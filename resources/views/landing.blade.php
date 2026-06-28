@@ -125,6 +125,7 @@
                 <nav class="hidden lg:flex items-center gap-8">
                     <a href="#funcionalidades" :class="scrolled ? 'text-gray-700 hover:text-brand-600' : 'text-white/90 hover:text-white'" class="text-sm font-medium transition-colors">Funcionalidades</a>
                     <a href="#modulos" :class="scrolled ? 'text-gray-700 hover:text-brand-600' : 'text-white/90 hover:text-white'" class="text-sm font-medium transition-colors">Modulos</a>
+                    <a href="#integracoes" :class="scrolled ? 'text-gray-700 hover:text-brand-600' : 'text-white/90 hover:text-white'" class="text-sm font-medium transition-colors">Integracoes</a>
                     <a href="#precos" :class="scrolled ? 'text-gray-700 hover:text-brand-600' : 'text-white/90 hover:text-white'" class="text-sm font-medium transition-colors">Precos</a>
                     <a href="#contato" :class="scrolled ? 'text-gray-700 hover:text-brand-600' : 'text-white/90 hover:text-white'" class="text-sm font-medium transition-colors">Contato</a>
                     <a href="{{ route('login') }}" class="ml-4 inline-flex items-center px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-lg shadow-brand-600/25">
@@ -280,6 +281,67 @@
                 <div class="text-center" x-show="shown" x-transition.duration.1100ms>
                     <div class="text-3xl sm:text-4xl font-extrabold text-brand-600"><i class="fas fa-headset text-2xl sm:text-3xl"></i></div>
                     <div class="text-gray-500 text-sm mt-1">Suporte Dedicado</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ===== COMPARATIVO (ANTES x DEPOIS) ===== --}}
+    <section id="comparativo" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1.5 bg-brand-50 text-brand-600 text-sm font-semibold rounded-full mb-4">Por que mudar</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Troque vários sistemas por um só</h2>
+                <p class="text-gray-500 text-lg max-w-2xl mx-auto">Chega de planilhas soltas e ferramentas que não conversam entre si. Centralize tudo em uma única plataforma.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                {{-- Sem o sistema --}}
+                <div class="rounded-2xl border border-red-100 bg-red-50/40 p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center">
+                            <i class="fas fa-xmark text-red-500 text-lg"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900">Sem o BrasEduCRM</h3>
+                    </div>
+                    <ul class="space-y-4">
+                        @foreach([
+                            'Dados espalhados em planilhas e sistemas diferentes',
+                            'Retrabalho ao digitar a mesma informação várias vezes',
+                            'Cobrança manual e alto índice de inadimplência',
+                            'Captação de alunos sem controle ou acompanhamento',
+                            'Relatórios demorados, feitos à mão',
+                        ] as $item)
+                        <li class="flex items-start gap-3 text-sm text-gray-600">
+                            <i class="fas fa-circle-xmark text-red-400 mt-0.5"></i>
+                            <span>{{ $item }}</span>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                {{-- Com o sistema --}}
+                <div class="rounded-2xl border-2 border-green-200 bg-green-50/40 p-8 shadow-lg shadow-green-600/5">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center">
+                            <i class="fas fa-check text-green-600 text-lg"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900">Com o BrasEduCRM</h3>
+                    </div>
+                    <ul class="space-y-4">
+                        @foreach([
+                            'Tudo integrado: acadêmico, financeiro, CRM e comunicação',
+                            'A informação é cadastrada uma vez e flui por todo o sistema',
+                            'Boletos, cartão e cobrança automática reduzindo a inadimplência',
+                            'Funil de vendas para captar e converter mais matrículas',
+                            'Painéis e relatórios em tempo real para decidir na hora',
+                        ] as $item)
+                        <li class="flex items-start gap-3 text-sm text-gray-700">
+                            <i class="fas fa-circle-check text-green-500 mt-0.5"></i>
+                            <span>{{ $item }}</span>
+                        </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
@@ -642,8 +704,42 @@
         </div>
     </section>
 
+    {{-- ===== INTEGRACOES ===== --}}
+    <section id="integracoes" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1.5 bg-brand-50 text-brand-600 text-sm font-semibold rounded-full mb-4">Integrações</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Conectado com as ferramentas que você já usa</h2>
+                <p class="text-gray-500 text-lg max-w-2xl mx-auto">Um ecossistema integrado para automatizar cobranças, marketing e comunicação.</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
+                @php
+                $integracoes = [
+                    ['icon' => 'fa-bullseye', 'name' => 'RD Station', 'desc' => 'Leads e marketing'],
+                    ['icon' => 'fa-barcode', 'name' => 'Boletos CNAB', 'desc' => 'Remessa e retorno'],
+                    ['icon' => 'fa-credit-card', 'name' => 'Cartão', 'desc' => 'Gateway de pagamento'],
+                    ['icon' => 'fa-whatsapp', 'name' => 'WhatsApp', 'desc' => 'Mensagens', 'brand' => true],
+                    ['icon' => 'fa-comment-sms', 'name' => 'SMS', 'desc' => 'Avisos e campanhas'],
+                    ['icon' => 'fa-file-invoice', 'name' => 'NF-e', 'desc' => 'Notas fiscais'],
+                ];
+                @endphp
+
+                @foreach($integracoes as $int)
+                <div class="card-hover bg-white border border-gray-100 rounded-xl p-5 text-center shadow-sm hover:shadow-lg">
+                    <div class="w-12 h-12 rounded-lg bg-brand-50 flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-{{ ($int['brand'] ?? false) ? 'brands' : 'solid' }} {{ $int['icon'] }} text-brand-600 text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">{{ $int['name'] }}</h4>
+                    <p class="text-gray-400 text-xs mt-1">{{ $int['desc'] }}</p>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     {{-- ===== PRICING ===== --}}
-    <section id="precos" class="py-24 bg-gray-50">
+    <section id="precos" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <span class="inline-block px-4 py-1.5 bg-brand-50 text-brand-600 text-sm font-semibold rounded-full mb-4">Precos</span>
@@ -1015,7 +1111,7 @@
             </div>
 
             <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p class="text-sm">&copy; 2024 BrasEduCRM. Todos os direitos reservados.</p>
+                <p class="text-sm">&copy; {{ date('Y') }} BrasEduCRM. Todos os direitos reservados.</p>
                 <div class="flex gap-6 text-sm">
                     <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
                     <a href="#" class="hover:text-white transition-colors">Politica de Privacidade</a>

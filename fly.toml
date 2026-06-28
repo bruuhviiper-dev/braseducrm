@@ -1,27 +1,38 @@
-# Configuração do Fly.io para o BrasEduCRM.
-# O nome do app é definido por `fly launch` (pode ajustar abaixo).
-app = "braseducrm"
-primary_region = "gru"  # São Paulo
+# fly.toml app configuration file generated for braseducrm-cliente on 2026-06-28T19:58:28-03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'braseducrm-cliente'
+primary_region = 'gru'
 
 [build]
+  dockerfile = 'Dockerfile'
 
 [env]
-  APP_ENV = "production"
-  APP_DEBUG = "false"
-  LOG_CHANNEL = "stderr"
-  DB_CONNECTION = "sqlite"
-  DB_DATABASE = "/data/database.sqlite"
-  SESSION_DRIVER = "file"
-  CACHE_STORE = "file"
-  QUEUE_CONNECTION = "sync"
+  APP_DEBUG = 'false'
+  APP_ENV = 'production'
+  APP_URL = 'https://braseducrm-cliente.fly.dev'
+  CACHE_STORE = 'file'
+  DB_CONNECTION = 'sqlite'
+  DB_DATABASE = '/data/database.sqlite'
+  LOG_CHANNEL = 'stderr'
+  QUEUE_CONNECTION = 'sync'
+  SESSION_DRIVER = 'file'
+
+[[mounts]]
+  source = 'braseducrm_data'
+  destination = '/data'
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = "stop"
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
 
-[[mounts]]
-  source = "braseducrm_data"
-  destination = "/data"
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 1024
