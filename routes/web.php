@@ -117,6 +117,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('requerimentos', RequerimentoController::class)->parameters(['requerimentos' => 'requerimento'])->except('show');
     Route::resource('atendimentos', AtendimentoController::class)->parameters(['atendimentos' => 'atendimento'])->except('show');
 
+    // Cadastros-base genéricos (tabelas de apoio)
+    Route::prefix('cadastros')->name('cadastros.')->controller(\App\Http\Controllers\CadastroSimplesController::class)->group(function () {
+        Route::get('{tipo}', 'index')->name('index');
+        Route::get('{tipo}/novo', 'create')->name('create');
+        Route::post('{tipo}', 'store')->name('store');
+        Route::get('{tipo}/{id}/editar', 'edit')->name('edit');
+        Route::put('{tipo}/{id}', 'update')->name('update');
+        Route::delete('{tipo}/{id}', 'destroy')->name('destroy');
+    });
+
     // Administrativo - controle de acesso
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('operadores', \App\Http\Controllers\Admin\OperadorController::class)->parameters(['operadores' => 'operador'])->except('show');
