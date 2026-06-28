@@ -1,0 +1,27 @@
+# Configuração do Fly.io para o BrasEduCRM.
+# O nome do app é definido por `fly launch` (pode ajustar abaixo).
+app = "braseducrm"
+primary_region = "gru"  # São Paulo
+
+[build]
+
+[env]
+  APP_ENV = "production"
+  APP_DEBUG = "false"
+  LOG_CHANNEL = "stderr"
+  DB_CONNECTION = "sqlite"
+  DB_DATABASE = "/data/database.sqlite"
+  SESSION_DRIVER = "file"
+  CACHE_STORE = "file"
+  QUEUE_CONNECTION = "sync"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[mounts]]
+  source = "braseducrm_data"
+  destination = "/data"

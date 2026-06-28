@@ -1,0 +1,12 @@
+.git
+.github
+.vscode
+node_modules
+vendor
+storage/logs/*
+database/*.sqlite
+cookies.txt
+tests
+*.md
+.env
+.env.*
