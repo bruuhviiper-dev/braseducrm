@@ -35,13 +35,17 @@
         [x-cloak] { display: none !important; }
 
         .gradient-hero {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #3730a3 50%, #4338ca 75%, #4f46e5 100%);
+            background-color: #312e81;
+            background-image: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #3730a3 50%, #4338ca 75%, #4f46e5 100%);
         }
 
+        /* Pontos sobrepostos AO gradiente (camadas no mesmo background-image) */
         .hero-pattern {
-            background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.05) 1px, transparent 1px),
-                              radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.06) 1px, transparent 1px),
+                              radial-gradient(circle at 75% 75%, rgba(255,255,255,0.06) 1px, transparent 1px),
+                              linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #3730a3 50%, #4338ca 75%, #4f46e5 100%);
+            background-size: 50px 50px, 50px 50px, 100% 100%;
+            background-color: #312e81;
         }
 
         .glass {

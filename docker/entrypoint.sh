@@ -18,5 +18,6 @@ fi
 
 php artisan storage:link || true
 php artisan config:clear || true
+php artisan view:clear || true
 
 exec apache2-foreground
