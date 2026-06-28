@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function temPermissao(int $codigoFuncao): bool
     {
-        if ($this->grupoOperador && $this->grupoOperador->permissoes()->whereHas('funcao', fn($q) => $q->where('codigo', $codigoFuncao))->exists()) {
+        if ($this->grupoOperador && $this->grupoOperador->funcoes()->where('codigo', $codigoFuncao)->exists()) {
             return true;
         }
         return $this->permissoes()->where('codigo', $codigoFuncao)->exists();

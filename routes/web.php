@@ -117,6 +117,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('requerimentos', RequerimentoController::class)->parameters(['requerimentos' => 'requerimento'])->except('show');
     Route::resource('atendimentos', AtendimentoController::class)->parameters(['atendimentos' => 'atendimento'])->except('show');
 
+    // Administrativo - controle de acesso
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('operadores', \App\Http\Controllers\Admin\OperadorController::class)->parameters(['operadores' => 'operador'])->except('show');
+        Route::resource('grupos', \App\Http\Controllers\Admin\GrupoOperadorController::class)->parameters(['grupos' => 'grupo'])->except('show');
+        Route::resource('departamentos', \App\Http\Controllers\Admin\DepartamentoController::class)->parameters(['departamentos' => 'departamento'])->except('show');
+    });
+
     // Academico
     Route::prefix('academico')->name('academico.')->group(function () {
         Route::resource('cursos', CursoController::class);

@@ -117,8 +117,9 @@
                         <a href="{{ Route::has('atendimentos.index') ? route('atendimentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">55</span> Atendimentos</a>
                         <a href="{{ Route::has('documentos.index') ? route('documentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">18</span> Documentos</a>
                         <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">12</span> Profissionais</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">44</span> Cadastro de Operador</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">43</span> Grupo de Operadores</a>
+                        <a href="{{ Route::has('admin.operadores.index') ? route('admin.operadores.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('admin.operadores.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">44</span> Cadastro de Operador</a>
+                        <a href="{{ Route::has('admin.grupos.index') ? route('admin.grupos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('admin.grupos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">43</span> Grupo de Operadores</a>
+                        <a href="{{ Route::has('admin.departamentos.index') ? route('admin.departamentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('admin.departamentos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">67</span> Departamentos</a>
                     </div>
                 </div>
 
