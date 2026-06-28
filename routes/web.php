@@ -116,6 +116,7 @@ Route::middleware('auth')->group(function () {
     Route::get('emissoes/recibo/{titulo}', [EmissaoController::class, 'recibo'])->name('emissoes.recibo');
     Route::resource('requerimentos', RequerimentoController::class)->parameters(['requerimentos' => 'requerimento'])->except('show');
     Route::resource('atendimentos', AtendimentoController::class)->parameters(['atendimentos' => 'atendimento'])->except('show');
+    Route::resource('profissionais', \App\Http\Controllers\ProfissionalController::class)->parameters(['profissionais' => 'profissional'])->except('show');
 
     // Cadastros-base genéricos (tabelas de apoio)
     Route::prefix('cadastros')->name('cadastros.')->controller(\App\Http\Controllers\CadastroSimplesController::class)->group(function () {
@@ -152,6 +153,8 @@ Route::middleware('auth')->group(function () {
         Route::post('frequencia', [FrequenciaController::class, 'salvar'])->name('frequencia.salvar');
         Route::get('boletim', [BoletimController::class, 'index'])->name('boletim.index');
         Route::post('boletim/consolidar', [BoletimController::class, 'consolidar'])->name('boletim.consolidar');
+        Route::get('configuracao', [\App\Http\Controllers\Academico\ConfiguracaoAcademicoController::class, 'index'])->name('configuracao.index');
+        Route::put('configuracao', [\App\Http\Controllers\Academico\ConfiguracaoAcademicoController::class, 'update']);
         Route::resource('montagem-turma', MontagemTurmaController::class)->parameters(['montagem-turma' => 'montagem_turma'])->except('show');
         Route::post('montagem-turma/{montagem_turma}/matricular', [MontagemTurmaController::class, 'matricular'])->name('montagem-turma.matricular');
         Route::delete('montagem-turma/{montagem_turma}/desmatricular/{matricula}', [MontagemTurmaController::class, 'desmatricular'])->name('montagem-turma.desmatricular');
@@ -184,11 +187,15 @@ Route::middleware('auth')->group(function () {
         Route::resource('categorias-pagar', CategoriaPagarController::class)->except('show');
         Route::resource('contas-bancarias', ContaBancariaController::class)->except('show');
         Route::resource('descontos', DescontoController::class)->parameters(['descontos' => 'desconto'])->except('show');
+        Route::get('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'index'])->name('configuracao.index');
+        Route::put('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'update']);
     });
 
     // Comunicacao
     Route::prefix('comunicacao')->name('comunicacao.')->group(function () {
         Route::resource('templates', TemplateMensagemController::class);
+        Route::get('configuracao', [\App\Http\Controllers\Comunicacao\ConfiguracaoComunicacaoController::class, 'index'])->name('configuracao.index');
+        Route::put('configuracao', [\App\Http\Controllers\Comunicacao\ConfiguracaoComunicacaoController::class, 'update']);
     });
 
     // Estoque
