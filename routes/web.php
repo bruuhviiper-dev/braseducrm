@@ -189,6 +189,20 @@ Route::middleware('auth')->group(function () {
         Route::resource('descontos', DescontoController::class)->parameters(['descontos' => 'desconto'])->except('show');
         Route::get('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'index'])->name('configuracao.index');
         Route::put('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'update']);
+
+        // Financeiro avançado (P4)
+        Route::resource('lancamentos', \App\Http\Controllers\Financeiro\LancamentoFinanceiroController::class)->parameters(['lancamentos' => 'lancamento'])->except('show');
+        Route::get('caixas', [\App\Http\Controllers\Financeiro\CaixaController::class, 'index'])->name('caixas.index');
+        Route::post('caixas/abrir', [\App\Http\Controllers\Financeiro\CaixaController::class, 'abrir'])->name('caixas.abrir');
+        Route::get('caixas/{caixa}', [\App\Http\Controllers\Financeiro\CaixaController::class, 'show'])->name('caixas.show');
+        Route::post('caixas/{caixa}/movimentar', [\App\Http\Controllers\Financeiro\CaixaController::class, 'movimentar'])->name('caixas.movimentar');
+        Route::post('caixas/{caixa}/fechar', [\App\Http\Controllers\Financeiro\CaixaController::class, 'fechar'])->name('caixas.fechar');
+        Route::get('dre', [\App\Http\Controllers\Financeiro\DreController::class, 'index'])->name('dre.index');
+        Route::get('renegociacoes', [\App\Http\Controllers\Financeiro\RenegociacaoController::class, 'index'])->name('renegociacoes.index');
+        Route::get('renegociacoes/nova', [\App\Http\Controllers\Financeiro\RenegociacaoController::class, 'create'])->name('renegociacoes.create');
+        Route::post('renegociacoes', [\App\Http\Controllers\Financeiro\RenegociacaoController::class, 'store'])->name('renegociacoes.store');
+        Route::get('retorno', [\App\Http\Controllers\Financeiro\RetornoCnabController::class, 'index'])->name('retorno.index');
+        Route::post('retorno', [\App\Http\Controllers\Financeiro\RetornoCnabController::class, 'processar'])->name('retorno.processar');
     });
 
     // Comunicacao

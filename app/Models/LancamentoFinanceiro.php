@@ -21,4 +21,14 @@ class LancamentoFinanceiro extends Model
         'data_compensacao' => 'date',
         'conciliado' => 'boolean',
     ];
+
+    public function contaBancaria()
+    {
+        return $this->belongsTo(ContaBancaria::class);
+    }
+
+    public function planoConta()
+    {
+        return $this->belongsTo(PlanoContas::class, 'plano_conta_id');
+    }
 }
