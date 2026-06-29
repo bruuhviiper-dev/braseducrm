@@ -25,6 +25,15 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ $f['label'] }} @if($f['required'] ?? false)<span class="text-red-500">*</span>@endif</label>
                 @if($f['type'] === 'textarea')
                 <textarea name="{{ $f['name'] }}" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" {{ ($f['required'] ?? false) ? 'required' : '' }}>{{ old($f['name'], $registro->{$f['name']} ?? '') }}</textarea>
+                @elseif($f['type'] === 'select')
+                @php $valorAtual = old($f['name'], $registro->{$f['name']} ?? ''); @endphp
+                <select name="{{ $f['name'] }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" {{ ($f['required'] ?? false) ? 'required' : '' }}>
+                    <option value="">Selecione...</option>
+                    @foreach($f['options'] ?? [] as $optValue => $optLabel)
+                    @php $v = is_int($optValue) ? $optLabel : $optValue; @endphp
+                    <option value="{{ $v }}" {{ (string) $valorAtual === (string) $v ? 'selected' : '' }}>{{ $optLabel }}</option>
+                    @endforeach
+                </select>
                 @elseif($f['type'] === 'number')
                 <input type="number" step="0.01" name="{{ $f['name'] }}" value="{{ old($f['name'], $registro->{$f['name']} ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" {{ ($f['required'] ?? false) ? 'required' : '' }}>
                 @else

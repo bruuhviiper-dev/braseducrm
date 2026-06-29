@@ -145,6 +145,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('periodos-letivos', PeriodoLetivoController::class);
         Route::resource('turnos', TurnoController::class);
         Route::resource('salas', SalaController::class);
+        Route::resource('calendarios', \App\Http\Controllers\Academico\CalendarioController::class)->except('show');
+        Route::resource('grades-horario', \App\Http\Controllers\Academico\GradeHorarioController::class)->parameters(['grades-horario' => 'grades_horario'])->except('show');
         Route::resource('tabelas-avaliacao', TabelaAvaliacaoController::class)->except('show');
         Route::resource('configuracoes-boletim', ConfiguracaoBoletimController::class)->except('show');
         Route::get('lancamento-notas', [LancamentoNotaController::class, 'index'])->name('lancamento-notas.index');
@@ -210,6 +212,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('templates', TemplateMensagemController::class);
         Route::get('configuracao', [\App\Http\Controllers\Comunicacao\ConfiguracaoComunicacaoController::class, 'index'])->name('configuracao.index');
         Route::put('configuracao', [\App\Http\Controllers\Comunicacao\ConfiguracaoComunicacaoController::class, 'update']);
+
+        // Disparo de mensagens (P5)
+        Route::get('mensagens', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'index'])->name('mensagens.index');
+        Route::get('mensagens/avulsa', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'avulsaCreate'])->name('mensagens.avulsa');
+        Route::post('mensagens/avulsa', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'avulsaStore'])->name('mensagens.avulsa.store');
+        Route::get('mensagens/avisos', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'avisos'])->name('mensagens.avisos');
+        Route::post('mensagens/avisos/{titulo}', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'enviarAviso'])->name('mensagens.enviar-aviso');
     });
 
     // Estoque

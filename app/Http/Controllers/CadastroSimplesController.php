@@ -43,8 +43,10 @@ class CadastroSimplesController extends Controller
             'formas-ingresso' => ['model' => \App\Models\FormaIngresso::class, 'titulo' => 'Forma de Ingresso', 'codigo' => 21, 'fields' => $nome],
             'escolas' => ['model' => \App\Models\Escola::class, 'titulo' => 'Escola', 'codigo' => 8, 'fields' => [
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
-                ['name' => 'cidade', 'label' => 'Cidade', 'type' => 'text', 'required' => false],
+                ['name' => 'telefone', 'label' => 'Telefone (Fixo)', 'type' => 'text', 'required' => false],
+                ['name' => 'cidade', 'label' => 'Cidade', 'type' => 'text', 'required' => true],
                 ['name' => 'uf', 'label' => 'UF', 'type' => 'text', 'required' => false],
+                ['name' => 'tipo_escola', 'label' => 'Tipo da Escola', 'type' => 'select', 'required' => true, 'options' => \App\Models\Escola::TIPOS],
             ]],
             'instituicoes' => ['model' => \App\Models\InstituicaoEnsino::class, 'titulo' => 'Instituição de Ensino', 'codigo' => 7, 'fields' => [
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
@@ -139,6 +141,10 @@ class CadastroSimplesController extends Controller
             };
             if ($f['type'] === 'text') {
                 $r[] = 'max:255';
+            }
+            if ($f['type'] === 'select' && !empty($f['options'])) {
+                $valores = array_map(fn ($k, $v) => is_int($k) ? $v : $k, array_keys($f['options']), $f['options']);
+                $r[] = 'in:' . implode(',', $valores);
             }
             $rules[$f['name']] = implode('|', $r);
         }
