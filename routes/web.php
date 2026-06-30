@@ -161,6 +161,14 @@ Route::middleware('auth')->group(function () {
         Route::get('programacoes-avaliacao', [\App\Http\Controllers\Academico\ProgramacaoAvaliacaoController::class, 'index'])->name('programacoes-avaliacao.index');
         Route::get('programacoes-avaliacao/{turma_montada}/{disciplina}', [\App\Http\Controllers\Academico\ProgramacaoAvaliacaoController::class, 'editar'])->name('programacoes-avaliacao.editar');
         Route::put('programacoes-avaliacao/{turma_montada}/{disciplina}', [\App\Http\Controllers\Academico\ProgramacaoAvaliacaoController::class, 'salvar'])->name('programacoes-avaliacao.salvar');
+
+        // Emissões Acadêmicas em PDF (P6 - lote 3)
+        Route::get('emissoes', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'index'])->name('emissoes.index');
+        Route::get('emissoes/alunos-matriculados', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'alunosMatriculados'])->name('emissoes.alunos-matriculados');
+        Route::get('emissoes/turmas-montadas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'turmasMontadas'])->name('emissoes.turmas-montadas');
+        Route::get('emissoes/horarios-professores', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'horariosProfessores'])->name('emissoes.horarios-professores');
+        Route::get('emissoes/notas-faltas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'notasFaltas'])->name('emissoes.notas-faltas');
+        Route::get('emissoes/diario-classe', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'diarioClasse'])->name('emissoes.diario-classe');
         Route::resource('tabelas-avaliacao', TabelaAvaliacaoController::class)->except('show');
         Route::resource('configuracoes-boletim', ConfiguracaoBoletimController::class)->except('show');
         Route::get('lancamento-notas', [LancamentoNotaController::class, 'index'])->name('lancamento-notas.index');
