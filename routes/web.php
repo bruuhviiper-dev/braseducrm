@@ -153,6 +153,14 @@ Route::middleware('auth')->group(function () {
         Route::get('planos-ensino', [\App\Http\Controllers\Academico\PlanoEnsinoController::class, 'index'])->name('planos-ensino.index');
         Route::get('planos-ensino/{turma_montada}/{disciplina}', [\App\Http\Controllers\Academico\PlanoEnsinoController::class, 'preencher'])->name('planos-ensino.preencher');
         Route::put('planos-ensino/{turma_montada}/{disciplina}', [\App\Http\Controllers\Academico\PlanoEnsinoController::class, 'salvar'])->name('planos-ensino.salvar');
+
+        // Controles de Matrícula e Frequência (P6 - lote 2)
+        Route::resource('horas-complementares', \App\Http\Controllers\Academico\HoraComplementarController::class)->parameters(['horas-complementares' => 'horas_complementare'])->except('show');
+        Route::resource('praticas-supervisionadas', \App\Http\Controllers\Academico\PraticaSupervisionadaController::class)->parameters(['praticas-supervisionadas' => 'praticas_supervisionada'])->except('show');
+        Route::resource('liberacoes-frequencia', \App\Http\Controllers\Academico\LiberacaoFrequenciaController::class)->parameters(['liberacoes-frequencia' => 'liberacoes_frequencium'])->except('show');
+        Route::get('programacoes-avaliacao', [\App\Http\Controllers\Academico\ProgramacaoAvaliacaoController::class, 'index'])->name('programacoes-avaliacao.index');
+        Route::get('programacoes-avaliacao/{turma_montada}/{disciplina}', [\App\Http\Controllers\Academico\ProgramacaoAvaliacaoController::class, 'editar'])->name('programacoes-avaliacao.editar');
+        Route::put('programacoes-avaliacao/{turma_montada}/{disciplina}', [\App\Http\Controllers\Academico\ProgramacaoAvaliacaoController::class, 'salvar'])->name('programacoes-avaliacao.salvar');
         Route::resource('tabelas-avaliacao', TabelaAvaliacaoController::class)->except('show');
         Route::resource('configuracoes-boletim', ConfiguracaoBoletimController::class)->except('show');
         Route::get('lancamento-notas', [LancamentoNotaController::class, 'index'])->name('lancamento-notas.index');

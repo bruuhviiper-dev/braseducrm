@@ -20,6 +20,13 @@ class Matricula extends Model
         return $this->belongsTo(Aluno::class);
     }
 
+    /** Rótulo "NUMERO - Nome do Aluno" para selects/listagens. */
+    public function getRotuloAttribute(): string
+    {
+        $nome = $this->aluno?->pessoa?->nome;
+        return trim(($this->numero_matricula ?? ('#' . $this->id)) . ($nome ? ' - ' . $nome : ''));
+    }
+
     public function turma()
     {
         return $this->belongsTo(Turma::class);
