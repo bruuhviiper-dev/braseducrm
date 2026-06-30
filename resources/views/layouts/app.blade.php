@@ -178,8 +178,8 @@
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Acervo</p>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">288</span> Cadastro de Obra</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">286</span> Cadastro de Exemplares</a>
+                        <a href="{{ Route::has('biblioteca.obras.index') ? route('biblioteca.obras.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('biblioteca.obras.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">288</span> Cadastro de Obra</a>
+                        <a href="{{ Route::has('biblioteca.exemplares.index') ? route('biblioteca.exemplares.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('biblioteca.exemplares.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">286</span> Cadastro de Exemplares</a>
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">287</span> Movimentacoes de Exemplares</a>
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">289</span> Reserva de Exemplares</a>
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">283</span> Emissao de Etiquetas</a>

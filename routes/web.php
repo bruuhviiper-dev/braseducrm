@@ -264,6 +264,8 @@ Route::middleware('auth')->group(function () {
 
     // Biblioteca
     Route::prefix('biblioteca')->name('biblioteca.')->group(function () {
+        Route::resource('obras', \App\Http\Controllers\Biblioteca\ObraController::class)->except('show');
+        Route::resource('exemplares', \App\Http\Controllers\Biblioteca\ExemplarController::class)->parameters(['exemplares' => 'exemplare'])->except('show');
         Route::get('configuracao', [\App\Http\Controllers\Biblioteca\ConfiguracaoBibliotecaController::class, 'index'])->name('configuracao.index');
         Route::put('configuracao', [\App\Http\Controllers\Biblioteca\ConfiguracaoBibliotecaController::class, 'update'])->name('configuracao.update');
     });
