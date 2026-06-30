@@ -147,6 +147,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('salas', SalaController::class);
         Route::resource('calendarios', \App\Http\Controllers\Academico\CalendarioController::class)->except('show');
         Route::resource('grades-horario', \App\Http\Controllers\Academico\GradeHorarioController::class)->parameters(['grades-horario' => 'grades_horario'])->except('show');
+
+        // Plano de Ensino/Aula (P6 - lote 1)
+        Route::resource('estruturas-plano', \App\Http\Controllers\Academico\EstruturaPlanoController::class)->parameters(['estruturas-plano' => 'estruturas_plano'])->except('show');
+        Route::get('planos-ensino', [\App\Http\Controllers\Academico\PlanoEnsinoController::class, 'index'])->name('planos-ensino.index');
+        Route::get('planos-ensino/{turma_montada}/{disciplina}', [\App\Http\Controllers\Academico\PlanoEnsinoController::class, 'preencher'])->name('planos-ensino.preencher');
+        Route::put('planos-ensino/{turma_montada}/{disciplina}', [\App\Http\Controllers\Academico\PlanoEnsinoController::class, 'salvar'])->name('planos-ensino.salvar');
         Route::resource('tabelas-avaliacao', TabelaAvaliacaoController::class)->except('show');
         Route::resource('configuracoes-boletim', ConfiguracaoBoletimController::class)->except('show');
         Route::get('lancamento-notas', [LancamentoNotaController::class, 'index'])->name('lancamento-notas.index');

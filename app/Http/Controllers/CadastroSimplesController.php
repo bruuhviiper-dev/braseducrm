@@ -30,6 +30,19 @@ class CadastroSimplesController extends Controller
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'ordem', 'label' => 'Ordem', 'type' => 'number', 'required' => false],
             ]],
+            'conceitos-nota' => ['model' => \App\Models\Conceito::class, 'titulo' => 'Conceito de Notas', 'codigo' => 176, 'fields' => [
+                ['name' => 'descricao', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+                ['name' => 'conceito', 'label' => 'Conceito (sigla)', 'type' => 'text', 'required' => true],
+                ['name' => 'nota_minima', 'label' => 'Nota Mínima', 'type' => 'number', 'required' => true],
+                ['name' => 'nota_maxima', 'label' => 'Nota Máxima', 'type' => 'number', 'required' => true],
+            ]],
+            'motivos-cancelamento' => ['model' => \App\Models\MotivoCancelamentoMatricula::class, 'titulo' => 'Motivo de Cancelamento Matrícula', 'codigo' => 242, 'fields' => $nome],
+            'tags-matricula' => ['model' => \App\Models\TagMatricula::class, 'titulo' => 'Tag de Matrícula', 'codigo' => 169, 'fields' => $nome],
+            'tags-turma-montada' => ['model' => \App\Models\TagTurmaMontada::class, 'titulo' => 'Tag (Turma Montada)', 'codigo' => 251, 'fields' => $nome],
+            'topicos-plano' => ['model' => \App\Models\TopicoPlano::class, 'titulo' => 'Tópico do Plano', 'codigo' => 203, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+                ['name' => 'obrigatoria', 'label' => 'É obrigatória?', 'type' => 'boolean', 'required' => false],
+            ]],
             // Administrativo
             'religioes' => ['model' => \App\Models\Religiao::class, 'titulo' => 'Religião', 'codigo' => 13, 'fields' => $nome],
             'profissoes' => ['model' => \App\Models\Profissao::class, 'titulo' => 'Profissão', 'codigo' => 145, 'fields' => $nome],
@@ -85,7 +98,8 @@ class CadastroSimplesController extends Controller
     public function index(string $tipo)
     {
         $cfg = $this->config($tipo);
-        $registros = $cfg['model']::orderBy('nome')->paginate(20);
+        $ordenarPor = $cfg['fields'][0]['name'] ?? 'id';
+        $registros = $cfg['model']::orderBy($ordenarPor)->paginate(20);
         return view('cadastros.index', compact('tipo', 'cfg', 'registros'));
     }
 
@@ -133,6 +147,10 @@ class CadastroSimplesController extends Controller
     {
         $rules = [];
         foreach ($cfg['fields'] as $f) {
+            if ($f['type'] === 'boolean') {
+                $rules[$f['name']] = 'nullable|boolean';
+                continue;
+            }
             $r = [];
             $r[] = ($f['required'] ?? false) ? 'required' : 'nullable';
             $r[] = match ($f['type']) {
@@ -157,6 +175,12 @@ class CadastroSimplesController extends Controller
         $model = new $cfg['model'];
         if (in_array('ativo', $model->getFillable())) {
             $data['ativo'] = $isCreate ? $request->boolean('ativo', true) : $request->boolean('ativo');
+        }
+        // Campos boolean declarados nos fields
+        foreach ($cfg['fields'] as $f) {
+            if ($f['type'] === 'boolean') {
+                $data[$f['name']] = $request->boolean($f['name']);
+            }
         }
         return $data;
     }

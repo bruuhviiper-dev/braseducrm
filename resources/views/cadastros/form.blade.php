@@ -36,6 +36,11 @@
                 </select>
                 @elseif($f['type'] === 'number')
                 <input type="number" step="0.01" name="{{ $f['name'] }}" value="{{ old($f['name'], $registro->{$f['name']} ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" {{ ($f['required'] ?? false) ? 'required' : '' }}>
+                @elseif($f['type'] === 'boolean')
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="{{ $f['name'] }}" value="1" {{ old($f['name'], $registro->{$f['name']} ?? false) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <span class="text-sm text-gray-600">Sim</span>
+                </label>
                 @else
                 <input type="text" name="{{ $f['name'] }}" value="{{ old($f['name'], $registro->{$f['name']} ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" {{ ($f['required'] ?? false) ? 'required' : '' }}>
                 @endif

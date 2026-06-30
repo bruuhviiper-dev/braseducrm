@@ -24,6 +24,8 @@
                 <td class="px-4 py-3 {{ $loop->first ? 'font-medium text-gray-800' : 'text-gray-600' }}">
                     @if($f['type'] === 'number' && $f['name'] === 'valor')
                         R$ {{ number_format((float) $r->{$f['name']}, 2, ',', '.') }}
+                    @elseif($f['type'] === 'boolean')
+                        {{ $r->{$f['name']} ? 'Sim' : 'Não' }}
                     @else
                         {{ \Illuminate\Support\Str::limit($r->{$f['name']}, 60) ?: '—' }}
                     @endif
