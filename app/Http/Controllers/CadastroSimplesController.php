@@ -98,6 +98,10 @@ class CadastroSimplesController extends Controller
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'sobrenome', 'label' => 'Sobrenome', 'type' => 'text', 'required' => false],
             ]],
+            // EAD
+            'agrupadores-curso' => ['model' => \App\Models\AgrupadorCurso::class, 'titulo' => 'Agrupador de Cursos', 'codigo' => 211, 'fields' => $nome],
+            'tags-curso-ead' => ['model' => \App\Models\TagCursoEad::class, 'titulo' => 'Tag (Curso EAD)', 'codigo' => 246, 'fields' => $nome],
+            'tags-questao' => ['model' => \App\Models\TagQuestao::class, 'titulo' => 'Tag de Questões', 'codigo' => 236, 'fields' => $nome],
         ];
     }
 

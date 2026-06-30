@@ -293,6 +293,8 @@ Route::middleware('auth')->group(function () {
     // EAD
     Route::prefix('ead')->name('ead.')->group(function () {
         Route::resource('cursos', CursoEadController::class);
+        Route::resource('matriculas', \App\Http\Controllers\Ead\MatriculaEadController::class)->parameters(['matriculas' => 'matricula'])->except('show');
+        Route::resource('avaliacoes', \App\Http\Controllers\Ead\AvaliacaoEadController::class)->parameters(['avaliacoes' => 'avaliacao'])->except('show');
     });
 
     // Placeholder routes for modules

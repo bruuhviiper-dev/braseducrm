@@ -1,0 +1,40 @@
+@extends('layouts.app')
+@section('title', 'Manutenção de Matrículas EAD')
+
+@section('content')
+<x-data-table title="Manutenção de Matrículas EAD" codigo="156" :createRoute="route('ead.matriculas.create')">
+    <table class="w-full text-sm text-left">
+        <thead class="bg-gray-50 border-b">
+            <tr>
+                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Aluno</th>
+                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Curso EAD</th>
+                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Situação</th>
+                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Ativo</th>
+                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Ações</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y">
+            @forelse($matriculas as $m)
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium text-gray-800">{{ $m->aluno?->pessoa?->nome ?? '—' }}</td>
+                <td class="px-4 py-3 text-gray-600">{{ $m->cursoEad?->nome ?? '—' }}</td>
+                <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full capitalize {{ $m->situacao === 'ativa' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">{{ $m->situacao }}</span></td>
+                <td class="px-4 py-3 text-gray-600">{{ $m->ativo ? 'Sim' : 'Não' }}</td>
+                <td class="px-4 py-3">
+                    <div class="flex gap-1">
+                        <a href="{{ route('ead.matriculas.edit', $m) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <form method="POST" action="{{ route('ead.matriculas.destroy', $m) }}" onsubmit="return confirm('Remover?')">
+                            @csrf @method('DELETE')
+                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            @empty
+            <tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">Nenhuma matrícula EAD.</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+    <div class="mt-4">{{ $matriculas->links() }}</div>
+</x-data-table>
+@endsection
