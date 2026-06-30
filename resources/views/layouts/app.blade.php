@@ -92,9 +92,9 @@
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Documentos</p>
                         <a href="{{ Route::has('documentos.index') ? route('documentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">18</span> Cadastro de Documento</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">102</span> Consulta Docs nao Entregues</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">210</span> Emissao de Documentos</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">19</span> Entrega de Documentos</a>
+                        <a href="{{ Route::has('academico.entregas-documento.consulta') ? route('academico.entregas-documento.consulta') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.entregas-documento.consulta') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">102</span> Consulta Docs nao Entregues</a>
+                        <a href="{{ Route::has('academico.emissoes.documentos') ? route('academico.emissoes.documentos') : '#' }}" target="_blank" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">210</span> Emissao de Documentos</a>
+                        <a href="{{ Route::has('academico.entregas-documento.index') ? route('academico.entregas-documento.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.entregas-documento.index') || request()->routeIs('academico.entregas-documento.gerenciar') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">19</span> Entrega de Documentos</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Matricula</p>
                         <a href="{{ route('alunos.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('alunos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">17</span> Cadastro de Aluno</a>

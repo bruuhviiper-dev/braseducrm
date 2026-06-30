@@ -169,6 +169,13 @@ Route::middleware('auth')->group(function () {
         Route::get('emissoes/horarios-professores', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'horariosProfessores'])->name('emissoes.horarios-professores');
         Route::get('emissoes/notas-faltas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'notasFaltas'])->name('emissoes.notas-faltas');
         Route::get('emissoes/diario-classe', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'diarioClasse'])->name('emissoes.diario-classe');
+        Route::get('emissoes/documentos', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'documentos'])->name('emissoes.documentos');
+
+        // Documentos (P6 - lote 4a)
+        Route::get('entregas-documento', [\App\Http\Controllers\Academico\EntregaDocumentoController::class, 'index'])->name('entregas-documento.index');
+        Route::get('entregas-documento/{matricula}/gerenciar', [\App\Http\Controllers\Academico\EntregaDocumentoController::class, 'gerenciar'])->name('entregas-documento.gerenciar');
+        Route::put('entregas-documento/{matricula}', [\App\Http\Controllers\Academico\EntregaDocumentoController::class, 'salvar'])->name('entregas-documento.salvar');
+        Route::get('consulta-documentos', [\App\Http\Controllers\Academico\EntregaDocumentoController::class, 'consultaPendentes'])->name('entregas-documento.consulta');
         Route::resource('tabelas-avaliacao', TabelaAvaliacaoController::class)->except('show');
         Route::resource('configuracoes-boletim', ConfiguracaoBoletimController::class)->except('show');
         Route::get('lancamento-notas', [LancamentoNotaController::class, 'index'])->name('lancamento-notas.index');

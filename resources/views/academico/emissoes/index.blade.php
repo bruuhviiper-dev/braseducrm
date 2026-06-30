@@ -67,6 +67,11 @@
                 <button class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</button>
             </form>
         </div>
+        {{-- 210 Documentos --}}
+        <div class="bg-white rounded-xl border p-5">
+            <div class="flex items-center gap-2 mb-3"><span class="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">210</span><h2 class="font-semibold text-gray-800">Documentos (situação de entrega)</h2></div>
+            <a href="{{ route('academico.emissoes.documentos') }}" target="_blank" class="inline-block px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i> Gerar PDF</a>
+        </div>
     </div>
 </div>
 @endsection

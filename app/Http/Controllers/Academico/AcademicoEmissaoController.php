@@ -131,6 +131,23 @@ class AcademicoEmissaoController extends Controller
             ['Aluno', 'Presenças', 'Faltas', 'Justificadas'], $linhas, 'diario_classe');
     }
 
+    /** Emissão de Documentos (210) — situação de entrega dos documentos. */
+    public function documentos()
+    {
+        $entregas = \App\Models\EntregaDocumento::with(['matricula.aluno.pessoa', 'documento'])
+            ->orderByDesc('id')->get();
+
+        $linhas = $entregas->map(fn ($e) => [
+            $e->matricula?->aluno?->pessoa?->nome ?? '—',
+            $e->documento?->nome ?? '—',
+            $e->entregue ? 'Entregue' : 'Pendente',
+            optional($e->data_entrega)->format('d/m/Y') ?? '—',
+        ]);
+
+        return $this->pdf('Emissão de Documentos', 'Situação de entrega',
+            ['Aluno', 'Documento', 'Situação', 'Data de Entrega'], $linhas, 'documentos');
+    }
+
     private function pdf(string $titulo, ?string $subtitulo, array $colunas, $linhas, string $arquivo)
     {
         $linhas = collect($linhas)->map(fn ($l) => array_values((array) $l))->all();
