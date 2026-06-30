@@ -186,17 +186,17 @@
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">284</span> Emissao de Exemplares</a>
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">285</span> Emissao de Movimentacoes</a>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cadastros Essenciais</p>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">290</span> Cadastro de Autores</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">291</span> Cadastro de Biblioteca</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">292</span> Cadastro de Colecao</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">293</span> Cadastro de Editores</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">294</span> Estado de Conservacao</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">295</span> Cadastro de Idiomas</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">297</span> Tipo de Aquisicao</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">298</span> Tipo de Material</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">296</span> Motivo de Indisponibilidade</a>
+                        <a href="{{ route('cadastros.index', 'autores') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">290</span> Cadastro de Autores</a>
+                        <a href="{{ route('cadastros.index', 'bibliotecas') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">291</span> Cadastro de Biblioteca</a>
+                        <a href="{{ route('cadastros.index', 'colecoes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">292</span> Cadastro de Colecao</a>
+                        <a href="{{ route('cadastros.index', 'editores') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">293</span> Cadastro de Editores</a>
+                        <a href="{{ route('cadastros.index', 'estados-conservacao') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">294</span> Estado de Conservacao</a>
+                        <a href="{{ route('cadastros.index', 'idiomas') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">295</span> Cadastro de Idiomas</a>
+                        <a href="{{ route('cadastros.index', 'tipos-aquisicao') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">297</span> Tipo de Aquisicao</a>
+                        <a href="{{ route('cadastros.index', 'tipos-material') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">298</span> Tipo de Material</a>
+                        <a href="{{ route('cadastros.index', 'motivos-indisponibilidade') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">296</span> Motivo de Indisponibilidade</a>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Configuracao</p>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">299</span> Configuracao do Biblioteca</a>
+                        <a href="{{ Route::has('biblioteca.configuracao.index') ? route('biblioteca.configuracao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('biblioteca.configuracao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">299</span> Configuracao do Biblioteca</a>
                     </div>
                 </div>
 

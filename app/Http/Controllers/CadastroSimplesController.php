@@ -85,6 +85,19 @@ class CadastroSimplesController extends Controller
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'localizacao', 'label' => 'Localização', 'type' => 'text', 'required' => false],
             ]],
+            // Biblioteca
+            'bibliotecas' => ['model' => \App\Models\Biblioteca::class, 'titulo' => 'Biblioteca', 'codigo' => 291, 'fields' => $nome],
+            'colecoes' => ['model' => \App\Models\Colecao::class, 'titulo' => 'Coleção', 'codigo' => 292, 'fields' => $nome],
+            'editores' => ['model' => \App\Models\Editor::class, 'titulo' => 'Editor', 'codigo' => 293, 'fields' => $nome],
+            'estados-conservacao' => ['model' => \App\Models\EstadoConservacao::class, 'titulo' => 'Estado de Conservação', 'codigo' => 294, 'fields' => $nome],
+            'idiomas' => ['model' => \App\Models\Idioma::class, 'titulo' => 'Idioma', 'codigo' => 295, 'fields' => $nome],
+            'tipos-aquisicao' => ['model' => \App\Models\TipoAquisicao::class, 'titulo' => 'Tipo de Aquisição', 'codigo' => 297, 'fields' => $nome],
+            'tipos-material' => ['model' => \App\Models\TipoMaterial::class, 'titulo' => 'Tipo de Material', 'codigo' => 298, 'fields' => $nome],
+            'motivos-indisponibilidade' => ['model' => \App\Models\MotivoIndisponibilidade::class, 'titulo' => 'Motivo de Indisponibilidade', 'codigo' => 296, 'fields' => $nome],
+            'autores' => ['model' => \App\Models\Autor::class, 'titulo' => 'Autor', 'codigo' => 290, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'sobrenome', 'label' => 'Sobrenome', 'type' => 'text', 'required' => false],
+            ]],
         ];
     }
 

@@ -262,6 +262,12 @@ Route::middleware('auth')->group(function () {
         Route::post('mensagens/avisos/{titulo}', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'enviarAviso'])->name('mensagens.enviar-aviso');
     });
 
+    // Biblioteca
+    Route::prefix('biblioteca')->name('biblioteca.')->group(function () {
+        Route::get('configuracao', [\App\Http\Controllers\Biblioteca\ConfiguracaoBibliotecaController::class, 'index'])->name('configuracao.index');
+        Route::put('configuracao', [\App\Http\Controllers\Biblioteca\ConfiguracaoBibliotecaController::class, 'update'])->name('configuracao.update');
+    });
+
     // Estoque
     Route::prefix('estoque')->name('estoque.')->group(function () {
         Route::resource('produtos', ProdutoEstoqueController::class);
