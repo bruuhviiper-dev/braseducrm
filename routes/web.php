@@ -295,6 +295,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('cursos', CursoEadController::class);
         Route::resource('matriculas', \App\Http\Controllers\Ead\MatriculaEadController::class)->parameters(['matriculas' => 'matricula'])->except('show');
         Route::resource('avaliacoes', \App\Http\Controllers\Ead\AvaliacaoEadController::class)->parameters(['avaliacoes' => 'avaliacao'])->except('show');
+        Route::resource('videos', \App\Http\Controllers\Ead\VideoEadController::class)->parameters(['videos' => 'video'])->except('show');
+        Route::resource('questoes', \App\Http\Controllers\Ead\QuestaoAvulsaController::class)->parameters(['questoes' => 'questao'])->except('show');
     });
 
     // Placeholder routes for modules
