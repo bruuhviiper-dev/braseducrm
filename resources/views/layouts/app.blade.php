@@ -75,37 +75,74 @@
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Cadastros Essenciais</p>
-                        <a href="{{ Route::has('academico.cursos.index') ? route('academico.cursos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.cursos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">25</span> Cadastro de Curso</a>
-                        <a href="{{ Route::has('academico.disciplinas.index') ? route('academico.disciplinas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.disciplinas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">26</span> Cadastro de Disciplina</a>
-                        <a href="{{ Route::has('academico.periodos-letivos.index') ? route('academico.periodos-letivos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">38</span> Cadastro de Periodo Letivo</a>
+                        <a href="{{ Route::has('academico.calendarios.index') ? route('academico.calendarios.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.calendarios.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">35</span> Cadastro de Calendario</a>
+                        <a href="{{ route('cadastros.index', 'escolas') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">8</span> Cadastro de Escola</a>
+                        <a href="{{ Route::has('academico.grades-horario.index') ? route('academico.grades-horario.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.grades-horario.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">36</span> Cadastro de Grade de Horario</a>
                         <a href="{{ Route::has('academico.salas.index') ? route('academico.salas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">39</span> Cadastro de Sala</a>
                         <a href="{{ Route::has('academico.turnos.index') ? route('academico.turnos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">42</span> Cadastro de Turnos</a>
-                        <a href="{{ Route::has('academico.calendarios.index') ? route('academico.calendarios.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.calendarios.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">35</span> Cadastro de Calendario</a>
-                        <a href="{{ Route::has('academico.grades-horario.index') ? route('academico.grades-horario.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.grades-horario.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">36</span> Cadastro de Grade de Horario</a>
-                        <a href="{{ route('cadastros.index', 'escolas') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">8</span> Cadastro de Escola</a>
-                        <a href="{{ route('cadastros.index', 'areas') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">24</span> Cadastro de Area</a>
-                        <a href="{{ route('cadastros.index', 'graus') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">28</span> Cadastro de Grau</a>
-                        <a href="{{ route('cadastros.index', 'habilitacoes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">29</span> Cadastro de Habilitacao</a>
-                        <a href="{{ route('cadastros.index', 'modulos') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">31</span> Cadastro de Modulos</a>
-                        <a href="{{ Route::has('academico.configuracao.index') ? route('academico.configuracao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.configuracao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">167</span> Config. do Academico</a>
-                        <a href="{{ Route::has('academico.configuracoes-boletim.index') ? route('academico.configuracoes-boletim.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.configuracoes-boletim.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">3</span> Config. do Boletim</a>
+                        <a href="{{ Route::has('academico.configuracao.index') ? route('academico.configuracao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.configuracao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">167</span> Configuracao do Academico</a>
+                        <a href="{{ Route::has('academico.configuracoes-boletim.index') ? route('academico.configuracoes-boletim.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.configuracoes-boletim.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">3</span> Configuracao do Boletim</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">4</span> Programacoes de Avaliacoes</a>
+                        <a href="{{ Route::has('academico.frequencia.index') ? route('academico.frequencia.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.frequencia.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">268</span> Registro de Frequencia</a>
                         <a href="{{ Route::has('academico.tabelas-avaliacao.index') ? route('academico.tabelas-avaliacao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.tabelas-avaliacao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">5</span> Tabela de Avaliacao</a>
 
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Diploma Digital</p>
+                        <a href="{{ Route::has('ged.diplomas.index') ? route('ged.diplomas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">215</span> Cadastro de Diploma Digital</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">226</span> Historico Escolar Digital</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Documentos</p>
+                        <a href="{{ Route::has('documentos.index') ? route('documentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">18</span> Cadastro de Documento</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">102</span> Consulta Docs nao Entregues</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">210</span> Emissao de Documentos</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">19</span> Entrega de Documentos</a>
+
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Matricula</p>
+                        <a href="{{ route('alunos.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('alunos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">17</span> Cadastro de Aluno</a>
                         <a href="{{ Route::has('academico.matriculas.index') ? route('academico.matriculas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.matriculas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">23</span> Matricula e Historico</a>
+                        <a href="{{ route('cadastros.index', 'formas-ingresso') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">21</span> Forma de Ingresso</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">239</span> Controle de Horas Complementares</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">90</span> Controle de Pratica Supervisionada</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">279</span> Controle de Rematriculas</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">79</span> Emissao de Alunos Matriculados</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">98</span> Emissao do Historico Escolar</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">242</span> Motivo de Cancelamento Matricula</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Matriz Curricular</p>
-                        <a href="{{ Route::has('academico.matrizes.index') ? route('academico.matrizes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.matrizes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">30</span> Cadastro de Matriz</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">27</span> Emissao da Matriz</a>
-
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Turmas</p>
-                        <a href="{{ Route::has('academico.turmas.index') ? route('academico.turmas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.turmas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">40</span> Cadastro de Turma</a>
-                        <a href="{{ Route::has('academico.montagem-turma.index') ? route('academico.montagem-turma.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.montagem-turma.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">41</span> Montagem de Turma</a>
+                        <a href="{{ route('cadastros.index', 'areas') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">24</span> Cadastro de Area</a>
+                        <a href="{{ Route::has('ged.atos.index') ? route('ged.atos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">216</span> Cadastro de Atos Regulatorios</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">176</span> Cadastro de Conceito de Notas</a>
+                        <a href="{{ Route::has('academico.cursos.index') ? route('academico.cursos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.cursos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">25</span> Cadastro de Curso</a>
+                        <a href="{{ Route::has('academico.disciplinas.index') ? route('academico.disciplinas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.disciplinas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">26</span> Cadastro de Disciplina</a>
+                        <a href="{{ route('cadastros.index', 'graus') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">28</span> Cadastro de Grau</a>
+                        <a href="{{ route('cadastros.index', 'habilitacoes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">29</span> Cadastro de Habilitacao</a>
+                        <a href="{{ Route::has('academico.matrizes.index') ? route('academico.matrizes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.matrizes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">30</span> Cadastro de Matriz Curricular</a>
+                        <a href="{{ route('cadastros.index', 'modulos') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">31</span> Cadastro de Modulos</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">27</span> Emissao da Matriz Curricular</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Notas e Faltas</p>
-                        <a href="{{ Route::has('academico.lancamento-notas.index') ? route('academico.lancamento-notas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.lancamento-notas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">1</span> Lancamento de Avaliacao</a>
-                        <a href="{{ Route::has('academico.frequencia.index') ? route('academico.frequencia.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.frequencia.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">16</span> Frequencia</a>
                         <a href="{{ Route::has('academico.boletim.index') ? route('academico.boletim.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.boletim.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">2</span> Calculo do Boletim</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">60</span> Emissao de Notas e Faltas</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">91</span> Emissao do Diario de Classe</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">137</span> Exclusao de Notas e Faltas</a>
+                        <a href="{{ Route::has('academico.frequencia.index') ? route('academico.frequencia.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">16</span> Frequencia e Conteudo Ministrado</a>
+                        <a href="{{ Route::has('academico.lancamento-notas.index') ? route('academico.lancamento-notas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.lancamento-notas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">1</span> Lancamento de Avaliacao</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Plano de Ensino/Aula</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">204</span> Cadastro de Estrutura do Plano</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">203</span> Cadastro de Topico do Plano</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">119</span> Preenchimento Plano de Ensino</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Requerimentos</p>
+                        <a href="{{ Route::has('requerimentos.index') ? route('requerimentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">96</span> Manutencao de Requerimentos</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Turmas</p>
+                        <a href="{{ Route::has('academico.periodos-letivos.index') ? route('academico.periodos-letivos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">38</span> Cadastro de Periodo Letivo</a>
+                        <a href="{{ Route::has('academico.turmas.index') ? route('academico.turmas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.turmas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">40</span> Cadastro de Turma</a>
+                        <a href="{{ Route::has('academico.montagem-turma.index') ? route('academico.montagem-turma.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('academico.montagem-turma.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">41</span> Montagem de Turma e Horario</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">184</span> Emissao de Turmas Montadas</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">185</span> Emissao de Horarios Professores</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">257</span> Painel do Professor</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">45</span> Planejamento Diario de Aulas</a>
                         <a href="{{ Route::has('paineis.academico') ? route('paineis.academico') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('paineis.academico') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">144</span> Painel Academico</a>
                     </div>
                 </div>
@@ -118,24 +155,41 @@
                         <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
-                        <a href="{{ route('pessoas.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('pessoas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">11</span> Cadastro de Pessoa</a>
-                        <a href="{{ route('alunos.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('alunos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">17</span> Cadastro de Aluno</a>
-                        <a href="{{ Route::has('requerimentos.index') ? route('requerimentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">96</span> Requerimentos</a>
-                        <a href="{{ Route::has('atendimentos.index') ? route('atendimentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">55</span> Atendimentos</a>
-                        <a href="{{ Route::has('documentos.index') ? route('documentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">18</span> Documentos</a>
-                        <a href="{{ Route::has('profissionais.index') ? route('profissionais.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('profissionais.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">12</span> Profissionais</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Acessos</p>
+                        <a href="{{ Route::has('admin.grupos.index') ? route('admin.grupos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('admin.grupos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">43</span> Cadastro de Grupo de Operadores</a>
                         <a href="{{ Route::has('admin.operadores.index') ? route('admin.operadores.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('admin.operadores.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">44</span> Cadastro de Operador</a>
-                        <a href="{{ Route::has('admin.grupos.index') ? route('admin.grupos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('admin.grupos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">43</span> Grupo de Operadores</a>
-                        <a href="{{ Route::has('admin.departamentos.index') ? route('admin.departamentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('admin.departamentos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">67</span> Departamentos</a>
-                        <a href="{{ route('cadastros.index', 'instituicoes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">7</span> Instituicao de Ensino</a>
-                        <a href="{{ route('cadastros.index', 'escolas') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">8</span> Cadastro de Escola</a>
-                        <a href="{{ route('cadastros.index', 'formas-ingresso') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">21</span> Forma de Ingresso</a>
-                        <a href="{{ route('cadastros.index', 'religioes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">13</span> Cadastro de Religiao</a>
-                        <a href="{{ route('cadastros.index', 'profissoes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">145</span> Cadastro de Profissoes</a>
-                        <a href="{{ route('cadastros.index', 'tipos-profissional') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">14</span> Tipo de Profissional</a>
-                        <a href="{{ route('cadastros.index', 'titularidades') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">15</span> Cadastro de Titularidade</a>
-                        <a href="{{ route('cadastros.index', 'necessidades-especiais') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">10</span> Necessidades Especiais</a>
-                        <a href="{{ route('cadastros.index', 'alergias') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">198</span> Cadastro de Alergia</a>
+                        <a href="{{ route('painel-cliente.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('painel-cliente.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">112</span> Painel do Cliente</a>
+                    </div>
+                </div>
+
+                {{-- BIBLIOTECA --}}
+                <div x-data="{ open: activeModule === 'biblioteca' }">
+                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('biblioteca*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
+                        <i class="fa-solid fa-book w-5 text-center"></i>
+                        <span class="ml-3 flex-1 text-left" x-show="sidebarOpen" x-cloak>Biblioteca</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
+                    </button>
+                    <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Acervo</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">288</span> Cadastro de Obra</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">286</span> Cadastro de Exemplares</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">287</span> Movimentacoes de Exemplares</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">289</span> Reserva de Exemplares</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">283</span> Emissao de Etiquetas</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">284</span> Emissao de Exemplares</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">285</span> Emissao de Movimentacoes</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cadastros Essenciais</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">290</span> Cadastro de Autores</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">291</span> Cadastro de Biblioteca</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">292</span> Cadastro de Colecao</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">293</span> Cadastro de Editores</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">294</span> Estado de Conservacao</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">295</span> Cadastro de Idiomas</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">297</span> Tipo de Aquisicao</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">298</span> Tipo de Material</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">296</span> Motivo de Indisponibilidade</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Configuracao</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">299</span> Configuracao do Biblioteca</a>
                     </div>
                 </div>
 
@@ -147,11 +201,18 @@
                         <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Mensagens</p>
+                        <a href="{{ Route::has('comunicacao.mensagens.avulsa') ? route('comunicacao.mensagens.avulsa') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('comunicacao.mensagens.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">84</span> Mensagens Avulsas</a>
+                        <a href="{{ Route::has('comunicacao.mensagens.avisos') ? route('comunicacao.mensagens.avisos') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">88</span> Aviso de Cobranca</a>
+                        <a href="{{ Route::has('comunicacao.mensagens.avisos') ? route('comunicacao.mensagens.avisos') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">86</span> Aviso de Vencimento</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">234</span> Aviso de Pagamento</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">62</span> Mensagens para Interessados CRM</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Configuracao</p>
                         <a href="{{ route('comunicacao.templates.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('comunicacao.templates.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">87</span> Templates de Mensagens</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">84</span> Mensagens Avulsas</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">86</span> Aviso de Vencimento</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">88</span> Aviso de Cobranca</a>
-                        <a href="{{ Route::has('comunicacao.configuracao.index') ? route('comunicacao.configuracao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('comunicacao.configuracao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">85</span> Config. Comunicacao</a>
+                        <a href="{{ Route::has('comunicacao.configuracao.index') ? route('comunicacao.configuracao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('comunicacao.configuracao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">85</span> Configuracao da Comunicacao</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">89</span> Consulta de Saldo SMS</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">247</span> Numeros Whatsapp</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">260</span> Central de Notificacao do Aluno</a>
                     </div>
                 </div>
 
@@ -163,12 +224,15 @@
                         <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
-                        <a href="{{ route('estoque.produtos.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('estoque.produtos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">148</span> Produtos de Estoque</a>
-                        <a href="{{ Route::has('estoque.categorias.index') ? route('estoque.categorias.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">147</span> Categorias</a>
-                        <a href="{{ Route::has('estoque.unidades.index') ? route('estoque.unidades.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">146</span> Unidades de Medida</a>
-                        <a href="{{ Route::has('estoque.movimentacoes.index') ? route('estoque.movimentacoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">150</span> Movimentacoes</a>
-                        <a href="{{ route('cadastros.index', 'depositos') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">153</span> Depositos</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">154</span> Consulta de Estoque</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Cadastros Essenciais</p>
+                        <a href="{{ Route::has('estoque.categorias.index') ? route('estoque.categorias.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">147</span> Cadastro de Categorias de Estoque</a>
+                        <a href="{{ route('cadastros.index', 'depositos') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">153</span> Cadastro de Depositos de Estoque</a>
+                        <a href="{{ route('estoque.produtos.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('estoque.produtos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">148</span> Cadastro de Produtos de Estoque</a>
+                        <a href="{{ Route::has('estoque.unidades.index') ? route('estoque.unidades.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">146</span> Cadastro de Unidades de Medida</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">186</span> Emissao de Produtos de Estoques</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Movimentacoes</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">154</span> Consulta de Estoque</a>
+                        <a href="{{ Route::has('estoque.movimentacoes.index') ? route('estoque.movimentacoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">150</span> Movimentacoes de Estoque</a>
                     </div>
                 </div>
 
@@ -180,22 +244,28 @@
                         <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
-                        <a href="{{ route('crm.funil.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.funil.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">110</span> Funil de Oportunidades</a>
-                        <a href="{{ route('crm.oportunidades.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.oportunidades.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">109</span> Manut. Oportunidades</a>
-                        <a href="{{ route('crm.interessados.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.interessados.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">108</span> Interessados</a>
-                        <a href="{{ route('crm.desempenho.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">190</span> Desempenho Consultor</a>
-                        <a href="{{ Route::has('crm.origens.index') ? route('crm.origens.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">103</span> Origens</a>
-                        <a href="{{ Route::has('crm.tags.index') ? route('crm.tags.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">171</span> Tags CRM</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Cadastros Essenciais</p>
+                        <a href="{{ route('cadastros.index', 'categorias-interessado') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">207</span> Categorias (Interessados)</a>
                         <a href="{{ Route::has('crm.eventos.index') ? route('crm.eventos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">104</span> Eventos CRM</a>
+                        <a href="{{ Route::has('crm.funil.index') ? route('crm.funil.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.funil.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">200</span> Cadastro de Funil de Oportunidades</a>
                         <a href="{{ Route::has('crm.metas.index') ? route('crm.metas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">191</span> Metas CRM</a>
-                        <a href="{{ Route::has('crm.funil.create') ? route('crm.funil.create') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">200</span> Cadastro de Funil</a>
-                        <a href="{{ Route::has('paineis.comercial') ? route('paineis.comercial') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('paineis.comercial') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">142</span> Painel Comercial</a>
-                        <a href="{{ route('cadastros.index', 'categorias-interessado') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">207</span> Categorias Interessado</a>
-                        <a href="{{ route('cadastros.index', 'produtos-servico') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">206</span> Produtos/Servicos CRM</a>
-                        <a href="{{ route('cadastros.index', 'motivos-perda') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">107</span> Motivos de Perda</a>
                         <a href="{{ route('cadastros.index', 'motivos-ganho') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">212</span> Motivo de Ganho</a>
                         <a href="{{ route('cadastros.index', 'motivos-pausa') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">202</span> Motivo de Pausa</a>
-                        <a href="{{ Route::has('crm.configuracoes.index') ? route('crm.configuracoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.configuracoes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">166</span> Config. do CRM</a>
+                        <a href="{{ route('cadastros.index', 'motivos-perda') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">107</span> Motivos de Perda</a>
+                        <a href="{{ Route::has('crm.origens.index') ? route('crm.origens.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">103</span> Origem do Interessado</a>
+                        <a href="{{ route('cadastros.index', 'produtos-servico') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">206</span> Produtos/Servicos CRM</a>
+                        <a href="{{ Route::has('crm.tags.index') ? route('crm.tags.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">171</span> Tag CRM</a>
+                        <a href="{{ Route::has('crm.configuracoes.index') ? route('crm.configuracoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.configuracoes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">166</span> Configuracao do CRM</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">256</span> Acao Automatica (CRM)</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Oportunidades</p>
+                        <a href="{{ route('crm.interessados.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.interessados.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">108</span> Cadastro de Interessados</a>
+                        <a href="{{ route('crm.desempenho.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">190</span> Desempenho Individual do Consultor</a>
+                        <a href="{{ route('crm.funil.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.funil.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">110</span> Funil de Oportunidades</a>
+                        <a href="{{ route('crm.oportunidades.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('crm.oportunidades.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">109</span> Manutencao de Oportunidades</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">201</span> Emissao de Propostas (CRM)</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">159</span> Exportacao de Oportunidades</a>
+                        <a href="{{ Route::has('paineis.comercial') ? route('paineis.comercial') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('paineis.comercial') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">142</span> Painel Comercial</a>
                     </div>
                 </div>
 
@@ -207,10 +277,20 @@
                         <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
-                        <a href="{{ route('ead.cursos.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('ead.cursos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">152</span> Cadastro de Curso EAD</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">214</span> Avaliacoes EAD</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">156</span> Manut. Matriculas EAD</a>
-                        <a href="#" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">188</span> Painel Academico EAD</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Cadastros Essenciais</p>
+                        <a href="{{ route('ead.cursos.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('ead.cursos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">152</span> Cadastro de Curso (EAD)</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">211</span> Cadastro de Agrupador de Cursos</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">266</span> Cadastro de Sub Agrupador (EAD)</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">246</span> Cadastro de Tag (Curso EAD)</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">214</span> Cadastro de Avaliacoes EAD</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">238</span> Cadastro de Questoes Avulsas</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">236</span> Cadastro de Tag de Questoes</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">241</span> Gerador de Avaliacoes</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">301</span> Cadastro de Videos</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">306</span> Foruns EAD</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">156</span> Manutencao de Matriculas EAD</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">174</span> Emissao de Alunos Matriculados EAD</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">219</span> Emissao de notas alunos (EAD)</a>
                     </div>
                 </div>
 
@@ -222,35 +302,107 @@
                         <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
-                        <a href="{{ route('financeiro.titulos-receber.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.titulos-receber.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">64</span> Titulos a Receber</a>
-                        <a href="{{ route('financeiro.titulos-pagar.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.titulos-pagar.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">52</span> Titulos a Pagar</a>
-                        <a href="{{ route('financeiro.plano-contas.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.plano-contas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">50</span> Plano de Contas</a>
-                        <a href="{{ route('financeiro.fluxo-caixa.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">78</span> Fluxo de Caixa</a>
-                        <a href="{{ Route::has('financeiro.categorias-receber.index') ? route('financeiro.categorias-receber.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">65</span> Categorias a Receber</a>
-                        <a href="{{ Route::has('financeiro.categorias-pagar.index') ? route('financeiro.categorias-pagar.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">51</span> Categorias a Pagar</a>
-                        <a href="{{ Route::has('financeiro.contas-bancarias.index') ? route('financeiro.contas-bancarias.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">63</span> Contas Bancarias</a>
-                        <a href="{{ Route::has('financeiro.descontos.index') ? route('financeiro.descontos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">57</span> Descontos</a>
-                        <a href="{{ Route::has('financeiro.configuracao.index') ? route('financeiro.configuracao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.configuracao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">59</span> Config. Financeiro</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Cadastros Essenciais</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">47</span> Cadastro de Banco</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">274</span> Cadastro de Centro de Custos</a>
+                        <a href="{{ Route::has('financeiro.categorias-pagar.index') ? route('financeiro.categorias-pagar.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">51</span> Categorias (A Pagar)</a>
+                        <a href="{{ Route::has('financeiro.categorias-receber.index') ? route('financeiro.categorias-receber.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">65</span> Categorias (A Receber)</a>
+                        <a href="{{ Route::has('financeiro.contas-bancarias.index') ? route('financeiro.contas-bancarias.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">63</span> Cadastro de Contas</a>
+                        <a href="{{ Route::has('financeiro.descontos.index') ? route('financeiro.descontos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">58</span> Desconto Condicional</a>
+                        <a href="{{ Route::has('financeiro.descontos.index') ? route('financeiro.descontos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">57</span> Desconto Incondicional</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">53</span> Forma de Pagamento</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">213</span> Taxas de Cartao Avulso</a>
+                        <a href="{{ route('financeiro.plano-contas.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.plano-contas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">50</span> Cadastro do Plano de Contas</a>
+                        <a href="{{ Route::has('financeiro.configuracao.index') ? route('financeiro.configuracao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.configuracao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">59</span> Configuracao do Financeiro</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">227</span> Configuracoes de NFS-e</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Caixa (Movimentacoes)</p>
+                        <a href="{{ Route::has('financeiro.caixas.index') ? route('financeiro.caixas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.caixas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">68</span> Movimentacoes de Caixas</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">106</span> Emissao do Fechamento de Caixa</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cartoes</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">70</span> Contratos de Cartoes</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">71</span> Conciliacao de Recebimentos (Cartao)</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">136</span> Cartao de Credito Empresarial</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cheques</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">72</span> Manutencao de Cheques</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">73</span> Motivo de Devolucao (Cheque)</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Lancamentos Financeiros</p>
+                        <a href="{{ Route::has('financeiro.dre.index') ? route('financeiro.dre.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.dre.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">111</span> Demonstrativo de Resultados (DRE)</a>
+                        <a href="{{ route('financeiro.fluxo-caixa.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">78</span> Fluxo de Caixa (Mensal)</a>
                         <a href="{{ Route::has('financeiro.lancamentos.index') ? route('financeiro.lancamentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.lancamentos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">61</span> Lancamentos Financeiros</a>
-                        <a href="{{ Route::has('financeiro.caixas.index') ? route('financeiro.caixas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.caixas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">68</span> Movim. de Caixas</a>
-                        <a href="{{ Route::has('financeiro.renegociacoes.index') ? route('financeiro.renegociacoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.renegociacoes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">80</span> Renegociacoes</a>
-                        <a href="{{ Route::has('financeiro.retorno.index') ? route('financeiro.retorno.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.retorno.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">82</span> Importacao Retorno</a>
-                        <a href="{{ Route::has('financeiro.dre.index') ? route('financeiro.dre.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.dre.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">111</span> DRE</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">195</span> Fluxo de Caixa (Diario)</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Titulos a pagar</p>
+                        <a href="{{ route('financeiro.titulos-pagar.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.titulos-pagar.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">52</span> Manutencao de Titulos a Pagar</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">173</span> Emissao de Titulos a Pagar</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">180</span> Emissao de Comissoes</a>
+
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Titulos a receber</p>
+                        <a href="{{ route('financeiro.titulos-receber.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.titulos-receber.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">64</span> Manutencao de Titulos a Receber</a>
+                        <a href="{{ Route::has('financeiro.renegociacoes.index') ? route('financeiro.renegociacoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.renegociacoes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">80</span> Renegociacoes de Parcelas</a>
+                        <a href="{{ Route::has('financeiro.retorno.index') ? route('financeiro.retorno.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.retorno.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">82</span> Importacao do Arquivo de Retorno</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">66</span> Emissao de Boletos Bancarios</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">113</span> Emissao de Cobranca</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">93</span> Conta Corrente Por Pessoa</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">101</span> Resumo Financeiro da Pessoa</a>
                         <a href="{{ Route::has('paineis.financeiro') ? route('paineis.financeiro') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('paineis.financeiro') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">138</span> Painel Financeiro</a>
                     </div>
                 </div>
 
                 {{-- GED --}}
-                <a href="{{ route('ged.index') }}" class="flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('ged*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
-                    <i class="fa-solid fa-folder-open w-5 text-center"></i>
-                    <span class="ml-3" x-show="sidebarOpen" x-cloak>GED</span>
-                </a>
+                <div x-data="{ open: activeModule === 'ged' }">
+                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('ged*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
+                        <i class="fa-solid fa-folder-open w-5 text-center"></i>
+                        <span class="ml-3 flex-1 text-left" x-show="sidebarOpen" x-cloak>GED</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
+                    </button>
+                    <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Cadastros Essenciais</p>
+                        <a href="{{ Route::has('ged.documentos.index') ? route('ged.documentos.index') : route('ged.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->is('ged*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">244</span> Documento (GED)</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">245</span> Categoria do Documento (GED)</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">252</span> Tipo de Documento</a>
+                    </div>
+                </div>
 
                 {{-- GERAL --}}
-                <a href="{{ route('geral.index') }}" class="flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('geral*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
-                    <i class="fa-solid fa-table-cells w-5 text-center"></i>
-                    <span class="ml-3" x-show="sidebarOpen" x-cloak>Geral</span>
-                </a>
+                <div x-data="{ open: activeModule === 'geral' || activeModule === 'pessoas' || activeModule === 'atendimentos' }">
+                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
+                        <i class="fa-solid fa-table-cells w-5 text-center"></i>
+                        <span class="ml-3 flex-1 text-left" x-show="sidebarOpen" x-cloak>Geral</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
+                    </button>
+                    <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Atendimentos</p>
+                        <a href="{{ Route::has('atendimentos.index') ? route('atendimentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">55</span> Manutencao de Atendimentos</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">172</span> Atendimentos Pool (Follow up)</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cadastros Essenciais</p>
+                        <a href="{{ Route::has('admin.departamentos.index') ? route('admin.departamentos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">67</span> Cadastro de Departamento</a>
+                        <a href="{{ route('cadastros.index', 'instituicoes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">7</span> Cadastro de Instituicao de Ensino</a>
+                        <a href="{{ Route::has('geral.questionarios.index') ? route('geral.questionarios.index') : route('geral.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">118</span> Cadastro de Questionarios NPS</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">97</span> Cadastro de Atributos Adicionais</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">221</span> Consulta Personalizada</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Configuracoes de Emissoes</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">6</span> Cadastro de Assinatura</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">9</span> Cadastro de Modelo de Documentos</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">48</span> Modelos de Cabecalho</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Indicacao</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">225</span> Campanha de Indicacao</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">223</span> Controle de Indicacoes</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Pessoas</p>
+                        <a href="{{ route('pessoas.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('pessoas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">11</span> Cadastro de Pessoa</a>
+                        <a href="{{ Route::has('profissionais.index') ? route('profissionais.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('profissionais.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">12</span> Cadastro de Profissional</a>
+                        <a href="{{ route('cadastros.index', 'profissoes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">145</span> Cadastro de Profissoes</a>
+                        <a href="{{ route('cadastros.index', 'religioes') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">13</span> Cadastro de Religiao</a>
+                        <a href="{{ route('cadastros.index', 'tipos-profissional') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">14</span> Tipo de Profissional</a>
+                        <a href="{{ route('cadastros.index', 'titularidades') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">15</span> Cadastro de Titularidade</a>
+                        <a href="{{ route('cadastros.index', 'necessidades-especiais') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">10</span> Necessidades Especiais</a>
+                        <a href="{{ route('cadastros.index', 'alergias') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">198</span> Cadastro de Alergia</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">164</span> Aniversariantes</a>
+                    </div>
+                </div>
 
                 {{-- INTEGRACOES --}}
                 <a href="{{ route('integracoes.index') }}" class="flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('integracoes*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
@@ -259,22 +411,41 @@
                 </a>
 
                 {{-- MATRICULA ONLINE --}}
-                <a href="{{ route('matricula-online.index') }}" class="flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('matricula-online*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
-                    <i class="fa-solid fa-globe w-5 text-center"></i>
-                    <span class="ml-3" x-show="sidebarOpen" x-cloak>Matr. Online</span>
-                </a>
+                <div x-data="{ open: activeModule === 'matricula-online' }">
+                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('matricula-online*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
+                        <i class="fa-solid fa-globe w-5 text-center"></i>
+                        <span class="ml-3 flex-1 text-left" x-show="sidebarOpen" x-cloak>Matr. Online</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
+                    </button>
+                    <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Processos</p>
+                        <a href="{{ Route::has('matricula-online.aberturas.index') ? route('matricula-online.aberturas.index') : route('matricula-online.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">140</span> Abertura de Matricula Online</a>
+                        <a href="{{ Route::has('matricula-online.inscricoes.index') ? route('matricula-online.inscricoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">149</span> Acompanhamento de Inscricoes</a>
+                        <a href="{{ Route::has('matricula-online.cupons.index') ? route('matricula-online.cupons.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">182</span> Cadastro de Cupons de Desconto</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">193</span> Cadastro de Cupons Personalizados</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">74</span> Cadastro de Tag Matricula Online</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">187</span> Emissao de Inscricoes</a>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">151</span> Painel de Inscricoes Online</a>
+                    </div>
+                </div>
 
                 {{-- PORTAIS --}}
-                <a href="{{ route('portais.index') }}" class="flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('portais*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
-                    <i class="fa-solid fa-desktop w-5 text-center"></i>
-                    <span class="ml-3" x-show="sidebarOpen" x-cloak>Portais</span>
-                </a>
-
-                {{-- PAINEL DO CLIENTE --}}
-                <a href="{{ route('painel-cliente.index') }}" class="flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('painel-cliente*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
-                    <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-                    <span class="ml-3" x-show="sidebarOpen" x-cloak>Painel do Cliente</span>
-                </a>
+                <div x-data="{ open: activeModule === 'portais' }">
+                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-700 {{ request()->is('portais*') ? 'bg-slate-700 text-primary-400 border-r-2 border-primary-400' : 'text-slate-300' }}">
+                        <i class="fa-solid fa-desktop w-5 text-center"></i>
+                        <span class="ml-3 flex-1 text-left" x-show="sidebarOpen" x-cloak>Portais</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="sidebarOpen" x-cloak></i>
+                    </button>
+                    <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Configuracao</p>
+                        <a href="{{ Route::has('portais.configuracao') ? route('portais.configuracao') : route('portais.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">46</span> Configuracao Portal Aluno</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Publicacao (Portal do Aluno)</p>
+                        <a href="{{ Route::has('portais.pastas.index') ? route('portais.pastas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">76</span> Cadastro de Pastas Portal Aluno</a>
+                        <a href="{{ Route::has('portais.publicacoes.index') ? route('portais.publicacoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">77</span> Publicacoes Portal Aluno</a>
+                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Feedbacks</p>
+                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">69</span> Resultados Feedback Professores</a>
+                    </div>
+                </div>
             </nav>
 
             {{-- Ajuda --}}
