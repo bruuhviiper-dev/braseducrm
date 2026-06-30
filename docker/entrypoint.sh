@@ -8,7 +8,11 @@ if [ ! -f /data/database.sqlite ]; then
     touch /data/database.sqlite
     FRESH=1
 fi
-chown www-data:www-data /data/database.sqlite || true
+# O SQLite precisa gravar o journal/WAL no diretório, então o /data (e o arquivo)
+# precisam ser graváveis pelo www-data (Apache). Sem isso: "readonly database".
+chown -R www-data:www-data /data || true
+chmod 775 /data || true
+chmod 664 /data/database.sqlite || true
 
 # Migrações (idempotentes) e seed só na primeira subida
 php artisan migrate --force --no-interaction || true
