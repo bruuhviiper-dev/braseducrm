@@ -266,6 +266,18 @@ Route::middleware('auth')->group(function () {
     Route::prefix('biblioteca')->name('biblioteca.')->group(function () {
         Route::resource('obras', \App\Http\Controllers\Biblioteca\ObraController::class)->except('show');
         Route::resource('exemplares', \App\Http\Controllers\Biblioteca\ExemplarController::class)->parameters(['exemplares' => 'exemplare'])->except('show');
+
+        // Movimentacoes (287) e Reservas (289)
+        Route::put('movimentacoes/{movimentacao}/devolver', [\App\Http\Controllers\Biblioteca\MovimentacaoExemplarController::class, 'devolver'])->name('movimentacoes.devolver');
+        Route::resource('movimentacoes', \App\Http\Controllers\Biblioteca\MovimentacaoExemplarController::class)->parameters(['movimentacoes' => 'movimentacao'])->only(['index', 'create', 'store', 'destroy']);
+        Route::put('reservas/{reserva}/situacao', [\App\Http\Controllers\Biblioteca\ReservaExemplarController::class, 'situacao'])->name('reservas.situacao');
+        Route::resource('reservas', \App\Http\Controllers\Biblioteca\ReservaExemplarController::class)->parameters(['reservas' => 'reserva'])->only(['index', 'create', 'store', 'destroy']);
+
+        // Emissoes (283/284/285)
+        Route::get('emissoes/etiquetas', [\App\Http\Controllers\Biblioteca\BibliotecaEmissaoController::class, 'etiquetas'])->name('emissoes.etiquetas');
+        Route::get('emissoes/exemplares', [\App\Http\Controllers\Biblioteca\BibliotecaEmissaoController::class, 'exemplares'])->name('emissoes.exemplares');
+        Route::get('emissoes/movimentacoes', [\App\Http\Controllers\Biblioteca\BibliotecaEmissaoController::class, 'movimentacoes'])->name('emissoes.movimentacoes');
+
         Route::get('configuracao', [\App\Http\Controllers\Biblioteca\ConfiguracaoBibliotecaController::class, 'index'])->name('configuracao.index');
         Route::put('configuracao', [\App\Http\Controllers\Biblioteca\ConfiguracaoBibliotecaController::class, 'update'])->name('configuracao.update');
     });
