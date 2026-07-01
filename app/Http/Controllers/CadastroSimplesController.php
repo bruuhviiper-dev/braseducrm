@@ -70,6 +70,20 @@ class CadastroSimplesController extends Controller
                 ['name' => 'telefone', 'label' => 'Telefone', 'type' => 'text', 'required' => false],
                 ['name' => 'email', 'label' => 'E-mail', 'type' => 'text', 'required' => false],
             ]],
+            // Financeiro
+            'bancos' => ['model' => \App\Models\Banco::class, 'titulo' => 'Banco', 'codigo' => 47, 'fields' => [
+                ['name' => 'codigo', 'label' => 'Código (FEBRABAN)', 'type' => 'text', 'required' => false],
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+            ]],
+            'centros-custo' => ['model' => \App\Models\CentroCusto::class, 'titulo' => 'Centro de Custos', 'codigo' => 274, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'codigo', 'label' => 'Código', 'type' => 'text', 'required' => false],
+            ]],
+            'formas-pagamento' => ['model' => \App\Models\FormaPagamento::class, 'titulo' => 'Forma de Pagamento', 'codigo' => 53, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'tipo', 'label' => 'Tipo', 'type' => 'select', 'required' => false, 'options' => \App\Models\FormaPagamento::TIPOS],
+            ]],
+            'motivos-devolucao-cheque' => ['model' => \App\Models\MotivoDevolucaoCheque::class, 'titulo' => 'Motivo de Devolução (Cheque)', 'codigo' => 73, 'fields' => $nome],
             // CRM
             'motivos-perda' => ['model' => \App\Models\MotivoPerda::class, 'titulo' => 'Motivo de Perda', 'codigo' => 107, 'fields' => $nome],
             'motivos-ganho' => ['model' => \App\Models\MotivoGanho::class, 'titulo' => 'Motivo de Ganho', 'codigo' => 212, 'fields' => $nome],

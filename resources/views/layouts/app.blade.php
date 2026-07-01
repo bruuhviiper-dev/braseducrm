@@ -310,14 +310,14 @@
                     </button>
                     <div x-show="open && sidebarOpen" x-cloak x-collapse class="bg-slate-800/50">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Cadastros Essenciais</p>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">47</span> Cadastro de Banco</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">274</span> Cadastro de Centro de Custos</a>
+                        <a href="{{ route('cadastros.index', 'bancos') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">47</span> Cadastro de Banco</a>
+                        <a href="{{ route('cadastros.index', 'centros-custo') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">274</span> Cadastro de Centro de Custos</a>
                         <a href="{{ Route::has('financeiro.categorias-pagar.index') ? route('financeiro.categorias-pagar.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">51</span> Categorias (A Pagar)</a>
                         <a href="{{ Route::has('financeiro.categorias-receber.index') ? route('financeiro.categorias-receber.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">65</span> Categorias (A Receber)</a>
                         <a href="{{ Route::has('financeiro.contas-bancarias.index') ? route('financeiro.contas-bancarias.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">63</span> Cadastro de Contas</a>
                         <a href="{{ Route::has('financeiro.descontos.index') ? route('financeiro.descontos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">58</span> Desconto Condicional</a>
                         <a href="{{ Route::has('financeiro.descontos.index') ? route('financeiro.descontos.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">57</span> Desconto Incondicional</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">53</span> Forma de Pagamento</a>
+                        <a href="{{ route('cadastros.index', 'formas-pagamento') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">53</span> Forma de Pagamento</a>
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">213</span> Taxas de Cartao Avulso</a>
                         <a href="{{ route('financeiro.plano-contas.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.plano-contas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">50</span> Cadastro do Plano de Contas</a>
                         <a href="{{ Route::has('financeiro.configuracao.index') ? route('financeiro.configuracao.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.configuracao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">59</span> Configuracao do Financeiro</a>
@@ -334,7 +334,7 @@
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cheques</p>
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">72</span> Manutencao de Cheques</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">73</span> Motivo de Devolucao (Cheque)</a>
+                        <a href="{{ route('cadastros.index', 'motivos-devolucao-cheque') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">73</span> Motivo de Devolucao (Cheque)</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Lancamentos Financeiros</p>
                         <a href="{{ Route::has('financeiro.dre.index') ? route('financeiro.dre.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.dre.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">111</span> Demonstrativo de Resultados (DRE)</a>
