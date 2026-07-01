@@ -84,6 +84,11 @@ class CadastroSimplesController extends Controller
                 ['name' => 'tipo', 'label' => 'Tipo', 'type' => 'select', 'required' => false, 'options' => \App\Models\FormaPagamento::TIPOS],
             ]],
             'motivos-devolucao-cheque' => ['model' => \App\Models\MotivoDevolucaoCheque::class, 'titulo' => 'Motivo de Devolução (Cheque)', 'codigo' => 73, 'fields' => $nome],
+            // Matrícula Online
+            'tags-matricula-online' => ['model' => \App\Models\TagMatriculaOnline::class, 'titulo' => 'Tag de Matrícula Online', 'codigo' => 74, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'cor', 'label' => 'Cor (hex ou nome)', 'type' => 'text', 'required' => false],
+            ]],
             // Comunicação
             'numeros-whatsapp' => ['model' => \App\Models\NumeroWhatsapp::class, 'titulo' => 'Número de WhatsApp', 'codigo' => 247, 'fields' => [
                 ['name' => 'numero', 'label' => 'Número (com DDD)', 'type' => 'text', 'required' => true],

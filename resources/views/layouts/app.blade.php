@@ -429,10 +429,10 @@
                         <a href="{{ Route::has('matricula-online.aberturas.index') ? route('matricula-online.aberturas.index') : route('matricula-online.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">140</span> Abertura de Matricula Online</a>
                         <a href="{{ Route::has('matricula-online.inscricoes.index') ? route('matricula-online.inscricoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">149</span> Acompanhamento de Inscricoes</a>
                         <a href="{{ Route::has('matricula-online.cupons.index') ? route('matricula-online.cupons.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">182</span> Cadastro de Cupons de Desconto</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">193</span> Cadastro de Cupons Personalizados</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">74</span> Cadastro de Tag Matricula Online</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">187</span> Emissao de Inscricoes</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">151</span> Painel de Inscricoes Online</a>
+                        <a href="{{ route('matricula-online.cupons-personalizados.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('matricula-online.cupons-personalizados.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">193</span> Cadastro de Cupons Personalizados</a>
+                        <a href="{{ route('cadastros.index', 'tags-matricula-online') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">74</span> Cadastro de Tag Matricula Online</a>
+                        <a href="{{ route('matricula-online.emissao-inscricoes') }}" target="_blank" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">187</span> Emissao de Inscricoes</a>
+                        <a href="{{ route('matricula-online.painel.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('matricula-online.painel.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">151</span> Painel de Inscricoes Online</a>
                     </div>
                 </div>
 

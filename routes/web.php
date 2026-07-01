@@ -389,6 +389,11 @@ Route::middleware('auth')->group(function () {
         Route::post('inscricoes', [InscricaoController::class, 'store'])->name('inscricoes.store');
         Route::put('inscricoes/{inscricao}', [InscricaoController::class, 'update'])->name('inscricoes.update');
         Route::delete('inscricoes/{inscricao}', [InscricaoController::class, 'destroy'])->name('inscricoes.destroy');
+
+        // Lote MO (193/151/187)
+        Route::resource('cupons-personalizados', \App\Http\Controllers\MatriculaOnline\CupomPersonalizadoController::class)->parameters(['cupons-personalizados' => 'cupons_personalizado'])->except('show');
+        Route::get('painel', [\App\Http\Controllers\MatriculaOnline\PainelInscricoesController::class, 'index'])->name('painel.index');
+        Route::get('emissao-inscricoes', [\App\Http\Controllers\MatriculaOnline\PainelInscricoesController::class, 'emissao'])->name('emissao-inscricoes');
     });
     Route::prefix('portais')->name('portais.')->group(function () {
         Route::get('/', [PortaisController::class, 'index'])->name('index');
