@@ -297,6 +297,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('avaliacoes', \App\Http\Controllers\Ead\AvaliacaoEadController::class)->parameters(['avaliacoes' => 'avaliacao'])->except('show');
         Route::resource('videos', \App\Http\Controllers\Ead\VideoEadController::class)->parameters(['videos' => 'video'])->except('show');
         Route::resource('questoes', \App\Http\Controllers\Ead\QuestaoAvulsaController::class)->parameters(['questoes' => 'questao'])->except('show');
+        Route::resource('sub-agrupadores', \App\Http\Controllers\Ead\SubAgrupadorCursoController::class)->parameters(['sub-agrupadores' => 'sub_agrupadore'])->except('show');
+        Route::resource('geradores', \App\Http\Controllers\Ead\GeradorAvaliacaoController::class)->parameters(['geradores' => 'geradore'])->except('show');
+        Route::resource('foruns', \App\Http\Controllers\Ead\ForumEadController::class)->parameters(['foruns' => 'forum']);
+        Route::post('foruns/{forum}/mensagem', [\App\Http\Controllers\Ead\ForumEadController::class, 'mensagem'])->name('foruns.mensagem');
+        Route::get('emissoes', [\App\Http\Controllers\Ead\EadEmissaoController::class, 'index'])->name('emissoes.index');
+        Route::get('emissoes/alunos-matriculados', [\App\Http\Controllers\Ead\EadEmissaoController::class, 'alunosMatriculados'])->name('emissoes.alunos-matriculados');
+        Route::get('emissoes/notas-alunos', [\App\Http\Controllers\Ead\EadEmissaoController::class, 'notasAlunos'])->name('emissoes.notas-alunos');
     });
 
     // Placeholder routes for modules
