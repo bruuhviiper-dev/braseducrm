@@ -106,6 +106,12 @@ class CadastroSimplesController extends Controller
                 ['name' => 'conteudo', 'label' => 'Conteúdo (HTML)', 'type' => 'textarea', 'required' => false],
             ]],
             // CRM
+            'acoes-automaticas' => ['model' => \App\Models\AcaoAutomaticaCrm::class, 'titulo' => 'Ação Automática (CRM)', 'codigo' => 256, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'gatilho', 'label' => 'Quando (gatilho)', 'type' => 'select', 'required' => true, 'options' => \App\Models\AcaoAutomaticaCrm::GATILHOS],
+                ['name' => 'acao', 'label' => 'Fazer (ação)', 'type' => 'select', 'required' => true, 'options' => \App\Models\AcaoAutomaticaCrm::ACOES],
+                ['name' => 'detalhes', 'label' => 'Detalhes', 'type' => 'textarea', 'required' => false],
+            ]],
             'motivos-perda' => ['model' => \App\Models\MotivoPerda::class, 'titulo' => 'Motivo de Perda', 'codigo' => 107, 'fields' => $nome],
             'motivos-ganho' => ['model' => \App\Models\MotivoGanho::class, 'titulo' => 'Motivo de Ganho', 'codigo' => 212, 'fields' => $nome],
             'motivos-pausa' => ['model' => \App\Models\MotivoPausa::class, 'titulo' => 'Motivo de Pausa', 'codigo' => 202, 'fields' => $nome],

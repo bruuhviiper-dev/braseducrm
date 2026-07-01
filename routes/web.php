@@ -216,6 +216,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('metas', MetaCrmController::class)->parameters(['metas' => 'meta'])->except('show');
         Route::get('configuracoes', [ConfiguracaoCrmController::class, 'index'])->name('configuracoes.index');
         Route::put('configuracoes', [ConfiguracaoCrmController::class, 'update'])->name('configuracoes.update');
+
+        // Propostas (201) e Exportação (159)
+        Route::get('propostas', [\App\Http\Controllers\Crm\PropostaCrmController::class, 'index'])->name('propostas.index');
+        Route::get('propostas/{oportunidade}/pdf', [\App\Http\Controllers\Crm\PropostaCrmController::class, 'gerar'])->name('propostas.gerar');
+        Route::get('exportacao', [\App\Http\Controllers\Crm\ExportacaoCrmController::class, 'index'])->name('exportacao.index');
+        Route::get('exportacao/csv', [\App\Http\Controllers\Crm\ExportacaoCrmController::class, 'exportar'])->name('exportacao.csv');
     });
 
     // Financeiro
