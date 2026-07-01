@@ -373,6 +373,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('campanhas-indicacao', \App\Http\Controllers\Geral\CampanhaIndicacaoController::class)->parameters(['campanhas-indicacao' => 'campanha'])->except('show');
         Route::resource('indicacoes', \App\Http\Controllers\Geral\IndicacaoController::class)->parameters(['indicacoes' => 'indicaco'])->except('show');
         Route::post('indicacoes/{indicaco}/status', [\App\Http\Controllers\Geral\IndicacaoController::class, 'status'])->name('indicacoes.status');
+
+        // Consulta Personalizada (221)
+        Route::resource('consultas', \App\Http\Controllers\Geral\ConsultaPersonalizadaController::class)->parameters(['consultas' => 'consulta'])->except('show');
+        Route::get('consultas/{consulta}/executar', [\App\Http\Controllers\Geral\ConsultaPersonalizadaController::class, 'executar'])->name('consultas.executar');
+        Route::get('consultas/{consulta}/csv', [\App\Http\Controllers\Geral\ConsultaPersonalizadaController::class, 'exportar'])->name('consultas.csv');
     });
     Route::prefix('integracoes')->name('integracoes.')->group(function () {
         Route::get('/', [IntegracoesController::class, 'index'])->name('index');
