@@ -232,6 +232,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('descontos', DescontoController::class)->parameters(['descontos' => 'desconto'])->except('show');
         Route::get('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'index'])->name('configuracao.index');
         Route::put('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'update']);
+        Route::get('nfse', [\App\Http\Controllers\Financeiro\ConfiguracaoNfseController::class, 'index'])->name('nfse.index');
+        Route::put('nfse', [\App\Http\Controllers\Financeiro\ConfiguracaoNfseController::class, 'update'])->name('nfse.update');
 
         // Financeiro avançado (P4)
         Route::resource('lancamentos', \App\Http\Controllers\Financeiro\LancamentoFinanceiroController::class)->parameters(['lancamentos' => 'lancamento'])->except('show');
