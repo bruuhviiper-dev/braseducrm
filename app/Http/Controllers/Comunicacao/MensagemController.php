@@ -86,4 +86,82 @@ class MensagemController extends Controller
         $service->enviar($data['canal'], $destinatario, $conteudo, 'Aviso financeiro', $titulo->pessoa_id);
         return back()->with('success', 'Aviso enviado para ' . $titulo->pessoa->nome . '.');
     }
+
+    /** Consulta de Saldo SMS (89). */
+    public function saldoSms()
+    {
+        $integracao = \App\Models\Integracao::where('chave', 'sms')->first();
+        $enviados = MensagemEnviada::where('canal', 'sms')->count();
+        $enviadosMes = MensagemEnviada::where('canal', 'sms')
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->count();
+        $ultimos = MensagemEnviada::where('canal', 'sms')->with('pessoa')->orderByDesc('id')->limit(10)->get();
+
+        return view('comunicacao.saldo-sms', compact('integracao', 'enviados', 'enviadosMes', 'ultimos'));
+    }
+
+    /** Aviso de Pagamento (234) — confirmação de pagamentos recebidos. */
+    public function avisoPagamento()
+    {
+        $titulos = TituloReceber::with('pessoa')
+            ->where('situacao', 'pago')
+            ->whereNotNull('data_pagamento')
+            ->orderByDesc('data_pagamento')->paginate(20);
+
+        return view('comunicacao.mensagens.aviso-pagamento', compact('titulos'));
+    }
+
+    public function enviarAvisoPagamento(Request $request, TituloReceber $titulo, MensagemService $service)
+    {
+        $data = $request->validate(['canal' => 'required|in:email,sms,whatsapp']);
+        $titulo->load('pessoa');
+
+        $destinatario = match ($data['canal']) {
+            'email' => $titulo->pessoa->email ?? null,
+            default => $titulo->pessoa->celular ?? $titulo->pessoa->telefone ?? null,
+        };
+        if (!$destinatario) {
+            return back()->with('error', 'Pessoa sem contato para o canal selecionado.');
+        }
+
+        $valor = number_format($titulo->valor_pago ?? $titulo->valor_original, 2, ',', '.');
+        $pgto = $titulo->data_pagamento ? Carbon::parse($titulo->data_pagamento)->format('d/m/Y') : '';
+        $conteudo = "Olá {$titulo->pessoa->nome}, confirmamos o recebimento do pagamento de R$ {$valor} em {$pgto}. Obrigado!";
+
+        $service->enviar($data['canal'], $destinatario, $conteudo, 'Confirmação de pagamento', $titulo->pessoa_id);
+        return back()->with('success', 'Confirmação enviada para ' . $titulo->pessoa->nome . '.');
+    }
+
+    /** Mensagens para Interessados CRM (62). */
+    public function interessados()
+    {
+        $interessados = \App\Models\Interessado::where('ativo', true)->orderBy('nome')->paginate(20);
+        $templates = TemplateMensagem::where('ativo', true)->orderBy('nome')->get();
+
+        return view('comunicacao.mensagens.interessados', compact('interessados', 'templates'));
+    }
+
+    public function enviarInteressado(Request $request, MensagemService $service)
+    {
+        $data = $request->validate([
+            'interessado_id' => 'required|exists:interessados,id',
+            'canal' => 'required|in:email,sms,whatsapp',
+            'assunto' => 'nullable|string|max:255',
+            'conteudo' => 'required|string',
+        ]);
+
+        $interessado = \App\Models\Interessado::findOrFail($data['interessado_id']);
+        $destinatario = match ($data['canal']) {
+            'email' => $interessado->email ?? null,
+            default => $interessado->celular ?? $interessado->telefone ?? null,
+        };
+        if (!$destinatario) {
+            return back()->with('error', 'Interessado sem contato para o canal selecionado.');
+        }
+
+        $msg = $service->enviar($data['canal'], $destinatario, $data['conteudo'], $data['assunto'] ?? 'Contato', $interessado->pessoa_id ?? null);
+        $tipo = $msg->situacao === 'enviada' ? 'success' : 'error';
+        $texto = $msg->situacao === 'enviada' ? 'Mensagem enviada para ' . $interessado->nome . '.' : 'Falha no envio: ' . $msg->erro;
+
+        return back()->with($tipo, $texto);
+    }
 }

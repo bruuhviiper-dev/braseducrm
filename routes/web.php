@@ -285,6 +285,18 @@ Route::middleware('auth')->group(function () {
         Route::post('mensagens/avulsa', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'avulsaStore'])->name('mensagens.avulsa.store');
         Route::get('mensagens/avisos', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'avisos'])->name('mensagens.avisos');
         Route::post('mensagens/avisos/{titulo}', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'enviarAviso'])->name('mensagens.enviar-aviso');
+
+        // Lote Comunicacao (89/234/62/260)
+        Route::get('saldo-sms', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'saldoSms'])->name('saldo-sms');
+        Route::get('mensagens/aviso-pagamento', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'avisoPagamento'])->name('mensagens.aviso-pagamento');
+        Route::post('mensagens/aviso-pagamento/{titulo}', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'enviarAvisoPagamento'])->name('mensagens.enviar-aviso-pagamento');
+        Route::get('mensagens/interessados', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'interessados'])->name('mensagens.interessados');
+        Route::post('mensagens/interessados', [\App\Http\Controllers\Comunicacao\MensagemController::class, 'enviarInteressado'])->name('mensagens.enviar-interessado');
+        Route::get('notificacoes', [\App\Http\Controllers\Comunicacao\NotificacaoAlunoController::class, 'index'])->name('notificacoes.index');
+        Route::get('notificacoes/nova', [\App\Http\Controllers\Comunicacao\NotificacaoAlunoController::class, 'create'])->name('notificacoes.create');
+        Route::post('notificacoes', [\App\Http\Controllers\Comunicacao\NotificacaoAlunoController::class, 'store'])->name('notificacoes.store');
+        Route::post('notificacoes/{notificaco}/lida', [\App\Http\Controllers\Comunicacao\NotificacaoAlunoController::class, 'marcarLida'])->name('notificacoes.lida');
+        Route::delete('notificacoes/{notificaco}', [\App\Http\Controllers\Comunicacao\NotificacaoAlunoController::class, 'destroy'])->name('notificacoes.destroy');
     });
 
     // Biblioteca

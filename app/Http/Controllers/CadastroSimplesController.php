@@ -84,6 +84,12 @@ class CadastroSimplesController extends Controller
                 ['name' => 'tipo', 'label' => 'Tipo', 'type' => 'select', 'required' => false, 'options' => \App\Models\FormaPagamento::TIPOS],
             ]],
             'motivos-devolucao-cheque' => ['model' => \App\Models\MotivoDevolucaoCheque::class, 'titulo' => 'Motivo de Devolução (Cheque)', 'codigo' => 73, 'fields' => $nome],
+            // Comunicação
+            'numeros-whatsapp' => ['model' => \App\Models\NumeroWhatsapp::class, 'titulo' => 'Número de WhatsApp', 'codigo' => 247, 'fields' => [
+                ['name' => 'numero', 'label' => 'Número (com DDD)', 'type' => 'text', 'required' => true],
+                ['name' => 'descricao', 'label' => 'Descrição', 'type' => 'text', 'required' => false],
+                ['name' => 'principal', 'label' => 'Número principal?', 'type' => 'boolean', 'required' => false],
+            ]],
             // CRM
             'motivos-perda' => ['model' => \App\Models\MotivoPerda::class, 'titulo' => 'Motivo de Perda', 'codigo' => 107, 'fields' => $nome],
             'motivos-ganho' => ['model' => \App\Models\MotivoGanho::class, 'titulo' => 'Motivo de Ganho', 'codigo' => 212, 'fields' => $nome],
