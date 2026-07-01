@@ -250,6 +250,15 @@ Route::middleware('auth')->group(function () {
         // Cheques (72)
         Route::resource('cheques', \App\Http\Controllers\Financeiro\ChequeController::class)->parameters(['cheques' => 'cheque'])->except('show');
         Route::post('cheques/{cheque}/situacao', [\App\Http\Controllers\Financeiro\ChequeController::class, 'situacao'])->name('cheques.situacao');
+
+        // Cartões (70/71/136)
+        Route::resource('contratos-cartao', \App\Http\Controllers\Financeiro\ContratoCartaoController::class)->parameters(['contratos-cartao' => 'contratos_cartao'])->except('show');
+        Route::resource('cartoes-empresariais', \App\Http\Controllers\Financeiro\CartaoEmpresarialController::class)->parameters(['cartoes-empresariais' => 'cartoes_empresariai'])->except('show');
+        Route::get('conciliacao-cartao', [\App\Http\Controllers\Financeiro\ConciliacaoCartaoController::class, 'index'])->name('conciliacao-cartao.index');
+        Route::get('conciliacao-cartao/novo', [\App\Http\Controllers\Financeiro\ConciliacaoCartaoController::class, 'create'])->name('conciliacao-cartao.create');
+        Route::post('conciliacao-cartao', [\App\Http\Controllers\Financeiro\ConciliacaoCartaoController::class, 'store'])->name('conciliacao-cartao.store');
+        Route::post('conciliacao-cartao/{recebimento}/conciliar', [\App\Http\Controllers\Financeiro\ConciliacaoCartaoController::class, 'conciliar'])->name('conciliacao-cartao.conciliar');
+        Route::delete('conciliacao-cartao/{recebimento}', [\App\Http\Controllers\Financeiro\ConciliacaoCartaoController::class, 'destroy'])->name('conciliacao-cartao.destroy');
     });
 
     // Comunicacao

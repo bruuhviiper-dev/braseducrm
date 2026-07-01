@@ -328,9 +328,9 @@
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">106</span> Emissao do Fechamento de Caixa</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cartoes</p>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">70</span> Contratos de Cartoes</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">71</span> Conciliacao de Recebimentos (Cartao)</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">136</span> Cartao de Credito Empresarial</a>
+                        <a href="{{ route('financeiro.contratos-cartao.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.contratos-cartao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">70</span> Contratos de Cartoes</a>
+                        <a href="{{ route('financeiro.conciliacao-cartao.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.conciliacao-cartao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">71</span> Conciliacao de Recebimentos (Cartao)</a>
+                        <a href="{{ route('financeiro.cartoes-empresariais.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.cartoes-empresariais.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">136</span> Cartao de Credito Empresarial</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cheques</p>
                         <a href="{{ route('financeiro.cheques.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.cheques.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">72</span> Manutencao de Cheques</a>
