@@ -246,6 +246,10 @@ Route::middleware('auth')->group(function () {
         Route::post('renegociacoes', [\App\Http\Controllers\Financeiro\RenegociacaoController::class, 'store'])->name('renegociacoes.store');
         Route::get('retorno', [\App\Http\Controllers\Financeiro\RetornoCnabController::class, 'index'])->name('retorno.index');
         Route::post('retorno', [\App\Http\Controllers\Financeiro\RetornoCnabController::class, 'processar'])->name('retorno.processar');
+
+        // Cheques (72)
+        Route::resource('cheques', \App\Http\Controllers\Financeiro\ChequeController::class)->parameters(['cheques' => 'cheque'])->except('show');
+        Route::post('cheques/{cheque}/situacao', [\App\Http\Controllers\Financeiro\ChequeController::class, 'situacao'])->name('cheques.situacao');
     });
 
     // Comunicacao

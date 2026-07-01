@@ -333,7 +333,7 @@
                         <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">136</span> Cartao de Credito Empresarial</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cheques</p>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">72</span> Manutencao de Cheques</a>
+                        <a href="{{ route('financeiro.cheques.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.cheques.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">72</span> Manutencao de Cheques</a>
                         <a href="{{ route('cadastros.index', 'motivos-devolucao-cheque') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">73</span> Motivo de Devolucao (Cheque)</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Lancamentos Financeiros</p>
