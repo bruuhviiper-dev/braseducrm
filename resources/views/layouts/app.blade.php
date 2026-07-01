@@ -325,7 +325,7 @@
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Caixa (Movimentacoes)</p>
                         <a href="{{ Route::has('financeiro.caixas.index') ? route('financeiro.caixas.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.caixas.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">68</span> Movimentacoes de Caixas</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">106</span> Emissao do Fechamento de Caixa</a>
+                        <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.emissoes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">106</span> Emissao do Fechamento de Caixa</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Cartoes</p>
                         <a href="{{ route('financeiro.contratos-cartao.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.contratos-cartao.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">70</span> Contratos de Cartoes</a>
@@ -344,17 +344,17 @@
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Titulos a pagar</p>
                         <a href="{{ route('financeiro.titulos-pagar.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.titulos-pagar.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">52</span> Manutencao de Titulos a Pagar</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">173</span> Emissao de Titulos a Pagar</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">180</span> Emissao de Comissoes</a>
+                        <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.emissoes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">173</span> Emissao de Titulos a Pagar</a>
+                        <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.emissoes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">180</span> Emissao de Comissoes</a>
 
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Titulos a receber</p>
                         <a href="{{ route('financeiro.titulos-receber.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.titulos-receber.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">64</span> Manutencao de Titulos a Receber</a>
                         <a href="{{ Route::has('financeiro.renegociacoes.index') ? route('financeiro.renegociacoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.renegociacoes.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">80</span> Renegociacoes de Parcelas</a>
                         <a href="{{ Route::has('financeiro.retorno.index') ? route('financeiro.retorno.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('financeiro.retorno.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">82</span> Importacao do Arquivo de Retorno</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">66</span> Emissao de Boletos Bancarios</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">113</span> Emissao de Cobranca</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">93</span> Conta Corrente Por Pessoa</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">101</span> Resumo Financeiro da Pessoa</a>
+                        <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">66</span> Emissao de Boletos Bancarios</a>
+                        <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">113</span> Emissao de Cobranca</a>
+                        <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">93</span> Conta Corrente Por Pessoa</a>
+                        <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">101</span> Resumo Financeiro da Pessoa</a>
                         <a href="{{ Route::has('paineis.financeiro') ? route('paineis.financeiro') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('paineis.financeiro') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">138</span> Painel Financeiro</a>
                     </div>
                 </div>

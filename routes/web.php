@@ -235,6 +235,16 @@ Route::middleware('auth')->group(function () {
         Route::get('nfse', [\App\Http\Controllers\Financeiro\ConfiguracaoNfseController::class, 'index'])->name('nfse.index');
         Route::put('nfse', [\App\Http\Controllers\Financeiro\ConfiguracaoNfseController::class, 'update'])->name('nfse.update');
 
+        // Emissões financeiras (173/66/113/106/93/101/180)
+        Route::get('emissoes', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'index'])->name('emissoes.index');
+        Route::get('emissoes/titulos-pagar', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'titulosPagar'])->name('emissoes.titulos-pagar');
+        Route::get('emissoes/boletos', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'boletos'])->name('emissoes.boletos');
+        Route::get('emissoes/cobranca', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'cobranca'])->name('emissoes.cobranca');
+        Route::get('emissoes/conta-corrente', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'contaCorrente'])->name('emissoes.conta-corrente');
+        Route::get('emissoes/resumo-pessoa', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'resumoPessoa'])->name('emissoes.resumo-pessoa');
+        Route::get('emissoes/fechamento-caixa', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'fechamentoCaixa'])->name('emissoes.fechamento-caixa');
+        Route::get('emissoes/comissoes', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'comissoes'])->name('emissoes.comissoes');
+
         // Financeiro avançado (P4)
         Route::resource('lancamentos', \App\Http\Controllers\Financeiro\LancamentoFinanceiroController::class)->parameters(['lancamentos' => 'lancamento'])->except('show');
         Route::get('caixas', [\App\Http\Controllers\Financeiro\CaixaController::class, 'index'])->name('caixas.index');
