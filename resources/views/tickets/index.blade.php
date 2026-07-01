@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('title', 'Central de Tickets')
 
 @section('content')
@@ -96,4 +96,5 @@
     </div>
     @endif
 </div>
+<x-fab :route="route('tickets.create')" />
 @endsection

@@ -9,11 +9,6 @@
             <h1 class="text-lg font-semibold text-gray-800">{{ $title }}</h1>
         </div>
         <div class="flex items-center gap-2">
-            @if($createRoute)
-            <a href="{{ $createRoute }}" class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-plus"></i> {{ $createLabel }}
-            </a>
-            @endif
             <button class="px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-2">
                 <i class="fa-solid fa-filter"></i> Filtrar
             </button>
@@ -31,3 +26,13 @@
         {{ $slot }}
     </div>
 </div>
+
+@if($createRoute)
+{{-- FAB "+" estilo EDUQ (canto inferior direito) --}}
+<a href="{{ $createRoute }}" class="group fixed bottom-6 right-6 z-40 flex items-center" title="{{ $createLabel }}">
+    <span class="mr-2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs font-medium px-2.5 py-1 rounded shadow-lg whitespace-nowrap">{{ $createLabel }}</span>
+    <span class="w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-xl shadow-primary-600/30 flex items-center justify-center transition-transform group-hover:scale-105 active:scale-95">
+        <i class="fa-solid fa-plus text-2xl"></i>
+    </span>
+</a>
+@endif

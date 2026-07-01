@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('title', 'Titulos a Pagar')
 
 @section('content')
@@ -177,4 +177,5 @@
         </div>
     </div>
 </div>
+<x-fab :route="route('financeiro.titulos-pagar.create')" />
 @endsection

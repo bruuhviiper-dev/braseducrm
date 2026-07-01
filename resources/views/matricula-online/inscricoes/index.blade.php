@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('title', 'Acompanhamento de Inscrições')
+﻿@extends('layouts.app')
+@section('title', 'Acompanhamento de InscriÃ§Ãµes')
 
 @php
 $badges = [
@@ -15,14 +15,14 @@ $badges = [
     <div class="p-5 border-b flex items-center justify-between">
         <div class="flex items-center gap-3">
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">149</span>
-            <h1 class="text-lg font-semibold text-gray-800">Acompanhamento de Inscrições</h1>
+            <h1 class="text-lg font-semibold text-gray-800">Acompanhamento de InscriÃ§Ãµes</h1>
         </div>
         <a href="{{ route('matricula-online.inscricoes.create') }}" class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 flex items-center gap-2">
-            <i class="fa-solid fa-plus"></i> Nova Inscrição
+            <i class="fa-solid fa-plus"></i> Nova InscriÃ§Ã£o
         </a>
     </div>
 
-    {{-- Filtro por situação --}}
+    {{-- Filtro por situaÃ§Ã£o --}}
     <div class="px-5 py-3 border-b flex gap-2 text-sm">
         @php $atual = request('situacao'); @endphp
         <a href="{{ route('matricula-online.inscricoes.index') }}" class="px-3 py-1 rounded-full {{ !$atual ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">Todas</a>
@@ -54,7 +54,7 @@ $badges = [
                         <div>{{ $i->email }}</div>
                         <div class="text-xs text-gray-400">{{ $i->telefone ?? '' }}</div>
                     </td>
-                    <td class="px-4 py-3 text-gray-600">{{ $i->abertura?->nome ?? '—' }}</td>
+                    <td class="px-4 py-3 text-gray-600">{{ $i->abertura?->nome ?? 'â€”' }}</td>
                     <td class="px-4 py-3">
                         <i class="fa-solid {{ $i->pagamento_confirmado ? 'fa-circle-check text-green-500' : 'fa-circle-xmark text-gray-300' }}"></i>
                     </td>
@@ -76,7 +76,7 @@ $badges = [
                             <form method="POST" action="{{ route('matricula-online.inscricoes.update', $i) }}" class="space-y-3">
                                 @csrf @method('PUT')
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-600 mb-1">Situação</label>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">SituaÃ§Ã£o</label>
                                     <select name="situacao" class="w-full border rounded px-2 py-1.5 text-sm">
                                         @foreach(['pendente','aprovada','matriculada','cancelada'] as $s)
                                         <option value="{{ $s }}" {{ $i->situacao === $s ? 'selected' : '' }} class="capitalize">{{ ucfirst($s) }}</option>
@@ -97,11 +97,12 @@ $badges = [
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">Nenhuma inscrição encontrada.</td></tr>
+                <tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">Nenhuma inscriÃ§Ã£o encontrada.</td></tr>
                 @endforelse
             </tbody>
         </table>
         <div class="mt-4">{{ $inscricoes->links() }}</div>
     </div>
 </div>
+<x-fab :route="route('matricula-online.inscricoes.create')" />
 @endsection
