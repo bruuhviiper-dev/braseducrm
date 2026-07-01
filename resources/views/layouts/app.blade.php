@@ -236,9 +236,9 @@
                         <a href="{{ route('cadastros.index', 'depositos') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">153</span> Cadastro de Depositos de Estoque</a>
                         <a href="{{ route('estoque.produtos.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('estoque.produtos.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">148</span> Cadastro de Produtos de Estoque</a>
                         <a href="{{ Route::has('estoque.unidades.index') ? route('estoque.unidades.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">146</span> Cadastro de Unidades de Medida</a>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">186</span> Emissao de Produtos de Estoques</a>
+                        <a href="{{ route('estoque.emissao') }}" target="_blank" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">186</span> Emissao de Produtos de Estoques</a>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-1">Movimentacoes</p>
-                        <a href="#" class="submenu-item block text-slate-500 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">154</span> Consulta de Estoque</a>
+                        <a href="{{ route('estoque.consulta.index') }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700 {{ request()->routeIs('estoque.consulta.*') ? 'text-primary-400' : '' }}"><span class="text-slate-600 mr-1">154</span> Consulta de Estoque</a>
                         <a href="{{ Route::has('estoque.movimentacoes.index') ? route('estoque.movimentacoes.index') : '#' }}" class="submenu-item block text-slate-400 hover:text-white hover:bg-slate-700"><span class="text-slate-600 mr-1">150</span> Movimentacoes de Estoque</a>
                     </div>
                 </div>

@@ -331,6 +331,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('categorias', CategoriaEstoqueController::class);
         Route::resource('unidades', UnidadeMedidaController::class);
         Route::resource('movimentacoes', MovimentacaoEstoqueController::class);
+        Route::get('consulta', [\App\Http\Controllers\Estoque\ConsultaEstoqueController::class, 'index'])->name('consulta.index');
+        Route::get('emissao', [\App\Http\Controllers\Estoque\ConsultaEstoqueController::class, 'emissao'])->name('emissao');
     });
 
     // EAD
