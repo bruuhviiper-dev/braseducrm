@@ -24,7 +24,7 @@
                     <label class="block text-xs text-gray-500 mb-1">Situação</label>
                     <select name="situacao" class="w-full border rounded-lg px-3 py-2 text-sm">
                         <option value="">Todas</option>
-                        @foreach(['cursando','concluido','cancelado','trancado'] as $s)
+                        @foreach(['ativa','concluida','cancelada','trancada'] as $s)
                         <option value="{{ $s }}">{{ ucfirst($s) }}</option>
                         @endforeach
                     </select>

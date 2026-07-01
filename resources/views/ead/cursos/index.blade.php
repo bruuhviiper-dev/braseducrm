@@ -8,6 +8,8 @@
             <tr>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Nome</th>
+                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Tutor</th>
+                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Módulos</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Carga Horaria</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Valor</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Ativo</th>
@@ -19,6 +21,8 @@
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 text-gray-500">{{ $c->id }}</td>
                 <td class="px-4 py-3 font-medium text-gray-800">{{ $c->nome }}</td>
+                <td class="px-4 py-3 text-gray-600">{{ $c->tutor?->pessoa?->nome ?? '—' }}</td>
+                <td class="px-4 py-3 text-gray-600">{{ $c->modulos_count }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $c->carga_horaria ? $c->carga_horaria . 'h' : '-' }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $c->valor ? 'R$ ' . number_format($c->valor, 2, ',', '.') : '-' }}</td>
                 <td class="px-4 py-3">
@@ -37,7 +41,7 @@
                 </td>
             </tr>
             @empty
-            <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhum curso EAD cadastrado.</td></tr>
+            <tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">Nenhum curso EAD cadastrado.</td></tr>
             @endforelse
         </tbody>
     </table>
