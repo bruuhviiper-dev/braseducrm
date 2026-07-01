@@ -358,6 +358,13 @@ Route::middleware('auth')->group(function () {
         Route::get('questionarios/{questionario}/responder', [\App\Http\Controllers\Geral\RespostaQuestionarioController::class, 'responder'])->name('questionarios.responder');
         Route::post('questionarios/{questionario}/responder', [\App\Http\Controllers\Geral\RespostaQuestionarioController::class, 'salvar'])->name('questionarios.salvar-resposta');
         Route::get('questionarios/{questionario}/resultados', [\App\Http\Controllers\Geral\RespostaQuestionarioController::class, 'resultados'])->name('questionarios.resultados');
+
+        // Geral lote (9/164/225/223)
+        Route::resource('modelos-documento', \App\Http\Controllers\Geral\ModeloDocumentoController::class)->parameters(['modelos-documento' => 'modelo'])->except('show');
+        Route::get('aniversariantes', [\App\Http\Controllers\Geral\AniversariantesController::class, 'index'])->name('aniversariantes.index');
+        Route::resource('campanhas-indicacao', \App\Http\Controllers\Geral\CampanhaIndicacaoController::class)->parameters(['campanhas-indicacao' => 'campanha'])->except('show');
+        Route::resource('indicacoes', \App\Http\Controllers\Geral\IndicacaoController::class)->parameters(['indicacoes' => 'indicaco'])->except('show');
+        Route::post('indicacoes/{indicaco}/status', [\App\Http\Controllers\Geral\IndicacaoController::class, 'status'])->name('indicacoes.status');
     });
     Route::prefix('integracoes')->name('integracoes.')->group(function () {
         Route::get('/', [IntegracoesController::class, 'index'])->name('index');

@@ -90,6 +90,21 @@ class CadastroSimplesController extends Controller
                 ['name' => 'descricao', 'label' => 'Descrição', 'type' => 'text', 'required' => false],
                 ['name' => 'principal', 'label' => 'Número principal?', 'type' => 'boolean', 'required' => false],
             ]],
+            // Geral
+            'atributos-adicionais' => ['model' => \App\Models\AtributoAdicional::class, 'titulo' => 'Atributo Adicional', 'codigo' => 97, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'entidade', 'label' => 'Aplicar em', 'type' => 'select', 'required' => true, 'options' => \App\Models\AtributoAdicional::ENTIDADES],
+                ['name' => 'tipo', 'label' => 'Tipo', 'type' => 'select', 'required' => true, 'options' => \App\Models\AtributoAdicional::TIPOS],
+                ['name' => 'obrigatorio', 'label' => 'Obrigatório?', 'type' => 'boolean', 'required' => false],
+            ]],
+            'assinaturas' => ['model' => \App\Models\Assinatura::class, 'titulo' => 'Assinatura', 'codigo' => 6, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'cargo', 'label' => 'Cargo', 'type' => 'text', 'required' => false],
+            ]],
+            'cabecalhos' => ['model' => \App\Models\Cabecalho::class, 'titulo' => 'Modelo de Cabeçalho', 'codigo' => 48, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'conteudo', 'label' => 'Conteúdo (HTML)', 'type' => 'textarea', 'required' => false],
+            ]],
             // CRM
             'motivos-perda' => ['model' => \App\Models\MotivoPerda::class, 'titulo' => 'Motivo de Perda', 'codigo' => 107, 'fields' => $nome],
             'motivos-ganho' => ['model' => \App\Models\MotivoGanho::class, 'titulo' => 'Motivo de Ganho', 'codigo' => 212, 'fields' => $nome],
