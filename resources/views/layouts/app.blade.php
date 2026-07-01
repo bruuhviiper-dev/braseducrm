@@ -30,51 +30,30 @@
     </style>
     @stack('styles')
 </head>
-<body class="bg-gray-50 min-h-screen" x-data="{ pinned: false, hovering: false, searchOpen: false, activeModule: '{{ request()->segment(1, 'dashboard') }}', get navOpen() { return this.pinned || this.hovering } }">
+<body class="bg-gray-50 min-h-screen" x-data="{ searchOpen: false, openMod: null }">
     <div class="flex min-h-screen">
 
         {{-- SIDEBAR COM SUBMENUS EXPANDIVEIS --}}
-        <aside @mouseenter="hovering = true" @mouseleave="hovering = false"
-               class="fixed top-0 left-0 z-40 h-screen transition-all duration-300 bg-white text-gray-700 border-r border-gray-200 flex flex-col"
-               :class="navOpen ? 'w-64' : 'w-16'">
+        <aside class="fixed top-0 left-0 z-40 h-screen bg-white text-gray-700 border-r border-gray-200 flex flex-col w-20">
 
             {{-- Logo --}}
             <div class="flex items-center justify-center h-14 border-b border-gray-200 px-3">
-                <template x-if="navOpen">
-                    <span class="text-lg font-bold tracking-wide">BrasEdu<span class="text-primary-600">CRM</span></span>
-                </template>
-                <template x-if="!navOpen">
-                    <span class="text-lg font-bold text-primary-600">B</span>
-                </template>
+                <span class="text-2xl font-extrabold text-primary-600">B</span>
             </div>
 
             {{-- Search bar inside sidebar --}}
-            <div class="px-3 py-2 border-b border-gray-200" x-show="navOpen" x-cloak>
-                <button @click="searchOpen = true" class="w-full flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg text-gray-600 text-xs hover:bg-primary-50">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <span>Buscar...</span>
-                    <span class="ml-auto text-[10px] border border-gray-300 rounded px-1">Ctrl+K</span>
-                </button>
-            </div>
+            <div class="px-2 py-2 border-b border-gray-200"><button @click="searchOpen = true" class="w-full flex flex-col items-center gap-1 py-1.5 text-[10px] text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded" title="Buscar (Ctrl+K)"><i class="fa-solid fa-magnifying-glass text-base"></i><span>Buscar</span></button></div>
 
             {{-- Menu items --}}
             <nav class="flex-1 overflow-y-auto scrollbar-thin py-1">
 
                 {{-- Dashboard --}}
-                <a href="{{ route('dashboard') }}"
-                   class="flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->routeIs('dashboard') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                    <i class="fa-solid fa-house w-5 text-center"></i>
-                    <span class="ml-3" x-show="navOpen" x-cloak>Dashboard</span>
-                </a>
+                <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->routeIs('dashboard') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}"><i class="fa-solid fa-house text-lg"></i><span class="text-center px-0.5">Dashboard</span></a>
 
                 {{-- ACADEMICO --}}
-                <div x-data="{ open: activeModule === 'academico' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('academico*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-graduation-cap w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Academico</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===0 ? null : 0" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('academico*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===0 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-graduation-cap text-lg"></i><span class="text-center px-0.5">Academico</span></button>
+                    <div x-show="openMod===0" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('academico.calendarios.index') ? route('academico.calendarios.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('academico.calendarios.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">35</span> Cadastro de Calendario</a>
                         <a href="{{ route('cadastros.index', 'escolas') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">8</span> Cadastro de Escola</a>
@@ -156,13 +135,9 @@
                 </div>
 
                 {{-- ADMINISTRATIVO --}}
-                <div x-data="{ open: activeModule === 'pessoas' || activeModule === 'alunos' || activeModule === 'requerimentos' || activeModule === 'atendimentos' || activeModule === 'documentos' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('pessoas*') || request()->is('alunos*') || request()->is('requerimentos*') || request()->is('atendimentos*') || request()->is('documentos*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-building w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Administrativo</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===1 ? null : 1" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('pessoas*') || request()->is('alunos*') || request()->is('requerimentos*') || request()->is('atendimentos*') || request()->is('documentos*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===1 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-building text-lg"></i><span class="text-center px-0.5">Administrativo</span></button>
+                    <div x-show="openMod===1" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Acessos</p>
                         <a href="{{ Route::has('admin.grupos.index') ? route('admin.grupos.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('admin.grupos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">43</span> Cadastro de Grupo de Operadores</a>
                         <a href="{{ Route::has('admin.operadores.index') ? route('admin.operadores.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('admin.operadores.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">44</span> Cadastro de Operador</a>
@@ -171,13 +146,9 @@
                 </div>
 
                 {{-- BIBLIOTECA --}}
-                <div x-data="{ open: activeModule === 'biblioteca' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('biblioteca*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-book w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Biblioteca</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===2 ? null : 2" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('biblioteca*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===2 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-book text-lg"></i><span class="text-center px-0.5">Biblioteca</span></button>
+                    <div x-show="openMod===2" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Acervo</p>
                         <a href="{{ Route::has('biblioteca.obras.index') ? route('biblioteca.obras.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('biblioteca.obras.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">288</span> Cadastro de Obra</a>
                         <a href="{{ Route::has('biblioteca.exemplares.index') ? route('biblioteca.exemplares.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('biblioteca.exemplares.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">286</span> Cadastro de Exemplares</a>
@@ -202,13 +173,9 @@
                 </div>
 
                 {{-- COMUNICACAO --}}
-                <div x-data="{ open: activeModule === 'comunicacao' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('comunicacao*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-comments w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Comunicacao</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===3 ? null : 3" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('comunicacao*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===3 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-comments text-lg"></i><span class="text-center px-0.5">Comunicacao</span></button>
+                    <div x-show="openMod===3" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Mensagens</p>
                         <a href="{{ Route::has('comunicacao.mensagens.avulsa') ? route('comunicacao.mensagens.avulsa') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('comunicacao.mensagens.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">84</span> Mensagens Avulsas</a>
                         <a href="{{ Route::has('comunicacao.mensagens.avisos') ? route('comunicacao.mensagens.avisos') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">88</span> Aviso de Cobranca</a>
@@ -225,13 +192,9 @@
                 </div>
 
                 {{-- ESTOQUE --}}
-                <div x-data="{ open: activeModule === 'estoque' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('estoque*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-boxes-stacked w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Estoque</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===4 ? null : 4" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('estoque*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===4 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-center px-0.5">Estoque</span></button>
+                    <div x-show="openMod===4" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('estoque.categorias.index') ? route('estoque.categorias.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">147</span> Cadastro de Categorias de Estoque</a>
                         <a href="{{ route('cadastros.index', 'depositos') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">153</span> Cadastro de Depositos de Estoque</a>
@@ -245,13 +208,9 @@
                 </div>
 
                 {{-- CRM --}}
-                <div x-data="{ open: activeModule === 'crm' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('crm*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-handshake w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>CRM</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===5 ? null : 5" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('crm*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===5 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-handshake text-lg"></i><span class="text-center px-0.5">CRM</span></button>
+                    <div x-show="openMod===5" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'categorias-interessado') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">207</span> Categorias (Interessados)</a>
                         <a href="{{ Route::has('crm.eventos.index') ? route('crm.eventos.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">104</span> Eventos CRM</a>
@@ -278,13 +237,9 @@
                 </div>
 
                 {{-- EAD --}}
-                <div x-data="{ open: activeModule === 'ead' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('ead*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-laptop w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>EAD</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===6 ? null : 6" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('ead*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===6 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-laptop text-lg"></i><span class="text-center px-0.5">EAD</span></button>
+                    <div x-show="openMod===6" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('ead.cursos.index') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('ead.cursos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">152</span> Cadastro de Curso (EAD)</a>
                         <a href="{{ route('cadastros.index', 'agrupadores-curso') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">211</span> Cadastro de Agrupador de Cursos</a>
@@ -303,13 +258,9 @@
                 </div>
 
                 {{-- FINANCEIRO --}}
-                <div x-data="{ open: activeModule === 'financeiro' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('financeiro*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-dollar-sign w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Financeiro</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===7 ? null : 7" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('financeiro*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===7 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-dollar-sign text-lg"></i><span class="text-center px-0.5">Financeiro</span></button>
+                    <div x-show="openMod===7" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'bancos') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">47</span> Cadastro de Banco</a>
                         <a href="{{ route('cadastros.index', 'centros-custo') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">274</span> Cadastro de Centro de Custos</a>
@@ -361,13 +312,9 @@
                 </div>
 
                 {{-- GED --}}
-                <div x-data="{ open: activeModule === 'ged' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('ged*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-folder-open w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>GED</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===8 ? null : 8" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('ged*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===8 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-folder-open text-lg"></i><span class="text-center px-0.5">GED</span></button>
+                    <div x-show="openMod===8" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('ged.documentos.index') ? route('ged.documentos.index') : route('ged.index') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->is('ged*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">244</span> Documento (GED)</a>
                         <a href="#" class="submenu-item block text-gray-400 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">245</span> Categoria do Documento (GED)</a>
@@ -376,13 +323,9 @@
                 </div>
 
                 {{-- GERAL --}}
-                <div x-data="{ open: activeModule === 'geral' || activeModule === 'pessoas' || activeModule === 'atendimentos' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-table-cells w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Geral</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===9 ? null : 9" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===9 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-table-cells text-lg"></i><span class="text-center px-0.5">Geral</span></button>
+                    <div x-show="openMod===9" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Atendimentos</p>
                         <a href="{{ Route::has('atendimentos.index') ? route('atendimentos.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">55</span> Manutencao de Atendimentos</a>
                         <a href="#" class="submenu-item block text-gray-400 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">172</span> Atendimentos Pool (Follow up)</a>
@@ -413,19 +356,15 @@
                 </div>
 
                 {{-- INTEGRACOES --}}
-                <a href="{{ route('integracoes.index') }}" class="flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('integracoes*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                    <i class="fa-solid fa-plug w-5 text-center"></i>
-                    <span class="ml-3" x-show="navOpen" x-cloak>Integracoes</span>
+                <a href="{{ route('integracoes.index') }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('integracoes*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-600' }}">
+                    <i class="fa-solid fa-plug text-lg"></i>
+                    <span class="text-center px-0.5">Integracoes</span>
                 </a>
 
                 {{-- MATRICULA ONLINE --}}
-                <div x-data="{ open: activeModule === 'matricula-online' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('matricula-online*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-globe w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Matr. Online</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===10 ? null : 10" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('matricula-online*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===10 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-globe text-lg"></i><span class="text-center px-0.5">Matr. Online</span></button>
+                    <div x-show="openMod===10" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Processos</p>
                         <a href="{{ Route::has('matricula-online.aberturas.index') ? route('matricula-online.aberturas.index') : route('matricula-online.index') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">140</span> Abertura de Matricula Online</a>
                         <a href="{{ Route::has('matricula-online.inscricoes.index') ? route('matricula-online.inscricoes.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">149</span> Acompanhamento de Inscricoes</a>
@@ -438,13 +377,9 @@
                 </div>
 
                 {{-- PORTAIS --}}
-                <div x-data="{ open: activeModule === 'portais' }">
-                    <button @click="open = !open" class="w-full flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-primary-50 {{ request()->is('portais*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}">
-                        <i class="fa-solid fa-desktop w-5 text-center"></i>
-                        <span class="ml-3 flex-1 text-left" x-show="navOpen" x-cloak>Portais</span>
-                        <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="open && 'rotate-180'" x-show="navOpen" x-cloak></i>
-                    </button>
-                    <div x-show="open && navOpen" x-cloak x-collapse class="bg-gray-50">
+                <div>
+                    <button @click="openMod = openMod===11 ? null : 11" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('portais*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===11 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-desktop text-lg"></i><span class="text-center px-0.5">Portais</span></button>
+                    <div x-show="openMod===11" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Configuracao</p>
                         <a href="{{ Route::has('portais.configuracao') ? route('portais.configuracao') : route('portais.index') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">46</span> Configuracao Portal Aluno</a>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Publicacao (Portal do Aluno)</p>
@@ -458,20 +393,19 @@
 
             {{-- Ajuda --}}
             <div class="border-t border-gray-200 p-2">
-                <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 rounded">
-                    <i class="fa-solid fa-circle-question w-5 text-center"></i>
-                    <span class="ml-3" x-show="navOpen" x-cloak>Ajuda</span>
-                </a>
+                <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight text-primary-600 bg-primary-50 hover:bg-primary-100 rounded"><i class="fa-solid fa-circle-question text-lg"></i><span>Ajuda</span></a>
             </div>
         </aside>
 
+        <div x-show="openMod !== null" x-cloak @click="openMod = null" class="fixed inset-0 z-30"></div>
+
         {{-- MAIN CONTENT --}}
-        <div class="flex-1 transition-all duration-300" :class="pinned ? 'ml-64' : 'ml-16'">
+        <div class="flex-1 ml-20">
 
             {{-- TOPBAR --}}
             <header class="sticky top-0 z-30 bg-white border-b border-gray-200 h-14 flex items-center justify-between px-4 shadow-sm">
                 <div class="flex items-center gap-3">
-                    <button @click="pinned = !pinned" class="text-gray-500 hover:text-gray-700" title="Fixar/recolher menu">
+                    <button @click="openMod = null" class="text-gray-500 hover:text-gray-700" title="Menu">
                         <i class="fa-solid fa-bars text-lg"></i>
                     </button>
                     <nav class="flex items-center gap-1 text-sm">
