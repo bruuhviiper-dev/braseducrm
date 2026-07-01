@@ -545,6 +545,30 @@
                 </div>
             </header>
 
+            {{-- BARRA DE ABAS (estilo EDUQ) --}}
+            @php $pageTitle = trim($__env->yieldContent('title')); @endphp
+            <script>window.__PAGE_TITLE__ = @json($pageTitle !== '' ? $pageTitle : 'Início');</script>
+            <div x-data="tabBar()" x-init="init()" x-cloak
+                 class="sticky top-14 z-20 bg-gray-100 border-b border-gray-200 flex items-stretch h-9 overflow-x-auto scrollbar-thin"
+                 x-show="tabs.length > 0">
+                <template x-for="(tab, i) in tabs" :key="tab.url">
+                    <div class="flex items-center border-r border-gray-200 group shrink-0 max-w-[220px]"
+                         :class="tab.url === current ? 'bg-white border-t-2 border-t-primary-500' : 'hover:bg-gray-50'">
+                        <a :href="tab.url" class="flex items-center gap-2 pl-3 pr-1 py-1.5 text-xs truncate"
+                           :class="tab.url === current ? 'text-primary-600 font-medium' : 'text-gray-600'">
+                            <i class="fa-solid fa-window-maximize text-[10px] opacity-60"></i>
+                            <span class="truncate" x-text="tab.title"></span>
+                        </a>
+                        <button @click.prevent="close(tab.url)" class="px-1.5 py-1 text-gray-400 hover:text-red-500 hover:bg-gray-200 rounded" title="Fechar">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+                </template>
+                <button @click="closeAll()" x-show="tabs.length > 1" class="px-3 text-gray-400 hover:text-red-500 text-xs shrink-0" title="Fechar todas">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+
             {{-- SEARCH MODAL --}}
             <div x-show="searchOpen" x-cloak @keydown.escape.window="searchOpen = false" @keydown.ctrl.k.window.prevent="searchOpen = !searchOpen"
                  class="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/30">
@@ -585,6 +609,35 @@
         </div>
     </div>
 
+    <script>
+        function tabBar() {
+            return {
+                tabs: [],
+                current: window.location.pathname,
+                init() {
+                    try { this.tabs = JSON.parse(localStorage.getItem('braseducrm_tabs') || '[]'); } catch (e) { this.tabs = []; }
+                    const url = window.location.pathname;
+                    if (url === '/login' || url === '/') return;
+                    const title = (window.__PAGE_TITLE__ || document.title || url).toString();
+                    const existing = this.tabs.find(t => t.url === url);
+                    if (existing) { existing.title = title; }
+                    else { this.tabs.push({ url, title }); }
+                    if (this.tabs.length > 12) { this.tabs = this.tabs.slice(-12); }
+                    this.save();
+                },
+                close(url) {
+                    this.tabs = this.tabs.filter(t => t.url !== url);
+                    this.save();
+                    if (url === this.current) {
+                        const last = this.tabs[this.tabs.length - 1];
+                        window.location.href = last ? last.url : '/dashboard';
+                    }
+                },
+                closeAll() { this.tabs = []; this.save(); window.location.href = '/dashboard'; },
+                save() { localStorage.setItem('braseducrm_tabs', JSON.stringify(this.tabs)); },
+            };
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>
