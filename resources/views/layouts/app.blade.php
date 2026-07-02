@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -30,11 +31,11 @@
     </style>
     @stack('styles')
 </head>
-<body class="bg-gray-50 min-h-screen" x-data="{ searchOpen: false, openMod: null }">
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen" x-data="{ searchOpen: false, openMod: null, dark: localStorage.getItem('braseducrm_dark')==='true' }" x-init="document.documentElement.classList.toggle('dark', dark); $watch('dark', v => document.documentElement.classList.toggle('dark', v))">
     <div class="flex min-h-screen">
 
         {{-- SIDEBAR COM SUBMENUS EXPANDIVEIS --}}
-        <aside class="fixed top-0 left-0 z-40 h-screen bg-white text-gray-700 border-r border-gray-200 flex flex-col w-20">
+        <aside class="fixed top-0 left-0 z-40 h-screen bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 flex flex-col w-20">
 
             {{-- Logo --}}
             <div class="flex items-center justify-center h-14 border-b border-gray-200 px-3">
@@ -42,7 +43,7 @@
             </div>
 
             {{-- Search bar inside sidebar --}}
-            <div class="px-2 py-2 border-b border-gray-200"><button @click="searchOpen = true" class="w-full flex flex-col items-center gap-1 py-1.5 text-[10px] text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded" title="Buscar (Ctrl+K)"><i class="fa-solid fa-magnifying-glass text-base"></i><span>Buscar</span></button></div>
+            <div class="px-2 py-2 border-b border-gray-200 dark:border-gray-700"><button @click="searchOpen = true" class="w-full flex flex-col items-center gap-1 py-1.5 text-[10px] text-gray-500 dark:text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 rounded" title="Buscar (Ctrl+K)"><i class="fa-solid fa-magnifying-glass text-base"></i><span>Ctrl K</span></button></div>
 
             {{-- Menu items --}}
             <nav class="flex-1 overflow-y-auto scrollbar-thin py-1">
@@ -53,7 +54,7 @@
                 {{-- ACADEMICO --}}
                 <div>
                     <button @click="openMod = openMod===0 ? null : 0" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('academico*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===0 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-graduation-cap text-lg"></i><span class="text-center px-0.5">Academico</span></button>
-                    <div x-show="openMod===0" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===0" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('academico.calendarios.index') ? route('academico.calendarios.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('academico.calendarios.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">35</span> Cadastro de Calendario</a>
                         <a href="{{ route('cadastros.index', 'escolas') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">8</span> Cadastro de Escola</a>
@@ -137,7 +138,7 @@
                 {{-- ADMINISTRATIVO --}}
                 <div>
                     <button @click="openMod = openMod===1 ? null : 1" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('pessoas*') || request()->is('alunos*') || request()->is('requerimentos*') || request()->is('atendimentos*') || request()->is('documentos*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===1 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-building text-lg"></i><span class="text-center px-0.5">Administrativo</span></button>
-                    <div x-show="openMod===1" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===1" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Acessos</p>
                         <a href="{{ Route::has('admin.grupos.index') ? route('admin.grupos.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('admin.grupos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">43</span> Cadastro de Grupo de Operadores</a>
                         <a href="{{ Route::has('admin.operadores.index') ? route('admin.operadores.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('admin.operadores.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">44</span> Cadastro de Operador</a>
@@ -148,7 +149,7 @@
                 {{-- BIBLIOTECA --}}
                 <div>
                     <button @click="openMod = openMod===2 ? null : 2" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('biblioteca*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===2 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-book text-lg"></i><span class="text-center px-0.5">Biblioteca</span></button>
-                    <div x-show="openMod===2" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===2" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Acervo</p>
                         <a href="{{ Route::has('biblioteca.obras.index') ? route('biblioteca.obras.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('biblioteca.obras.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">288</span> Cadastro de Obra</a>
                         <a href="{{ Route::has('biblioteca.exemplares.index') ? route('biblioteca.exemplares.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('biblioteca.exemplares.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">286</span> Cadastro de Exemplares</a>
@@ -175,7 +176,7 @@
                 {{-- COMUNICACAO --}}
                 <div>
                     <button @click="openMod = openMod===3 ? null : 3" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('comunicacao*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===3 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-comments text-lg"></i><span class="text-center px-0.5">Comunicacao</span></button>
-                    <div x-show="openMod===3" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===3" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Mensagens</p>
                         <a href="{{ Route::has('comunicacao.mensagens.avulsa') ? route('comunicacao.mensagens.avulsa') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('comunicacao.mensagens.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">84</span> Mensagens Avulsas</a>
                         <a href="{{ Route::has('comunicacao.mensagens.avisos') ? route('comunicacao.mensagens.avisos') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">88</span> Aviso de Cobranca</a>
@@ -194,7 +195,7 @@
                 {{-- ESTOQUE --}}
                 <div>
                     <button @click="openMod = openMod===4 ? null : 4" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('estoque*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===4 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-center px-0.5">Estoque</span></button>
-                    <div x-show="openMod===4" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===4" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('estoque.categorias.index') ? route('estoque.categorias.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">147</span> Cadastro de Categorias de Estoque</a>
                         <a href="{{ route('cadastros.index', 'depositos') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">153</span> Cadastro de Depositos de Estoque</a>
@@ -210,7 +211,7 @@
                 {{-- CRM --}}
                 <div>
                     <button @click="openMod = openMod===5 ? null : 5" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('crm*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===5 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-handshake text-lg"></i><span class="text-center px-0.5">CRM</span></button>
-                    <div x-show="openMod===5" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===5" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'categorias-interessado') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">207</span> Categorias (Interessados)</a>
                         <a href="{{ Route::has('crm.eventos.index') ? route('crm.eventos.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">104</span> Eventos CRM</a>
@@ -239,7 +240,7 @@
                 {{-- EAD --}}
                 <div>
                     <button @click="openMod = openMod===6 ? null : 6" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('ead*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===6 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-laptop text-lg"></i><span class="text-center px-0.5">EAD</span></button>
-                    <div x-show="openMod===6" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===6" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('ead.cursos.index') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->routeIs('ead.cursos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">152</span> Cadastro de Curso (EAD)</a>
                         <a href="{{ route('cadastros.index', 'agrupadores-curso') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">211</span> Cadastro de Agrupador de Cursos</a>
@@ -260,7 +261,7 @@
                 {{-- FINANCEIRO --}}
                 <div>
                     <button @click="openMod = openMod===7 ? null : 7" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('financeiro*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===7 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-dollar-sign text-lg"></i><span class="text-center px-0.5">Financeiro</span></button>
-                    <div x-show="openMod===7" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===7" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'bancos') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">47</span> Cadastro de Banco</a>
                         <a href="{{ route('cadastros.index', 'centros-custo') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">274</span> Cadastro de Centro de Custos</a>
@@ -314,7 +315,7 @@
                 {{-- GED --}}
                 <div>
                     <button @click="openMod = openMod===8 ? null : 8" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('ged*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===8 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-folder-open text-lg"></i><span class="text-center px-0.5">GED</span></button>
-                    <div x-show="openMod===8" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===8" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('ged.documentos.index') ? route('ged.documentos.index') : route('ged.index') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50 {{ request()->is('ged*') ? 'text-primary-600' : '' }}"><span class="text-gray-300 mr-1">244</span> Documento (GED)</a>
                         <a href="#" class="submenu-item block text-gray-400 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">245</span> Categoria do Documento (GED)</a>
@@ -325,7 +326,7 @@
                 {{-- GERAL --}}
                 <div>
                     <button @click="openMod = openMod===9 ? null : 9" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===9 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-table-cells text-lg"></i><span class="text-center px-0.5">Geral</span></button>
-                    <div x-show="openMod===9" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===9" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Atendimentos</p>
                         <a href="{{ Route::has('atendimentos.index') ? route('atendimentos.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">55</span> Manutencao de Atendimentos</a>
                         <a href="#" class="submenu-item block text-gray-400 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">172</span> Atendimentos Pool (Follow up)</a>
@@ -364,7 +365,7 @@
                 {{-- MATRICULA ONLINE --}}
                 <div>
                     <button @click="openMod = openMod===10 ? null : 10" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('matricula-online*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===10 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-globe text-lg"></i><span class="text-center px-0.5">Matr. Online</span></button>
-                    <div x-show="openMod===10" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===10" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Processos</p>
                         <a href="{{ Route::has('matricula-online.aberturas.index') ? route('matricula-online.aberturas.index') : route('matricula-online.index') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">140</span> Abertura de Matricula Online</a>
                         <a href="{{ Route::has('matricula-online.inscricoes.index') ? route('matricula-online.inscricoes.index') : '#' }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">149</span> Acompanhamento de Inscricoes</a>
@@ -379,7 +380,7 @@
                 {{-- PORTAIS --}}
                 <div>
                     <button @click="openMod = openMod===11 ? null : 11" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-primary-50 {{ request()->is('portais*') ? 'bg-primary-100 text-primary-600 border-r-2 border-primary-400' : 'text-gray-700' }}" :class="openMod===11 ? 'text-primary-600 bg-primary-50' : 'text-gray-600'"><i class="fa-solid fa-desktop text-lg"></i><span class="text-center px-0.5">Portais</span></button>
-                    <div x-show="openMod===11" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white shadow-2xl border border-gray-200 overflow-y-auto py-2">
+                    <div x-show="openMod===11" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-800 dark:border-gray-700 shadow-2xl border border-gray-200 overflow-y-auto py-2">
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Configuracao</p>
                         <a href="{{ Route::has('portais.configuracao') ? route('portais.configuracao') : route('portais.index') }}" class="submenu-item block text-gray-600 hover:text-primary-700 hover:bg-primary-50"><span class="text-gray-300 mr-1">46</span> Configuracao Portal Aluno</a>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Publicacao (Portal do Aluno)</p>
@@ -402,66 +403,57 @@
         {{-- MAIN CONTENT --}}
         <div class="flex-1 ml-20">
 
-            {{-- TOPBAR --}}
-            <header class="sticky top-0 z-30 bg-white border-b border-gray-200 h-14 flex items-center justify-between px-4 shadow-sm">
-                <div class="flex items-center gap-3">
-                    <button @click="openMod = null" class="text-gray-500 hover:text-gray-700" title="Menu">
-                        <i class="fa-solid fa-bars text-lg"></i>
+            {{-- TOPBAR (estilo EDUQ) --}}
+            <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-14 flex items-center justify-between px-3 shadow-sm">
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-3 py-1.5 rounded-md {{ request()->routeIs('dashboard') ? 'bg-gray-100 text-gray-800' : 'text-gray-600 hover:bg-gray-50' }} font-medium text-sm border border-transparent {{ request()->routeIs('dashboard') ? 'border-gray-200' : '' }}">
+                        <i class="fa-solid fa-house text-xs text-primary-500"></i> Início
+                    </a>
+                    {{-- Botao "+" azul: abre nova funcao (busca), assinatura do EDUQ --}}
+                    <button @click="searchOpen = !searchOpen" class="w-7 h-7 flex items-center justify-center rounded-md bg-primary-600 hover:bg-primary-700 text-white shadow-sm" title="Abrir nova função (Ctrl+K)">
+                        <i class="fa-solid fa-plus text-xs"></i>
                     </button>
-                    <nav class="flex items-center gap-1 text-sm">
-                        <a href="{{ route('dashboard') }}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary-50 text-primary-600 font-medium">
-                            <i class="fa-solid fa-house text-xs"></i> Inicio
-                        </a>
-                        @if(isset($breadcrumbs))
-                            @foreach($breadcrumbs as $bc)
-                            <span class="text-gray-400">/</span>
-                            @if(isset($bc['url']))
-                            <a href="{{ $bc['url'] }}" class="text-gray-600 hover:text-primary-600">{{ $bc['label'] }}</a>
-                            @else
-                            <span class="text-gray-800 font-medium">{{ $bc['label'] }}</span>
-                            @endif
-                            @endforeach
-                        @endif
-                    </nav>
                 </div>
 
-                <div class="flex items-center gap-1">
-                    <button @click="searchOpen = !searchOpen" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Ctrl+K">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                <div class="flex items-center gap-0.5">
+                    <button onclick="window.location.reload()" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Atualizar">
+                        <i class="fa-solid fa-rotate-right"></i>
                     </button>
-                    <a href="{{ route('dashboard') }}" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fa-solid fa-house"></i>
-                    </a>
-                    <a href="{{ Route::has('notificacoes.index') ? route('notificacoes.index') : '#' }}" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg relative">
+                    <a href="{{ Route::has('notificacoes.index') ? route('notificacoes.index') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg relative" title="Notificações">
                         <i class="fa-solid fa-bell"></i>
                         @php $notifCount = \App\Models\Notificacao::where('user_id', Auth::id())->where('lida', false)->count() ?? 0; @endphp
                         @if($notifCount > 0)
-                        <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full">{{ $notifCount }}</span>
+                        <span class="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full">{{ $notifCount > 9 ? '9+' : $notifCount }}</span>
                         @endif
                     </a>
-                    <a href="{{ Route::has('calendario.index') ? route('calendario.index') : '#' }}" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fa-solid fa-calendar"></i>
+                    <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Mensagens">
+                        <i class="fa-regular fa-comment"></i>
                     </a>
-                    <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fa-solid fa-message"></i>
+                    <a href="{{ Route::has('tickets.create') ? route('tickets.create') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Ajuda">
+                        <i class="fa-regular fa-circle-question"></i>
                     </a>
-                    <a href="{{ Route::has('tickets.create') ? route('tickets.create') : '#' }}" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fa-solid fa-circle-question"></i>
-                    </a>
-                    <a href="{{ Route::has('configuracoes.index') ? route('configuracoes.index') : '#' }}" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
+                    <a href="{{ Route::has('configuracoes.index') ? route('configuracoes.index') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Configurações">
                         <i class="fa-solid fa-gear"></i>
                     </a>
+                    <button @click="dark = !dark; localStorage.setItem('braseducrm_dark', dark)" class="p-2 text-gray-400 hover:text-amber-500 hover:bg-gray-100 rounded-lg" title="Alternar tema">
+                        <i class="fa-solid" :class="dark ? 'fa-moon' : 'fa-sun'"></i>
+                    </button>
+                    {{-- Botao Painel (EDUQ) --}}
+                    <a href="{{ route('painel-cliente.index') }}" class="ml-1 hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium shadow-sm">
+                        <i class="fa-solid fa-table-cells-large text-xs"></i> Painel
+                    </a>
 
-                    {{-- User Menu --}}
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-lg hover:bg-gray-100">
-                            <div class="text-right hidden sm:block">
-                                <div class="text-sm font-medium text-gray-700">{{ Auth::user()->nome }}</div>
-                                <div class="text-xs text-gray-500">brasedu</div>
+                    {{-- User Menu (chip com tenant, estilo EDUQ) --}}
+                    <div class="relative ml-1" x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center gap-2 pl-1 pr-2 py-1 rounded-lg hover:bg-gray-100">
+                            <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                                {{ strtoupper(substr(Auth::user()->nome, 0, 2)) }}
                             </div>
-                            <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                                {{ strtoupper(substr(Auth::user()->nome, 0, 1)) }}
+                            <div class="text-left hidden lg:block leading-tight">
+                                <div class="text-xs font-semibold text-gray-700 uppercase truncate max-w-[140px]">{{ Auth::user()->nome }}</div>
+                                <div class="text-[10px] text-gray-400">apresentacao</div>
                             </div>
+                            <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 hidden lg:block"></i>
                         </button>
                         <div x-show="open" @click.away="open = false" x-cloak
                              class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50">
@@ -483,8 +475,11 @@
             @php $pageTitle = trim($__env->yieldContent('title')); @endphp
             <script>window.__PAGE_TITLE__ = @json($pageTitle !== '' ? $pageTitle : 'InÃ­cio');</script>
             <div x-data="tabBar()" x-init="init()" x-cloak
-                 class="sticky top-14 z-20 bg-gray-100 border-b border-gray-200 flex items-stretch h-9 overflow-x-auto scrollbar-thin"
-                 x-show="tabs.length > 0">
+                 class="sticky top-14 z-20 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-stretch h-9 overflow-x-auto scrollbar-thin">
+                {{-- Aba Início fixa (estilo EDUQ) --}}
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-3 py-1.5 text-xs border-r border-gray-200 dark:border-gray-700 shrink-0 {{ request()->routeIs('dashboard') ? 'bg-white dark:bg-gray-800 text-primary-600 font-medium border-t-2 border-t-primary-500' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800' }}">
+                    <i class="fa-solid fa-house text-[10px]"></i> Início
+                </a>
                 <template x-for="(tab, i) in tabs" :key="tab.url">
                     <div class="flex items-center border-r border-gray-200 group shrink-0 max-w-[220px]"
                          :class="tab.url === current ? 'bg-white border-t-2 border-t-primary-500' : 'hover:bg-gray-50'">
@@ -551,7 +546,7 @@
                 init() {
                     try { this.tabs = JSON.parse(localStorage.getItem('braseducrm_tabs') || '[]'); } catch (e) { this.tabs = []; }
                     const url = window.location.pathname;
-                    if (url === '/login' || url === '/') return;
+                    if (url === '/login' || url === '/' || url === '/dashboard') return;
                     const title = (window.__PAGE_TITLE__ || document.title || url).toString();
                     const existing = this.tabs.find(t => t.url === url);
                     if (existing) { existing.title = title; }
