@@ -38,8 +38,10 @@ class MontagemTurmaController extends Controller
             'turma_id' => $validated['turma_id'],
             'modulo_id' => $validated['modulo_id'] ?? null,
             'periodo_letivo_id' => $validated['periodo_letivo_id'] ?? null,
+            'sigla' => $validated['sigla'] ?? null,
             'nome' => $validated['nome'] ?? null,
             'situacao' => $validated['situacao'],
+            'ativo' => $request->boolean('ativo'),
         ]);
         $this->syncHorarios($turmaMontada, $validated['horarios'] ?? []);
         return redirect()->route('academico.montagem-turma.edit', $turmaMontada)
@@ -63,8 +65,10 @@ class MontagemTurmaController extends Controller
             'turma_id' => $validated['turma_id'],
             'modulo_id' => $validated['modulo_id'] ?? null,
             'periodo_letivo_id' => $validated['periodo_letivo_id'] ?? null,
+            'sigla' => $validated['sigla'] ?? null,
             'nome' => $validated['nome'] ?? null,
             'situacao' => $validated['situacao'],
+            'ativo' => $request->boolean('ativo'),
         ]);
         $this->syncHorarios($montagem_turma, $validated['horarios'] ?? []);
         return redirect()->route('academico.montagem-turma.edit', $montagem_turma)
@@ -145,7 +149,9 @@ class MontagemTurmaController extends Controller
             'turma_id' => 'required|exists:turmas,id',
             'modulo_id' => 'nullable|exists:modulos,id',
             'periodo_letivo_id' => 'nullable|exists:periodos_letivos,id',
+            'sigla' => 'nullable|string|max:60',
             'nome' => 'nullable|string|max:255',
+            'ativo' => 'nullable',
             'situacao' => 'required|in:aberta,em_andamento,finalizada',
             'horarios' => 'nullable|array',
             'horarios.*.disciplina_id' => 'nullable|exists:disciplinas,id',
