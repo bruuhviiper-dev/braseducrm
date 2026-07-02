@@ -25,17 +25,9 @@ class MovimentacaoEstoqueController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'produto_estoque_id' => 'required|exists:produtos_estoque,id',
-            'deposito_id' => 'required|exists:depositos,id',
-            'tipo' => 'required|in:entrada,saida,transferencia',
-            'quantidade' => 'required|numeric|min:0.01',
-            'valor_unitario' => 'nullable|numeric|min:0',
-            'motivo' => 'nullable|string|max:500',
-        ]);
-
+        $data = $this->validar($request);
         $data['operador_id'] = auth()->id();
-        $movimentacao = MovimentacaoEstoque::create($data);
+        MovimentacaoEstoque::create($data);
 
         $produto = ProdutoEstoque::find($data['produto_estoque_id']);
         if ($data['tipo'] === 'entrada') {
@@ -43,8 +35,36 @@ class MovimentacaoEstoqueController extends Controller
         } elseif ($data['tipo'] === 'saida') {
             $produto->decrement('estoque_atual', $data['quantidade']);
         }
+        // transferência não altera o estoque total (apenas move entre depósitos)
 
-        return redirect()->route('estoque.movimentacoes.index')->with('success', 'Movimentacao registrada com sucesso.');
+        return redirect()->route('estoque.movimentacoes.index')->with('success', 'Movimentação registrada com sucesso.');
+    }
+
+    private function validar(Request $request): array
+    {
+        $v = $request->validate([
+            'produto_estoque_id' => 'required|exists:produtos_estoque,id',
+            'tipo' => 'required|in:entrada,saida,transferencia',
+            'data_movimentacao' => 'nullable|date',
+            'deposito_id' => 'nullable|exists:depositos,id',
+            'deposito_origem_id' => 'nullable|exists:depositos,id',
+            'deposito_destino_id' => 'nullable|exists:depositos,id',
+            'quantidade' => 'required|numeric|min:0.01',
+            'valor_unitario' => 'nullable|numeric|min:0',
+            'motivo' => 'nullable|string|max:500',
+        ]);
+
+        // Transferência exige origem e destino; entrada/saída exigem depósito
+        if ($v['tipo'] === 'transferencia') {
+            $request->validate([
+                'deposito_origem_id' => 'required|exists:depositos,id',
+                'deposito_destino_id' => 'required|exists:depositos,id|different:deposito_origem_id',
+            ]);
+        } else {
+            $request->validate(['deposito_id' => 'required|exists:depositos,id']);
+        }
+
+        return $v + ['data_movimentacao' => $v['data_movimentacao'] ?? now()->toDateString()];
     }
 
     public function edit(MovimentacaoEstoque $movimentacao)
