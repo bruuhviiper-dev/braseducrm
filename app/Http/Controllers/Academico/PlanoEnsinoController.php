@@ -56,7 +56,9 @@ class PlanoEnsinoController extends Controller
     public function salvar(Request $request, TurmaMontada $turma_montada, Disciplina $disciplina)
     {
         $data = $request->validate([
-            'estrutura_plano_id' => 'required|exists:estruturas_plano,id',
+            'estrutura_plano_id' => 'nullable|exists:estruturas_plano,id',
+            'ocultar_portal' => 'nullable',
+            'anexo' => 'nullable|file|max:10240',
             'conteudo' => 'nullable|array',
         ]);
 
@@ -65,15 +67,26 @@ class PlanoEnsinoController extends Controller
             'disciplina_id' => $disciplina->id,
         ]);
 
-        DB::transaction(function () use ($plano, $data) {
-            $plano->update(['estrutura_plano_id' => $data['estrutura_plano_id']]);
+        $anexoPath = $plano->anexo_path;
+        if ($request->hasFile('anexo')) {
+            $anexoPath = $request->file('anexo')->store('planos-ensino', 'public');
+        }
 
-            $estrutura = EstruturaPlano::with('topicos')->find($data['estrutura_plano_id']);
-            foreach ($estrutura->topicos as $topico) {
-                $plano->conteudos()->updateOrCreate(
-                    ['topico_plano_id' => $topico->id],
-                    ['conteudo' => $data['conteudo'][$topico->id] ?? null]
-                );
+        DB::transaction(function () use ($plano, $data, $request, $anexoPath) {
+            $plano->update([
+                'estrutura_plano_id' => $data['estrutura_plano_id'] ?? $plano->estrutura_plano_id,
+                'ocultar_portal' => $request->boolean('ocultar_portal'),
+                'anexo_path' => $anexoPath,
+            ]);
+
+            if (!empty($data['estrutura_plano_id'])) {
+                $estrutura = EstruturaPlano::with('topicos')->find($data['estrutura_plano_id']);
+                foreach ($estrutura->topicos as $topico) {
+                    $plano->conteudos()->updateOrCreate(
+                        ['topico_plano_id' => $topico->id],
+                        ['conteudo' => $data['conteudo'][$topico->id] ?? null]
+                    );
+                }
             }
         });
 

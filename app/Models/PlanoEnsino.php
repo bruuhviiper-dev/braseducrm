@@ -10,7 +10,9 @@ class PlanoEnsino extends Model
 {
     protected $table = 'planos_ensino';
 
-    protected $fillable = ['turma_montada_id', 'disciplina_id', 'estrutura_plano_id'];
+    protected $fillable = ['turma_montada_id', 'disciplina_id', 'estrutura_plano_id', 'ocultar_portal', 'anexo_path'];
+
+    protected $casts = ['ocultar_portal' => 'boolean'];
 
     public function turmaMontada(): BelongsTo
     {
