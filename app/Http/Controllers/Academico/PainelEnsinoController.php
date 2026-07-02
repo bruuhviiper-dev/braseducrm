@@ -15,29 +15,85 @@ class PainelEnsinoController extends Controller
 {
     private const DIAS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
-    /** Planejamento Diário de Aulas (45): horários montados de uma turma. */
+    /** Planejamento Diário de Aulas (45): ocorrências de aula (datadas) num intervalo. */
     public function planejamentoDiario(Request $request)
     {
         $turmasMontadas = TurmaMontada::with('turma')->orderByDesc('id')->get();
-        $aulas = collect();
-        $tm = null;
+        $disciplinas = \App\Models\Disciplina::where('ativo', true)->orderBy('nome')->get();
+        $professores = Profissional::with('pessoa')->where('ativo', true)->get();
 
-        if ($request->filled('turma_montada_id')) {
-            $tm = TurmaMontada::with('turma')->find($request->turma_montada_id);
-            $aulas = Horario::with(['disciplina', 'profissional.pessoa', 'sala'])
-                ->where('turma_montada_id', $request->turma_montada_id)
-                ->orderBy('dia_semana')->orderBy('hora_inicio')->get()
-                ->map(fn ($h) => [
-                    'dia' => self::DIAS[$h->dia_semana] ?? $h->dia_semana,
+        $aulas = collect();
+        $consultou = $request->filled(['turma_montada_id', 'inicio', 'fim']);
+
+        if ($consultou) {
+            $aulas = $this->ocorrenciasDeAula($request);
+
+            if ($request->boolean('export')) {
+                return $this->exportarPlanejamento($aulas);
+            }
+        }
+
+        return view('academico.painel.planejamento-diario', compact('turmasMontadas', 'disciplinas', 'professores', 'aulas', 'consultou', 'request'));
+    }
+
+    private function ocorrenciasDeAula(Request $request): \Illuminate\Support\Collection
+    {
+        $inicio = \Carbon\Carbon::parse($request->inicio)->startOfDay();
+        $fim = \Carbon\Carbon::parse($request->fim)->startOfDay();
+        if ($fim->lt($inicio)) {
+            [$inicio, $fim] = [$fim, $inicio];
+        }
+        if ($inicio->diffInDays($fim) > 120) {
+            $fim = $inicio->copy()->addDays(120);
+        }
+
+        $horarios = Horario::with(['disciplina', 'profissional.pessoa', 'sala'])
+            ->where('turma_montada_id', $request->turma_montada_id)
+            ->when($request->filled('disciplina_id'), fn ($q) => $q->where('disciplina_id', $request->disciplina_id))
+            ->when($request->filled('professor_id'), fn ($q) => $q->where('profissional_id', $request->professor_id))
+            ->orderBy('hora_inicio')->get();
+
+        $ocorrencias = collect();
+        for ($d = $inicio->copy(); $d->lte($fim); $d->addDay()) {
+            foreach ($horarios as $h) {
+                if ($h->dia_semana !== $d->dayOfWeekIso) {
+                    continue;
+                }
+                $dataStr = $d->format('Y-m-d');
+                $temFreq = Frequencia::where('disciplina_id', $h->disciplina_id)->whereDate('data', $dataStr)->exists();
+                if ($request->boolean('sem_frequencia') && $temFreq) {
+                    continue;
+                }
+                $ocorrencias->push([
+                    'data' => $dataStr,
+                    'dia' => self::DIAS[$d->dayOfWeek] ?? '',
                     'inicio' => substr($h->hora_inicio, 0, 5),
                     'fim' => substr($h->hora_fim, 0, 5),
                     'disciplina' => $h->disciplina?->nome ?? '—',
                     'professor' => $h->profissional?->pessoa?->nome ?? '—',
                     'sala' => $h->sala?->nome ?? '—',
+                    'frequencia_lancada' => $temFreq,
                 ]);
+            }
         }
 
-        return view('academico.painel.planejamento-diario', compact('turmasMontadas', 'aulas', 'tm'));
+        return $ocorrencias->sortBy(fn ($a) => $a['data'] . $a['inicio'])->values();
+    }
+
+    private function exportarPlanejamento(\Illuminate\Support\Collection $aulas)
+    {
+        return response()->streamDownload(function () use ($aulas) {
+            $out = fopen('php://output', 'w');
+            fwrite($out, "\xEF\xBB\xBF");
+            fputcsv($out, ['Data', 'Dia', 'Início', 'Fim', 'Disciplina', 'Professor', 'Sala', 'Frequência'], ';');
+            foreach ($aulas as $a) {
+                fputcsv($out, [
+                    \Carbon\Carbon::parse($a['data'])->format('d/m/Y'), $a['dia'], $a['inicio'], $a['fim'],
+                    $a['disciplina'], $a['professor'], $a['sala'], $a['frequencia_lancada'] ? 'Lançada' : 'Pendente',
+                ], ';');
+            }
+            fclose($out);
+        }, 'planejamento_' . now()->format('Ymd_His') . '.csv', ['Content-Type' => 'text/csv']);
     }
 
     /** Painel do Professor (257): notas e frequências por turma montada (com filtro por período). */
