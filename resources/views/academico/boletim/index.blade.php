@@ -12,24 +12,30 @@ $badges = [
 
 @section('content')
 <div class="space-y-6">
-    {{-- Filtro --}}
+    {{-- Filtro (fiel ao EDUQ) --}}
     <div class="bg-white rounded-xl border">
         <div class="px-5 py-3 border-b flex items-center gap-3">
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">2</span>
-            <h1 class="text-lg font-semibold text-gray-800">Cálculo do Boletim</h1>
-        </div>
-        <form method="GET" action="{{ route('academico.boletim.index') }}" class="p-4 grid grid-cols-1 md:grid-cols-4 gap-3">
             <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Turma Montada</label>
+                <h1 class="text-lg font-semibold text-gray-800">Cálculo do Boletim</h1>
+                <p class="text-xs text-gray-400">Acadêmico › Notas e Faltas</p>
+            </div>
+        </div>
+        <form method="POST" action="{{ route('academico.boletim.consolidar') }}" class="p-5 space-y-4"
+              x-data="{ final: false }"
+              @submit="if(final){ return confirm('Calcular o resultado final grava a situação de cada aluno. Continuar?') }">
+            @csrf
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Turma Montada <span class="text-red-500">*</span></label>
                 <select name="turma_montada_id" class="w-full border rounded-lg px-3 py-2 text-sm" required>
                     <option value="">Selecione...</option>
                     @foreach($turmasMontadas as $tm)
-                    <option value="{{ $tm->id }}" {{ $request->turma_montada_id == $tm->id ? 'selected' : '' }}>{{ $tm->nome ?? $tm->turma?->nome ?? 'Turma '.$tm->id }}</option>
+                    <option value="{{ $tm->id }}" {{ $request->turma_montada_id == $tm->id ? 'selected' : '' }}>{{ $tm->sigla ?? $tm->nome ?? $tm->turma?->nome ?? 'Turma '.$tm->id }}</option>
                     @endforeach
                 </select>
             </div>
             <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Disciplina</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Disciplina <span class="text-red-500">*</span></label>
                 <select name="disciplina_id" class="w-full border rounded-lg px-3 py-2 text-sm" required>
                     <option value="">Selecione...</option>
                     @foreach($disciplinas as $d)
@@ -37,18 +43,11 @@ $badges = [
                     @endforeach
                 </select>
             </div>
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Config. Boletim</label>
-                <select name="configuracao_boletim_id" class="w-full border rounded-lg px-3 py-2 text-sm">
-                    <option value="">Padrão (média 7 / freq 75%)</option>
-                    @foreach($configuracoes as $c)
-                    <option value="{{ $c->id }}" {{ $request->configuracao_boletim_id == $c->id ? 'selected' : '' }}>{{ $c->nome }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="flex items-end">
-                <button type="submit" class="w-full px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700"><i class="fa-solid fa-calculator mr-1"></i> Calcular</button>
-            </div>
+            <label class="flex items-center gap-3 text-sm">
+                <input type="checkbox" name="calcular_final" value="1" x-model="final" class="rounded text-primary-600 w-5 h-5">
+                <span class="text-gray-700">É para calcular o resultado final dos alunos?</span>
+            </label>
+            <button type="submit" class="w-full px-4 py-3 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700"><i class="fa-solid fa-gears mr-1"></i> Processar</button>
         </form>
     </div>
 
@@ -58,15 +57,8 @@ $badges = [
         <div class="bg-white rounded-xl border p-8 text-center text-gray-400">Nenhum aluno encontrado para esta turma montada.</div>
         @else
         <div class="bg-white rounded-xl border overflow-hidden">
-            <div class="px-5 py-3 border-b flex items-center justify-between">
-                <h2 class="text-sm font-semibold text-gray-700">Resultado (média ≥ {{ number_format($resultado['media_aprovacao'],1,',','.') }} e frequência ≥ {{ number_format($resultado['frequencia_minima'],0) }}%)</h2>
-                <form method="POST" action="{{ route('academico.boletim.consolidar') }}" onsubmit="return confirm('Consolidar e gravar a situação de cada aluno?')">
-                    @csrf
-                    <input type="hidden" name="turma_montada_id" value="{{ $request->turma_montada_id }}">
-                    <input type="hidden" name="disciplina_id" value="{{ $request->disciplina_id }}">
-                    <input type="hidden" name="configuracao_boletim_id" value="{{ $request->configuracao_boletim_id }}">
-                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"><i class="fa-solid fa-check-double mr-1"></i> Consolidar Boletim</button>
-                </form>
+            <div class="px-5 py-3 border-b">
+                <h2 class="text-sm font-semibold text-gray-700">Resultado <span class="font-normal text-gray-400">(média ≥ {{ number_format($resultado['media_aprovacao'],1,',','.') }} e frequência ≥ {{ number_format($resultado['frequencia_minima'],0) }}% — config. da matriz)</span></h2>
             </div>
             <table class="w-full text-sm text-left">
                 <thead class="bg-gray-50 border-b">
@@ -98,7 +90,7 @@ $badges = [
         </div>
         @endif
     @else
-    <div class="bg-white rounded-xl border p-8 text-center text-gray-400">Selecione turma e disciplina para calcular o boletim.</div>
+    <div class="bg-white rounded-xl border p-8 text-center text-gray-400">Selecione turma e disciplina e clique em Processar para calcular o boletim.</div>
     @endif
 </div>
 @endsection

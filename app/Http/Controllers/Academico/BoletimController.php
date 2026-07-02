@@ -17,21 +17,21 @@ class BoletimController extends Controller
     {
         $turmasMontadas = TurmaMontada::with('turma')->orderBy('id', 'desc')->get();
         $disciplinas = Disciplina::where('ativo', true)->orderBy('nome')->get();
-        $configuracoes = ConfiguracaoBoletim::orderBy('nome')->get();
 
         $resultado = null;
         if ($request->filled(['turma_montada_id', 'disciplina_id'])) {
             $resultado = $this->calcular($request);
         }
 
-        return view('academico.boletim.index', compact('turmasMontadas', 'disciplinas', 'configuracoes', 'resultado', 'request'));
+        return view('academico.boletim.index', compact('turmasMontadas', 'disciplinas', 'resultado', 'request'));
     }
 
     private function calcular(Request $request): array
     {
-        $config = $request->filled('configuracao_boletim_id')
-            ? ConfiguracaoBoletim::find($request->configuracao_boletim_id)
-            : null;
+        // Config do boletim deriva da matriz curricular da turma (EDUQ: definida na matriz, não escolhida aqui)
+        $tm = TurmaMontada::with('turma.matrizCurricular')->find($request->turma_montada_id);
+        $configId = $tm?->turma?->matrizCurricular?->configuracao_boletim_id;
+        $config = $configId ? ConfiguracaoBoletim::find($configId) : null;
 
         $mediaAprovacao = $config?->media_aprovacao ?? 7.0;
         $frequenciaMinima = $config?->frequencia_minima ?? 75.0;
@@ -98,12 +98,22 @@ class BoletimController extends Controller
         ];
     }
 
+    /** "Processar" (EDUQ): calcula o boletim; se o toggle "resultado final" estiver ligado, consolida a situação. */
     public function consolidar(Request $request)
     {
         $request->validate([
             'turma_montada_id' => 'required|exists:turmas_montadas,id',
             'disciplina_id' => 'required|exists:disciplinas,id',
+            'calcular_final' => 'nullable',
         ]);
+
+        $filtros = $request->only(['turma_montada_id', 'disciplina_id']);
+
+        if (! $request->boolean('calcular_final')) {
+            // Apenas processa a prévia (sem gravar resultado final)
+            return redirect()->route('academico.boletim.index', $filtros)
+                ->with('success', 'Boletim processado.');
+        }
 
         $resultado = $this->calcular($request);
         $mapa = ['aprovado' => 'aprovado', 'reprovado' => 'reprovado', 'reprovado_falta' => 'reprovado', 'cursando' => 'cursando'];
@@ -117,7 +127,7 @@ class BoletimController extends Controller
                 ->update(['situacao' => $mapa[$linha['situacao']] ?? 'cursando']);
         }
 
-        return redirect()->route('academico.boletim.index', $request->only(['turma_montada_id', 'disciplina_id', 'configuracao_boletim_id']))
-            ->with('success', 'Boletim consolidado: situação dos alunos atualizada.');
+        return redirect()->route('academico.boletim.index', $filtros)
+            ->with('success', 'Resultado final calculado: situação dos alunos atualizada.');
     }
 }
