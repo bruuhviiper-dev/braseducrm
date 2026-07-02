@@ -10,8 +10,8 @@ class MatriculaEad extends Model
     protected $table = 'matriculas_ead';
 
     protected $fillable = [
-        'aluno_id', 'curso_ead_id', 'data_matricula', 'progresso', 'situacao',
-        'ativo', 'permitir_inadimplente',
+        'aluno_id', 'operador_id', 'curso_ead_id', 'data_matricula', 'progresso', 'situacao',
+        'ativo', 'permitir_inadimplente', 'matricular_por_agrupador', 'nao_enviar_email', 'apresentar_nao_confirmado',
     ];
 
     protected $casts = [
@@ -19,11 +19,19 @@ class MatriculaEad extends Model
         'progresso' => 'decimal:2',
         'ativo' => 'boolean',
         'permitir_inadimplente' => 'boolean',
+        'matricular_por_agrupador' => 'boolean',
+        'nao_enviar_email' => 'boolean',
+        'apresentar_nao_confirmado' => 'boolean',
     ];
 
     public function aluno(): BelongsTo
     {
         return $this->belongsTo(Aluno::class);
+    }
+
+    public function operador(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'operador_id');
     }
 
     public function cursoEad(): BelongsTo

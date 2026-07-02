@@ -24,7 +24,7 @@ class MatriculaEadController extends Controller
 
     public function store(Request $request)
     {
-        MatriculaEad::create($this->validar($request));
+        MatriculaEad::create($this->validar($request) + ['operador_id' => auth()->id()]);
 
         return redirect()->route('ead.matriculas.index')->with('success', 'Matrícula EAD criada com sucesso.');
     }
@@ -58,6 +58,9 @@ class MatriculaEadController extends Controller
         ]);
         $data['ativo'] = $request->boolean('ativo');
         $data['permitir_inadimplente'] = $request->boolean('permitir_inadimplente');
+        $data['matricular_por_agrupador'] = $request->boolean('matricular_por_agrupador');
+        $data['nao_enviar_email'] = $request->boolean('nao_enviar_email');
+        $data['apresentar_nao_confirmado'] = $request->boolean('apresentar_nao_confirmado');
 
         return $data;
     }

@@ -52,10 +52,24 @@
                 </div>
             </div>
 
-            <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="permitir_inadimplente" value="1" {{ old('permitir_inadimplente', $matricula->permitir_inadimplente ?? false) ? 'checked' : '' }} class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
-                <span class="text-sm text-gray-700">Permitir o aluno acessar o curso mesmo estando inadimplente?</span>
-            </label>
+            <div class="space-y-2 border-t pt-3">
+                <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="checkbox" name="matricular_por_agrupador" value="1" {{ old('matricular_por_agrupador', $matricula->matricular_por_agrupador ?? false) ? 'checked' : '' }} class="rounded text-primary-600">
+                    Realizar matrícula pelo agrupador?
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="checkbox" name="nao_enviar_email" value="1" {{ old('nao_enviar_email', $matricula->nao_enviar_email ?? false) ? 'checked' : '' }} class="rounded text-primary-600">
+                    Não enviar o e-mail de criação da matrícula?
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="checkbox" name="permitir_inadimplente" value="1" {{ old('permitir_inadimplente', $matricula->permitir_inadimplente ?? false) ? 'checked' : '' }} class="rounded text-primary-600">
+                    Permitir o aluno acessar o curso mesmo estando inadimplente?
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+                    <input type="checkbox" name="apresentar_nao_confirmado" value="1" {{ old('apresentar_nao_confirmado', $matricula->apresentar_nao_confirmado ?? false) ? 'checked' : '' }} class="rounded text-primary-600">
+                    Apresentar curso mesmo que não esteja confirmado na 23 - Matrícula e Histórico?
+                </label>
+            </div>
 
             <div class="flex justify-end gap-3 pt-2 border-t">
                 <a href="{{ route('ead.matriculas.index') }}" class="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
