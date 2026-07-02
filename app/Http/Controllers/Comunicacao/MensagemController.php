@@ -16,7 +16,7 @@ class MensagemController extends Controller
     /** Histórico de mensagens enviadas. */
     public function index()
     {
-        $mensagens = MensagemEnviada::with('pessoa')->orderByDesc('id')->paginate(20);
+        $mensagens = MensagemEnviada::with('pessoa', 'enviadoPor')->orderByDesc('id')->paginate(20);
         return view('comunicacao.mensagens.index', compact('mensagens'));
     }
 

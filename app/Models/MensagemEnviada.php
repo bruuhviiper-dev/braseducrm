@@ -22,4 +22,15 @@ class MensagemEnviada extends Model
     {
         return $this->belongsTo(TemplateMensagem::class, 'template_id');
     }
+
+    public function enviadoPor()
+    {
+        return $this->belongsTo(User::class, 'enviado_por');
+    }
+
+    /** Rótulo da forma de envio (fiel ao EDUQ). */
+    public function getFormaEnvioAttribute(): string
+    {
+        return ['email' => 'E-mail', 'sms' => 'SMS', 'whatsapp' => 'WhatsApp'][$this->canal] ?? ucfirst((string) $this->canal);
+    }
 }
