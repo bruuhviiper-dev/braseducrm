@@ -9,10 +9,16 @@ class Matricula extends Model
     protected $fillable = [
         'numero_matricula', 'aluno_id', 'turma_id', 'turma_montada_id',
         'data_matricula', 'situacao', 'forma_ingresso_id', 'observacoes',
+        'valor_total', 'desconto', 'num_parcelas', 'valor_parcela',
+        'dia_vencimento', 'primeiro_vencimento', 'forma_pagamento_id',
     ];
 
     protected $casts = [
         'data_matricula' => 'date',
+        'primeiro_vencimento' => 'date',
+        'valor_total' => 'decimal:2',
+        'desconto' => 'decimal:2',
+        'valor_parcela' => 'decimal:2',
     ];
 
     public function aluno()
@@ -40,6 +46,16 @@ class Matricula extends Model
     public function formaIngresso()
     {
         return $this->belongsTo(FormaIngresso::class);
+    }
+
+    public function formaPagamento()
+    {
+        return $this->belongsTo(FormaPagamento::class);
+    }
+
+    public function documentos()
+    {
+        return $this->hasMany(DocumentoMatricula::class);
     }
 
     public function notas()

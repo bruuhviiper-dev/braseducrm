@@ -3,42 +3,35 @@
 namespace App\Http\Controllers\Academico;
 
 use App\Http\Controllers\Controller;
-use App\Models\Matricula;
 use App\Models\Aluno;
-use App\Models\Turma;
 use App\Models\FormaIngresso;
+use App\Models\FormaPagamento;
+use App\Models\Matricula;
+use App\Models\Turma;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MatriculaController extends Controller
 {
     public function index()
     {
-        $matriculas = Matricula::with(['aluno.pessoa', 'turma'])->paginate(15);
+        $matriculas = Matricula::with(['aluno.pessoa', 'turma'])->orderByDesc('id')->paginate(15);
 
         return view('academico.matriculas.index', compact('matriculas'));
     }
 
     public function create()
     {
-        $alunos = Aluno::with('pessoa')->get();
-        $turmas = Turma::orderBy('nome')->get();
-        $formasIngresso = FormaIngresso::orderBy('nome')->get();
-
-        return view('academico.matriculas.form', compact('alunos', 'turmas', 'formasIngresso'));
+        return view('academico.matriculas.form', $this->dados(null));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'aluno_id' => 'required|exists:alunos,id',
-            'turma_id' => 'required|exists:turmas,id',
-            'data_matricula' => 'required|date',
-            'situacao' => 'required|string|max:50',
-            'forma_ingresso_id' => 'nullable|exists:formas_ingresso,id',
-            'observacoes' => 'nullable|string',
-        ]);
-
-        Matricula::create($request->all());
+        $data = $this->validar($request);
+        DB::transaction(function () use ($data) {
+            $matricula = Matricula::create($data['matricula']);
+            $this->salvarFilhos($matricula, $data);
+        });
 
         return redirect()->route('academico.matriculas.index')
             ->with('success', 'Matricula realizada com sucesso.');
@@ -46,26 +39,18 @@ class MatriculaController extends Controller
 
     public function edit(Matricula $matricula)
     {
-        $matricula->load('aluno.pessoa');
-        $alunos = Aluno::with('pessoa')->get();
-        $turmas = Turma::orderBy('nome')->get();
-        $formasIngresso = FormaIngresso::orderBy('nome')->get();
+        $matricula->load(['aluno.pessoa', 'documentos']);
 
-        return view('academico.matriculas.form', compact('matricula', 'alunos', 'turmas', 'formasIngresso'));
+        return view('academico.matriculas.form', $this->dados($matricula));
     }
 
     public function update(Request $request, Matricula $matricula)
     {
-        $request->validate([
-            'aluno_id' => 'required|exists:alunos,id',
-            'turma_id' => 'required|exists:turmas,id',
-            'data_matricula' => 'required|date',
-            'situacao' => 'required|string|max:50',
-            'forma_ingresso_id' => 'nullable|exists:formas_ingresso,id',
-            'observacoes' => 'nullable|string',
-        ]);
-
-        $matricula->update($request->all());
+        $data = $this->validar($request);
+        DB::transaction(function () use ($matricula, $data) {
+            $matricula->update($data['matricula']);
+            $this->salvarFilhos($matricula, $data);
+        });
 
         return redirect()->route('academico.matriculas.index')
             ->with('success', 'Matricula atualizada com sucesso.');
@@ -77,5 +62,76 @@ class MatriculaController extends Controller
 
         return redirect()->route('academico.matriculas.index')
             ->with('success', 'Matricula removida com sucesso.');
+    }
+
+    private function validar(Request $request): array
+    {
+        $v = $request->validate([
+            'aluno_id' => 'required|exists:alunos,id',
+            'turma_id' => 'required|exists:turmas,id',
+            'numero_matricula' => 'nullable|string|max:50',
+            'data_matricula' => 'required|date',
+            'situacao' => 'required|string|max:50',
+            'forma_ingresso_id' => 'nullable|exists:formas_ingresso,id',
+            'observacoes' => 'nullable|string',
+            // plano de pagamento
+            'valor_total' => 'nullable|numeric|min:0',
+            'desconto' => 'nullable|numeric|min:0',
+            'num_parcelas' => 'nullable|integer|min:1|max:120',
+            'valor_parcela' => 'nullable|numeric|min:0',
+            'dia_vencimento' => 'nullable|integer|min:1|max:31',
+            'primeiro_vencimento' => 'nullable|date',
+            'forma_pagamento_id' => 'nullable|exists:formas_pagamento,id',
+            // documentos
+            'documentos' => 'nullable|array',
+            'documentos.*.documento' => 'nullable|string|max:255',
+            'documentos.*.entregue' => 'nullable',
+            'documentos.*.observacao' => 'nullable|string|max:255',
+        ]);
+
+        return [
+            'matricula' => [
+                'aluno_id' => $v['aluno_id'],
+                'turma_id' => $v['turma_id'],
+                'numero_matricula' => $v['numero_matricula'] ?? null,
+                'data_matricula' => $v['data_matricula'],
+                'situacao' => $v['situacao'],
+                'forma_ingresso_id' => $v['forma_ingresso_id'] ?? null,
+                'observacoes' => $v['observacoes'] ?? null,
+                'valor_total' => $v['valor_total'] ?? null,
+                'desconto' => $v['desconto'] ?? null,
+                'num_parcelas' => $v['num_parcelas'] ?? null,
+                'valor_parcela' => $v['valor_parcela'] ?? null,
+                'dia_vencimento' => $v['dia_vencimento'] ?? null,
+                'primeiro_vencimento' => $v['primeiro_vencimento'] ?? null,
+                'forma_pagamento_id' => $v['forma_pagamento_id'] ?? null,
+            ],
+            'documentos' => collect($v['documentos'] ?? [])
+                ->filter(fn ($d) => !empty($d['documento']))
+                ->map(fn ($d) => [
+                    'documento' => $d['documento'],
+                    'entregue' => !empty($d['entregue']),
+                    'observacao' => $d['observacao'] ?? null,
+                ])->values()->all(),
+        ];
+    }
+
+    private function salvarFilhos(Matricula $matricula, array $data): void
+    {
+        $matricula->documentos()->delete();
+        foreach ($data['documentos'] as $d) {
+            $matricula->documentos()->create($d);
+        }
+    }
+
+    private function dados(?Matricula $matricula): array
+    {
+        return [
+            'matricula' => $matricula,
+            'alunos' => Aluno::with('pessoa')->get(),
+            'turmas' => Turma::orderBy('nome')->get(),
+            'formasIngresso' => FormaIngresso::orderBy('nome')->get(),
+            'formasPagamento' => FormaPagamento::orderBy('nome')->get(),
+        ];
     }
 }
