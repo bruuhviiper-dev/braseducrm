@@ -9,17 +9,35 @@ class Interessado extends Model
     protected $table = 'interessados';
 
     protected $fillable = [
-        'pessoa_id', 'nome', 'email', 'telefone', 'celular',
-        'origem_id', 'categoria_id', 'curso_id', 'observacoes', 'ativo',
+        'pessoa_id', 'nome', 'e_empresa', 'nao_enviar_mensagens', 'email', 'cpf', 'telefone', 'celular',
+        'origem_id', 'responsavel_id', 'categoria_id', 'profissao_id', 'cidade', 'formacao',
+        'instagram', 'facebook', 'curso_id', 'observacoes', 'ativo',
     ];
 
     protected $casts = [
         'ativo' => 'boolean',
+        'e_empresa' => 'boolean',
+        'nao_enviar_mensagens' => 'boolean',
     ];
 
     public function pessoa()
     {
         return $this->belongsTo(Pessoa::class);
+    }
+
+    public function responsavel()
+    {
+        return $this->belongsTo(User::class, 'responsavel_id');
+    }
+
+    public function profissao()
+    {
+        return $this->belongsTo(Profissao::class);
+    }
+
+    public function contatos()
+    {
+        return $this->hasMany(ContatoInteressado::class);
     }
 
     public function origemInteressado()
