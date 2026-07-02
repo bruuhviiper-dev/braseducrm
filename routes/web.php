@@ -314,6 +314,7 @@ Route::middleware('auth')->group(function () {
 
         // Movimentacoes (287) e Reservas (289)
         Route::put('movimentacoes/{movimentacao}/devolver', [\App\Http\Controllers\Biblioteca\MovimentacaoExemplarController::class, 'devolver'])->name('movimentacoes.devolver');
+        Route::put('movimentacoes/{movimentacao}/renovar', [\App\Http\Controllers\Biblioteca\MovimentacaoExemplarController::class, 'renovar'])->name('movimentacoes.renovar');
         Route::resource('movimentacoes', \App\Http\Controllers\Biblioteca\MovimentacaoExemplarController::class)->parameters(['movimentacoes' => 'movimentacao'])->only(['index', 'create', 'store', 'destroy']);
         Route::put('reservas/{reserva}/situacao', [\App\Http\Controllers\Biblioteca\ReservaExemplarController::class, 'situacao'])->name('reservas.situacao');
         Route::resource('reservas', \App\Http\Controllers\Biblioteca\ReservaExemplarController::class)->parameters(['reservas' => 'reserva'])->only(['index', 'create', 'store', 'destroy']);

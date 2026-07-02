@@ -10,8 +10,8 @@ class MovimentacaoExemplar extends Model
     protected $table = 'movimentacoes_exemplar';
 
     protected $fillable = [
-        'exemplar_id', 'pessoa_id', 'data_emprestimo', 'data_prevista_devolucao',
-        'data_devolucao', 'multa', 'situacao',
+        'exemplar_id', 'pessoa_id', 'operador_id', 'data_emprestimo', 'data_prevista_devolucao',
+        'data_devolucao', 'multa', 'renovacoes', 'situacao',
     ];
 
     protected $casts = [
@@ -29,5 +29,19 @@ class MovimentacaoExemplar extends Model
     public function pessoa(): BelongsTo
     {
         return $this->belongsTo(Pessoa::class);
+    }
+
+    public function operador(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'operador_id');
+    }
+
+    /** Tipo exibido (fiel ao EDUQ: Empréstimo / Renovação / Devolução). */
+    public function getTipoAttribute(): string
+    {
+        if ($this->situacao === 'devolvido') {
+            return 'Devolução';
+        }
+        return $this->renovacoes > 0 ? 'Renovação' : 'Empréstimo';
     }
 }

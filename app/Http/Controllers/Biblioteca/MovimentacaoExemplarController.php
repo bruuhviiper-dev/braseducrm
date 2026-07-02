@@ -15,7 +15,7 @@ class MovimentacaoExemplarController extends Controller
 {
     public function index()
     {
-        $movimentacoes = MovimentacaoExemplar::with('exemplar.obra', 'pessoa')->orderByDesc('id')->paginate(20);
+        $movimentacoes = MovimentacaoExemplar::with('exemplar.obra', 'pessoa', 'operador')->orderByDesc('id')->paginate(20);
 
         return view('biblioteca.movimentacoes.index', compact('movimentacoes'));
     }
@@ -43,11 +43,31 @@ class MovimentacaoExemplarController extends Controller
         ]);
 
         DB::transaction(function () use ($data) {
-            MovimentacaoExemplar::create($data + ['situacao' => 'emprestado']);
+            MovimentacaoExemplar::create($data + ['situacao' => 'emprestado', 'operador_id' => auth()->id()]);
             Exemplar::where('id', $data['exemplar_id'])->update(['situacao' => 'emprestado']);
         });
 
         return redirect()->route('biblioteca.movimentacoes.index')->with('success', 'Empréstimo registrado.');
+    }
+
+    /** Renovação (fiel ao EDUQ): estende a devolução prevista pelos dias configurados. */
+    public function renovar(MovimentacaoExemplar $movimentacao)
+    {
+        if ($movimentacao->situacao === 'devolvido') {
+            return back()->with('error', 'Não é possível renovar um empréstimo já devolvido.');
+        }
+
+        $config = ConfiguracaoBiblioteca::current();
+        $novaPrevisao = Carbon::parse($movimentacao->data_prevista_devolucao)->addDays($config->dias_devolucao);
+
+        $movimentacao->update([
+            'data_prevista_devolucao' => $novaPrevisao->toDateString(),
+            'renovacoes' => $movimentacao->renovacoes + 1,
+            'operador_id' => auth()->id(),
+        ]);
+
+        return redirect()->route('biblioteca.movimentacoes.index')
+            ->with('success', 'Renovação registrada. Nova devolução prevista: ' . $novaPrevisao->format('d/m/Y') . '.');
     }
 
     /** Devolução: calcula multa (se configurada) e libera o exemplar. */
@@ -73,6 +93,7 @@ class MovimentacaoExemplarController extends Controller
                 'data_devolucao' => $hoje->toDateString(),
                 'multa' => $multa,
                 'situacao' => 'devolvido',
+                'operador_id' => auth()->id(),
             ]);
             $movimentacao->exemplar()->update(['situacao' => 'disponivel']);
         });
