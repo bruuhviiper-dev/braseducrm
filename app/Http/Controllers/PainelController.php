@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Oportunidade;
 use App\Models\EtapaFunil;
 use App\Models\TituloReceber;
+use App\Models\TituloPagar;
 use App\Models\Matricula;
 use App\Models\Interessado;
 use Illuminate\Support\Carbon;
@@ -40,30 +41,58 @@ class PainelController extends Controller
         return view('paineis.comercial', compact('porSituacao', 'porEtapa', 'stats'));
     }
 
+    /** Painel Financeiro Geral (138): KPIs + A Receber / A Pagar + evolução (fiel ao EDUQ). */
     public function financeiro()
     {
-        // Receber vs Pago nos últimos 6 meses
-        $meses = [];
-        $receber = [];
-        $pago = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $ref = Carbon::now()->subMonths($i);
-            $label = $ref->format('m/Y');
-            $meses[] = $label;
-            $receber[] = (float) TituloReceber::whereYear('data_vencimento', $ref->year)
-                ->whereMonth('data_vencimento', $ref->month)->sum('valor_original');
-            $pago[] = (float) TituloReceber::where('situacao', 'pago')
-                ->whereYear('data_pagamento', $ref->year)
-                ->whereMonth('data_pagamento', $ref->month)->sum('valor_pago');
-        }
+        $hoje = now();
 
-        $stats = [
-            'total_aberto' => TituloReceber::where('situacao', 'aberto')->sum('valor_original'),
-            'total_pago' => TituloReceber::where('situacao', 'pago')->sum('valor_pago'),
-            'total_vencido' => TituloReceber::where('situacao', 'aberto')->where('data_vencimento', '<', now())->sum('valor_original'),
+        // A RECEBER
+        $recTotal = (float) TituloReceber::whereIn('situacao', ['aberto', 'pago'])->sum('valor_original');
+        $recRecebidas = (float) TituloReceber::where('situacao', 'pago')->sum('valor_pago');
+        $recVencidas = (float) TituloReceber::where('situacao', 'aberto')->whereDate('data_vencimento', '<', $hoje)->sum('valor_original');
+        $recAVencer = (float) TituloReceber::where('situacao', 'aberto')->whereDate('data_vencimento', '>=', $hoje)->sum('valor_original');
+
+        // A PAGAR
+        $pagTotal = (float) TituloPagar::whereIn('situacao', ['aberto', 'pago'])->sum('valor_original');
+        $pagPagas = (float) TituloPagar::where('situacao', 'pago')->sum('valor_pago');
+        $pagVencidas = (float) TituloPagar::where('situacao', 'aberto')->whereDate('data_vencimento', '<', $hoje)->sum('valor_original');
+        $pagAVencer = (float) TituloPagar::where('situacao', 'aberto')->whereDate('data_vencimento', '>=', $hoje)->sum('valor_original');
+
+        $pct = fn ($parte, $total) => $total > 0 ? round($parte / $total * 100, 2) : 0;
+
+        $kpis = [
+            'resultado_previsto' => $recTotal - $pagTotal,
+            'resultado_realizado' => $recRecebidas - $pagPagas,
+            'taxa_realizada' => $pct($recRecebidas, $recTotal),
+            'saldo_acumulado' => $recRecebidas - $pagPagas,
+            'inadimplencia' => $pct($recVencidas, $recTotal),
         ];
 
-        return view('paineis.financeiro', compact('meses', 'receber', 'pago', 'stats'));
+        $aReceber = [
+            'total' => $recTotal,
+            'recebidas' => ['valor' => $recRecebidas, 'pct' => $pct($recRecebidas, $recTotal)],
+            'vencidas' => ['valor' => $recVencidas, 'pct' => $pct($recVencidas, $recTotal)],
+            'a_vencer' => ['valor' => $recAVencer, 'pct' => $pct($recAVencer, $recTotal)],
+        ];
+        $aPagar = [
+            'total' => $pagTotal,
+            'pagas' => ['valor' => $pagPagas, 'pct' => $pct($pagPagas, $pagTotal)],
+            'vencidas' => ['valor' => $pagVencidas, 'pct' => $pct($pagVencidas, $pagTotal)],
+            'a_vencer' => ['valor' => $pagAVencer, 'pct' => $pct($pagAVencer, $pagTotal)],
+        ];
+
+        // Evolução receitas x despesas (6 meses)
+        $meses = [];
+        $receitas = [];
+        $despesas = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $ref = Carbon::now()->subMonths($i);
+            $meses[] = $ref->format('m/Y');
+            $receitas[] = (float) TituloReceber::whereYear('data_vencimento', $ref->year)->whereMonth('data_vencimento', $ref->month)->sum('valor_original');
+            $despesas[] = (float) TituloPagar::whereYear('data_vencimento', $ref->year)->whereMonth('data_vencimento', $ref->month)->sum('valor_original');
+        }
+
+        return view('paineis.financeiro', compact('kpis', 'aReceber', 'aPagar', 'meses', 'receitas', 'despesas'));
     }
 
     public function academico()
