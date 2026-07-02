@@ -7,6 +7,7 @@ use App\Models\Frequencia;
 use App\Models\Horario;
 use App\Models\Matricula;
 use App\Models\Nota;
+use App\Models\Profissional;
 use App\Models\TurmaMontada;
 use Illuminate\Http\Request;
 
@@ -39,24 +40,39 @@ class PainelEnsinoController extends Controller
         return view('academico.painel.planejamento-diario', compact('turmasMontadas', 'aulas', 'tm'));
     }
 
-    /** Painel do Professor (257): notas e frequências por turma montada. */
+    /** Painel do Professor (257): notas e frequências por turma montada (com filtro por período). */
     public function painelProfessor(Request $request)
     {
         $turmasMontadas = TurmaMontada::with('turma')->orderByDesc('id')->get();
+        $professores = Profissional::with('pessoa')->where('ativo', true)->get();
+        $view = $request->get('view', 'notas'); // notas | frequencias
         $linhas = collect();
         $tm = null;
+        $consultou = $request->filled('turma_montada_id');
 
-        if ($request->filled('turma_montada_id')) {
+        if ($consultou) {
             $tm = TurmaMontada::with('turma')->find($request->turma_montada_id);
+            $inicio = $request->filled('inicio') ? $request->date('inicio') : null;
+            $fim = $request->filled('fim') ? $request->date('fim') : null;
+
             $matriculas = Matricula::with('aluno.pessoa')->where('turma_montada_id', $tm->id)->get();
 
-            $linhas = $matriculas->map(function ($m) {
+            $linhas = $matriculas->map(function ($m) use ($inicio, $fim) {
                 $notas = Nota::where('matricula_id', $m->id)->whereNotNull('nota')->pluck('nota');
                 $media = $notas->isNotEmpty() ? round($notas->avg(), 2) : null;
-                $presencas = Frequencia::where('matricula_id', $m->id)->where('status', 'presente')->count();
-                $faltas = Frequencia::where('matricula_id', $m->id)->where('status', 'ausente')->count();
+
+                $freqQuery = Frequencia::where('matricula_id', $m->id);
+                if ($inicio) {
+                    $freqQuery->whereDate('data', '>=', $inicio);
+                }
+                if ($fim) {
+                    $freqQuery->whereDate('data', '<=', $fim);
+                }
+                $presencas = (clone $freqQuery)->whereIn('status', ['presente', 'justificada'])->count();
+                $faltas = (clone $freqQuery)->where('status', 'ausente')->count();
                 $total = $presencas + $faltas;
                 $freq = $total > 0 ? round($presencas / $total * 100, 1) : null;
+
                 return [
                     'aluno' => $m->aluno?->pessoa?->nome ?? '—',
                     'media' => $media,
@@ -67,6 +83,6 @@ class PainelEnsinoController extends Controller
             });
         }
 
-        return view('academico.painel.painel-professor', compact('turmasMontadas', 'linhas', 'tm'));
+        return view('academico.painel.painel-professor', compact('turmasMontadas', 'professores', 'linhas', 'tm', 'view', 'consultou', 'request'));
     }
 }
