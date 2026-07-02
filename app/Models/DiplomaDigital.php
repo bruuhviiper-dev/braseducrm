@@ -9,18 +9,25 @@ class DiplomaDigital extends Model
     protected $table = 'diplomas_digitais';
 
     protected $fillable = [
-        'aluno_id', 'curso_id', 'numero_registro', 'situacao',
-        'data_emissao', 'data_colacao', 'observacoes',
+        'aluno_id', 'matricula_id', 'curso_id', 'numero_registro', 'situacao',
+        'data_solicitacao', 'data_registro', 'data_emissao', 'data_colacao', 'observacoes',
     ];
 
     protected $casts = [
         'data_emissao' => 'date',
         'data_colacao' => 'date',
+        'data_solicitacao' => 'date',
+        'data_registro' => 'date',
     ];
 
     public function aluno()
     {
         return $this->belongsTo(Aluno::class);
+    }
+
+    public function matricula()
+    {
+        return $this->belongsTo(Matricula::class);
     }
 
     public function curso()

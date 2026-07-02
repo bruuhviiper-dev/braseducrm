@@ -20,10 +20,20 @@
             </div>
             @endif
 
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Matrícula <span class="text-gray-400 text-xs">(deriva aluno e curso)</span></label>
+                <select name="matricula_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Selecione...</option>
+                    @foreach($matriculas as $m)
+                    <option value="{{ $m->id }}" {{ old('matricula_id', $diploma->matricula_id ?? '') == $m->id ? 'selected' : '' }}>{{ $m->numero_matricula ?? ('#'.$m->id) }} — {{ $m->aluno?->pessoa?->nome ?? 'Aluno '.$m->aluno_id }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Aluno <span class="text-red-500">*</span></label>
-                    <select name="aluno_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Aluno</label>
+                    <select name="aluno_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">Selecione...</option>
                         @foreach($alunos as $a)
                         <option value="{{ $a->id }}" {{ old('aluno_id', $diploma->aluno_id ?? '') == $a->id ? 'selected' : '' }}>{{ $a->pessoa?->nome }}</option>
@@ -56,14 +66,22 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Data de Solicitação</label>
+                    <input type="date" name="data_solicitacao" value="{{ old('data_solicitacao', optional($diploma->data_solicitacao ?? null)->format('Y-m-d')) }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Data de Registro</label>
+                    <input type="date" name="data_registro" value="{{ old('data_registro', optional($diploma->data_registro ?? null)->format('Y-m-d')) }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Data de Emissão</label>
-                    <input type="date" name="data_emissao" value="{{ old('data_emissao', isset($diploma) && $diploma->data_emissao ? $diploma->data_emissao->format('Y-m-d') : '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="date" name="data_emissao" value="{{ old('data_emissao', optional($diploma->data_emissao ?? null)->format('Y-m-d')) }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Data de Colação</label>
-                    <input type="date" name="data_colacao" value="{{ old('data_colacao', isset($diploma) && $diploma->data_colacao ? $diploma->data_colacao->format('Y-m-d') : '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="date" name="data_colacao" value="{{ old('data_colacao', optional($diploma->data_colacao ?? null)->format('Y-m-d')) }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
 
