@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academico;
 use App\Http\Controllers\Controller;
 use App\Models\TurmaMontada;
 use App\Models\Disciplina;
+use App\Models\Profissional;
 use App\Models\TabelaAvaliacao;
 use App\Models\Matricula;
 use App\Models\Nota;
@@ -15,6 +16,7 @@ class LancamentoNotaController extends Controller
 {
     public function index(Request $request)
     {
+        $professores = Profissional::with('pessoa')->where('ativo', true)->get();
         $turmasMontadas = TurmaMontada::with('turma')->orderBy('id', 'desc')->get();
         $disciplinas = Disciplina::where('ativo', true)->orderBy('nome')->get();
         $tabelas = TabelaAvaliacao::with('itens')->orderBy('nome')->get();
@@ -24,15 +26,17 @@ class LancamentoNotaController extends Controller
             $grade = $this->montarGrade($request);
         }
 
-        return view('academico.lancamento-notas.index', compact('turmasMontadas', 'disciplinas', 'tabelas', 'grade', 'request'));
+        return view('academico.lancamento-notas.index', compact('professores', 'turmasMontadas', 'disciplinas', 'tabelas', 'grade', 'request'));
     }
 
     private function montarGrade(Request $request): array
     {
         $tabela = TabelaAvaliacao::with('itens')->findOrFail($request->tabela_avaliacao_id);
+        // "Carregar somente alunos ativos?" (EDUQ): ligado = só ativa; desligado = ativa + concluída
+        $situacoes = $request->boolean('somente_ativos') ? ['ativa'] : ['ativa', 'concluida'];
         $matriculas = Matricula::with('aluno.pessoa')
             ->where('turma_montada_id', $request->turma_montada_id)
-            ->whereIn('situacao', ['ativa', 'concluida'])
+            ->whereIn('situacao', $situacoes)
             ->get();
 
         $notasExistentes = Nota::where('disciplina_id', $request->disciplina_id)
@@ -53,6 +57,8 @@ class LancamentoNotaController extends Controller
             'turma_montada_id' => 'required|exists:turmas_montadas,id',
             'disciplina_id' => 'required|exists:disciplinas,id',
             'tabela_avaliacao_id' => 'required|exists:tabelas_avaliacao,id',
+            'professor_id' => 'nullable|exists:profissionais,id',
+            'somente_ativos' => 'nullable',
             'notas' => 'nullable|array',
             // notas[matricula_id][item_id] = valor
         ]);
@@ -79,7 +85,7 @@ class LancamentoNotaController extends Controller
             }
         });
 
-        return redirect()->route('academico.lancamento-notas.index', $request->only(['turma_montada_id', 'disciplina_id', 'tabela_avaliacao_id']))
+        return redirect()->route('academico.lancamento-notas.index', $request->only(['professor_id', 'turma_montada_id', 'disciplina_id', 'tabela_avaliacao_id', 'somente_ativos']))
             ->with('success', 'Notas lançadas com sucesso.');
     }
 }
