@@ -9,10 +9,10 @@ class Oportunidade extends Model
     protected $table = 'oportunidades';
 
     protected $fillable = [
-        'interessado_id', 'funil_id', 'etapa_funil_id', 'consultor_id',
-        'curso_id', 'produto_servico_id', 'titulo', 'valor', 'situacao',
+        'interessado_id', 'origem_id', 'indicacao_id', 'funil_id', 'etapa_funil_id', 'consultor_id',
+        'curso_id', 'produto_servico_id', 'titulo', 'valor', 'situacao', 'qualificacao',
         'motivo_perda_id', 'motivo_ganho_id', 'motivo_pausa_id',
-        'data_previsao_fechamento', 'data_fechamento', 'observacoes',
+        'data_previsao_fechamento', 'data_fechamento', 'observacoes', 'motivacao_interesse',
     ];
 
     protected $casts = [
@@ -24,6 +24,16 @@ class Oportunidade extends Model
     public function interessado()
     {
         return $this->belongsTo(Interessado::class);
+    }
+
+    public function origem()
+    {
+        return $this->belongsTo(OrigemInteressado::class, 'origem_id');
+    }
+
+    public function indicacao()
+    {
+        return $this->belongsTo(Indicacao::class);
     }
 
     public function funil()
