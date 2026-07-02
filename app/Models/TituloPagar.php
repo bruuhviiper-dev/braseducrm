@@ -9,9 +9,9 @@ class TituloPagar extends Model
     protected $table = 'titulos_pagar';
 
     protected $fillable = [
-        'pessoa_id', 'categoria_pagar_id', 'conta_bancaria_id',
-        'numero_documento', 'descricao', 'valor_original', 'valor_pago',
-        'data_emissao', 'data_vencimento', 'data_pagamento',
+        'pessoa_id', 'categoria_pagar_id', 'conta_bancaria_id', 'forma_pagamento', 'plano_conta_id',
+        'numero_documento', 'linha_digitavel', 'descricao', 'valor_original', 'valor_pago',
+        'data_emissao', 'data_vencimento', 'data_pagamento', 'referencia',
         'situacao', 'observacoes', 'gerado_por',
     ];
 
@@ -36,5 +36,15 @@ class TituloPagar extends Model
     public function contaBancaria()
     {
         return $this->belongsTo(ContaBancaria::class);
+    }
+
+    public function planoConta()
+    {
+        return $this->belongsTo(PlanoContas::class, 'plano_conta_id');
+    }
+
+    public function rateios()
+    {
+        return $this->hasMany(RateioCentroCusto::class);
     }
 }
