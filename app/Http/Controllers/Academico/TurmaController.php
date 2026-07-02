@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Academico;
 
 use App\Http\Controllers\Controller;
-use App\Models\Turma;
-use App\Models\Curso;
+use App\Models\InstituicaoEnsino;
 use App\Models\MatrizCurricular;
+use App\Models\Turma;
 use App\Models\Turno;
-use App\Models\PeriodoLetivo;
 use Illuminate\Http\Request;
 
 class TurmaController extends Controller
@@ -21,30 +20,12 @@ class TurmaController extends Controller
 
     public function create()
     {
-        $cursos = Curso::orderBy('nome')->get();
-        $matrizes = MatrizCurricular::orderBy('nome')->get();
-        $turnos = Turno::orderBy('nome')->get();
-        $periodos = PeriodoLetivo::orderBy('nome')->get();
-
-        return view('academico.turmas.form', compact('cursos', 'matrizes', 'turnos', 'periodos'));
+        return view('academico.turmas.form', $this->dados(null));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nome' => 'required|string|max:255',
-            'codigo' => 'required|string|max:50',
-            'curso_id' => 'required|exists:cursos,id',
-            'matriz_curricular_id' => 'nullable|exists:matrizes_curriculares,id',
-            'turno_id' => 'nullable|exists:turnos,id',
-            'periodo_letivo_id' => 'nullable|exists:periodos_letivos,id',
-            'data_inicio' => 'nullable|date',
-            'data_fim' => 'nullable|date|after_or_equal:data_inicio',
-            'vagas' => 'nullable|integer|min:0',
-            'situacao' => 'required|string|max:50',
-        ]);
-
-        Turma::create($request->all());
+        Turma::create($this->validar($request));
 
         return redirect()->route('academico.turmas.index')
             ->with('success', 'Turma cadastrada com sucesso.');
@@ -52,30 +33,12 @@ class TurmaController extends Controller
 
     public function edit(Turma $turma)
     {
-        $cursos = Curso::orderBy('nome')->get();
-        $matrizes = MatrizCurricular::orderBy('nome')->get();
-        $turnos = Turno::orderBy('nome')->get();
-        $periodos = PeriodoLetivo::orderBy('nome')->get();
-
-        return view('academico.turmas.form', compact('turma', 'cursos', 'matrizes', 'turnos', 'periodos'));
+        return view('academico.turmas.form', $this->dados($turma));
     }
 
     public function update(Request $request, Turma $turma)
     {
-        $request->validate([
-            'nome' => 'required|string|max:255',
-            'codigo' => 'required|string|max:50',
-            'curso_id' => 'required|exists:cursos,id',
-            'matriz_curricular_id' => 'nullable|exists:matrizes_curriculares,id',
-            'turno_id' => 'nullable|exists:turnos,id',
-            'periodo_letivo_id' => 'nullable|exists:periodos_letivos,id',
-            'data_inicio' => 'nullable|date',
-            'data_fim' => 'nullable|date|after_or_equal:data_inicio',
-            'vagas' => 'nullable|integer|min:0',
-            'situacao' => 'required|string|max:50',
-        ]);
-
-        $turma->update($request->all());
+        $turma->update($this->validar($request));
 
         return redirect()->route('academico.turmas.index')
             ->with('success', 'Turma atualizada com sucesso.');
@@ -87,5 +50,49 @@ class TurmaController extends Controller
 
         return redirect()->route('academico.turmas.index')
             ->with('success', 'Turma removida com sucesso.');
+    }
+
+    private function validar(Request $request): array
+    {
+        $v = $request->validate([
+            'codigo' => 'required|string|max:50',                 // SIGLA
+            'nome' => 'required|string|max:255',                  // Descrição
+            'instituicao_ensino_id' => 'required|exists:instituicoes_ensino,id',
+            'matriz_curricular_id' => 'required|exists:matrizes_curriculares,id',
+            'turno_id' => 'required|exists:turnos,id',
+            'vagas' => 'nullable|integer|min:0',                  // Quantidade máxima de alunos
+        ]);
+
+        // Curso deriva da Matriz Curricular (EDUQ não pede curso direto na turma)
+        $matriz = MatrizCurricular::find($v['matriz_curricular_id']);
+        $finalizada = $request->boolean('finalizada');
+
+        return [
+            'codigo' => $v['codigo'],
+            'nome' => $v['nome'],
+            'instituicao_ensino_id' => $v['instituicao_ensino_id'] ?? null,
+            'matriz_curricular_id' => $v['matriz_curricular_id'],
+            'curso_id' => $matriz?->curso_id,
+            'turno_id' => $v['turno_id'] ?? null,
+            'vagas' => $v['vagas'] ?? null,
+            'finalizada' => $finalizada,
+            // EDUQ usa toggle "Turma finalizada?"; derivamos a situacao textual p/ compat do schema
+            'situacao' => $finalizada ? 'finalizada' : 'ativa',
+        ];
+    }
+
+    private function dados(?Turma $turma): array
+    {
+        if ($turma) {
+            $turma->loadCount(['matriculas', 'turmasMontadas']);
+            $turma->load('matriculas.aluno.pessoa', 'turmasMontadas.periodoLetivo');
+        }
+
+        return [
+            'turma' => $turma,
+            'instituicoes' => InstituicaoEnsino::orderBy('nome')->get(),
+            'matrizes' => MatrizCurricular::with('curso')->orderBy('nome')->get(),
+            'turnos' => Turno::orderBy('nome')->get(),
+        ];
     }
 }
