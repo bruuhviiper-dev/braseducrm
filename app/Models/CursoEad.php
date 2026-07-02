@@ -12,8 +12,9 @@ class CursoEad extends Model
     protected $table = 'cursos_ead';
 
     protected $fillable = [
-        'nome', 'descricao', 'carga_horaria', 'valor', 'imagem', 'ativo',
+        'nome', 'titulo_portal', 'descricao', 'carga_horaria', 'valor', 'imagem', 'ativo',
         'tutor_id', 'agrupador_curso_id', 'sub_agrupador_curso_id',
+        'turma_montada_id', 'disciplina_id', 'modelo_documento_id',
     ];
 
     protected $casts = [
@@ -39,6 +40,21 @@ class CursoEad extends Model
     public function subAgrupador(): BelongsTo
     {
         return $this->belongsTo(SubAgrupadorCurso::class, 'sub_agrupador_curso_id');
+    }
+
+    public function turmaMontada(): BelongsTo
+    {
+        return $this->belongsTo(TurmaMontada::class);
+    }
+
+    public function disciplina(): BelongsTo
+    {
+        return $this->belongsTo(Disciplina::class);
+    }
+
+    public function modeloDocumento(): BelongsTo
+    {
+        return $this->belongsTo(ModeloDocumento::class, 'modelo_documento_id');
     }
 
     public function modulos(): HasMany

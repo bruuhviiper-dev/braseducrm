@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Ead;
 use App\Http\Controllers\Controller;
 use App\Models\AgrupadorCurso;
 use App\Models\CursoEad;
+use App\Models\Disciplina;
+use App\Models\ModeloDocumento;
 use App\Models\Profissional;
 use App\Models\SubAgrupadorCurso;
 use App\Models\TagCursoEad;
+use App\Models\TurmaMontada;
 use App\Models\VideoEad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -64,12 +67,16 @@ class CursoEadController extends Controller
     {
         $v = $request->validate([
             'nome' => 'required|string|max:255',
+            'titulo_portal' => 'nullable|string|max:255',
             'descricao' => 'nullable|string',
             'carga_horaria' => 'nullable|integer|min:0',
             'valor' => 'nullable|numeric|min:0',
             'tutor_id' => 'nullable|exists:profissionais,id',
             'agrupador_curso_id' => 'nullable|exists:agrupadores_curso,id',
             'sub_agrupador_curso_id' => 'nullable|exists:sub_agrupadores_curso,id',
+            'turma_montada_id' => 'nullable|exists:turmas_montadas,id',
+            'disciplina_id' => 'nullable|exists:disciplinas,id',
+            'modelo_documento_id' => 'nullable|integer',
             'ativo' => 'boolean',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags_curso_ead,id',
@@ -85,12 +92,16 @@ class CursoEadController extends Controller
         return [
             'curso' => [
                 'nome' => $v['nome'],
+                'titulo_portal' => $v['titulo_portal'] ?? null,
                 'descricao' => $v['descricao'] ?? null,
                 'carga_horaria' => $v['carga_horaria'] ?? null,
                 'valor' => $v['valor'] ?? null,
                 'tutor_id' => $v['tutor_id'] ?? null,
                 'agrupador_curso_id' => $v['agrupador_curso_id'] ?? null,
                 'sub_agrupador_curso_id' => $v['sub_agrupador_curso_id'] ?? null,
+                'turma_montada_id' => $v['turma_montada_id'] ?? null,
+                'disciplina_id' => $v['disciplina_id'] ?? null,
+                'modelo_documento_id' => $v['modelo_documento_id'] ?? null,
                 'ativo' => $request->has('ativo'),
             ],
             'tags' => $v['tags'] ?? [],
@@ -131,6 +142,9 @@ class CursoEadController extends Controller
             'subAgrupadores' => SubAgrupadorCurso::orderBy('nome')->get(),
             'tagsDisponiveis' => TagCursoEad::orderBy('nome')->get(),
             'videos' => VideoEad::orderBy('titulo')->get(),
+            'turmasMontadas' => TurmaMontada::with('turma')->orderByDesc('id')->get(),
+            'disciplinas' => Disciplina::where('ativo', true)->orderBy('nome')->get(),
+            'modelosDocumento' => ModeloDocumento::orderBy('nome')->get(),
             'tagsSelecionadas' => $curso ? $curso->tags->pluck('id')->all() : [],
         ];
     }

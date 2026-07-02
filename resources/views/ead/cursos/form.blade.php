@@ -32,9 +32,13 @@
 
             {{-- Dados básicos --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nome <span class="text-red-500">*</span></label>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Descrição do curso <span class="text-red-500">*</span></label>
                     <input type="text" name="nome" value="{{ old('nome', $curso->nome ?? '') }}" required class="w-full border rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Título no Portal do Aluno <span class="text-gray-400 text-xs">(Opcional)</span></label>
+                    <input type="text" name="titulo_portal" value="{{ old('titulo_portal', $curso->titulo_portal ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Carga Horária</label>
@@ -69,6 +73,33 @@
                         @foreach($subAgrupadores as $s)
                         <option value="{{ $s->id }}" @selected(old('sub_agrupador_curso_id', $curso->sub_agrupador_curso_id ?? '') == $s->id)>{{ $s->nome }}</option>
                         @endforeach
+                    </select>
+                </div>
+                {{-- Vínculo de turma montada (fiel ao EDUQ) --}}
+                <div class="md:col-span-2 border-t pt-3 mt-1">
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Vínculo de turma montada</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Turma Montada <span class="text-gray-400 text-xs">(todos os alunos matriculados poderão fazer o curso)</span></label>
+                            <select name="turma_montada_id" class="w-full border rounded-lg px-3 py-2 text-sm">
+                                <option value="">Selecione...</option>
+                                @foreach($turmasMontadas as $tm)<option value="{{ $tm->id }}" @selected(old('turma_montada_id', $curso->turma_montada_id ?? '')==$tm->id)>{{ $tm->sigla ?? $tm->nome ?? $tm->turma?->nome ?? ('TM #'.$tm->id) }}</option>@endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Disciplina</label>
+                            <select name="disciplina_id" class="w-full border rounded-lg px-3 py-2 text-sm">
+                                <option value="">Selecione...</option>
+                                @foreach($disciplinas as $d)<option value="{{ $d->id }}" @selected(old('disciplina_id', $curso->disciplina_id ?? '')==$d->id)>{{ $d->nome }}</option>@endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Modelo de Documento (Certificado)</label>
+                    <select name="modelo_documento_id" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <option value="">Selecione...</option>
+                        @foreach($modelosDocumento as $md)<option value="{{ $md->id }}" @selected(old('modelo_documento_id', $curso->modelo_documento_id ?? '')==$md->id)>{{ $md->nome }}</option>@endforeach
                     </select>
                 </div>
                 <div class="md:col-span-2">
