@@ -95,17 +95,31 @@ class PainelController extends Controller
         return view('paineis.financeiro', compact('kpis', 'aReceber', 'aPagar', 'meses', 'receitas', 'despesas'));
     }
 
-    public function academico()
+    public function academico(\Illuminate\Http\Request $request)
     {
-        $porSituacao = Matricula::selectRaw('situacao, count(*) as total')
-            ->groupBy('situacao')->pluck('total', 'situacao');
-
-        $stats = [
-            'matriculas' => Matricula::count(),
-            'ativas' => Matricula::where('situacao', 'ativa')->count(),
+        // Totalizadores (Geral) — independentes do período (fiel ao EDUQ, campos com *)
+        $totais = [
+            'total' => Matricula::count(),
             'concluidas' => Matricula::where('situacao', 'concluida')->count(),
+            'ativas' => Matricula::where('situacao', 'ativa')->count(),
+            'canceladas' => Matricula::whereIn('situacao', ['cancelada', 'evadida'])->count(),
+            'pausadas' => Matricula::where('situacao', 'trancada')->count(),
         ];
 
-        return view('paineis.academico', compact('porSituacao', 'stats'));
+        // Período (novas/concluídas/canceladas/pausadas no período)
+        $inicio = $request->filled('inicio') ? $request->date('inicio') : now()->startOfMonth();
+        $fim = $request->filled('fim') ? $request->date('fim') : now()->endOfMonth();
+
+        $noPeriodo = fn ($situacoes = null) => Matricula::whereBetween('data_matricula', [$inicio, $fim])
+            ->when($situacoes, fn ($q) => $q->whereIn('situacao', (array) $situacoes))->count();
+
+        $periodo = [
+            'novas' => $noPeriodo(),
+            'concluidas' => $noPeriodo('concluida'),
+            'canceladas' => $noPeriodo(['cancelada', 'evadida']),
+            'pausadas' => $noPeriodo('trancada'),
+        ];
+
+        return view('paineis.academico', compact('totais', 'periodo', 'inicio', 'fim', 'request'));
     }
 }
