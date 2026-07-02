@@ -227,6 +227,8 @@ Route::middleware('auth')->group(function () {
     // Financeiro
     Route::prefix('financeiro')->name('financeiro.')->group(function () {
         Route::get('titulos-receber/remessa', [TituloReceberController::class, 'gerarRemessa'])->name('titulos-receber.remessa');
+        Route::post('titulos-receber/carregar', [TituloReceberController::class, 'carregar'])->name('titulos-receber.carregar');
+        Route::post('titulos-receber/gerar', [TituloReceberController::class, 'gerar'])->name('titulos-receber.gerar');
         Route::resource('titulos-receber', TituloReceberController::class);
         Route::post('titulos-receber/{titulo}/baixar', [TituloReceberController::class, 'baixar'])->name('titulos-receber.baixar');
         Route::resource('titulos-pagar', TituloPagarController::class);

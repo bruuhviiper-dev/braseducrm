@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Financeiro;
 
 use App\Http\Controllers\Controller;
 use App\Models\TituloReceber;
+use App\Models\Matricula;
 use App\Models\Pessoa;
 use App\Models\CategoriaReceber;
 use App\Models\ContaBancaria;
 use App\Services\BoletoCnabService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TituloReceberController extends Controller
 {
@@ -72,13 +75,104 @@ class TituloReceberController extends Controller
         ]);
     }
 
+    /** Novo (fiel ao EDUQ): "Gerar para" Matrícula/Pessoa -> Carregar dados -> parcelas. */
     public function create()
     {
-        $pessoas = Pessoa::orderBy('nome')->get();
-        $categorias = CategoriaReceber::orderBy('nome')->get();
-        $contas = ContaBancaria::where('ativo', true)->orderBy('nome')->get();
+        return view('financeiro.titulos-receber.gerar', $this->dadosGerar());
+    }
 
-        return view('financeiro.titulos-receber.form', compact('pessoas', 'categorias', 'contas'));
+    /** Carrega as parcelas a partir do plano de pagamento da matrícula (ou uma parcela p/ pessoa). */
+    public function carregar(Request $request)
+    {
+        $v = $request->validate([
+            'gerar_para' => 'required|in:matricula,pessoa',
+            'matricula_id' => 'nullable|exists:matriculas,id',
+            'pessoa_id' => 'nullable|exists:pessoas,id',
+        ]);
+
+        $parcelas = [];
+        $pessoaId = null;
+        $matriculaId = null;
+
+        if ($v['gerar_para'] === 'matricula' && !empty($v['matricula_id'])) {
+            $m = Matricula::with('aluno.pessoa')->find($v['matricula_id']);
+            $matriculaId = $m->id;
+            $pessoaId = $m->aluno?->pessoa_id;
+
+            $n = (int) ($m->num_parcelas ?: 1);
+            $valorParcela = $m->valor_parcela ?: (($m->valor_total ?: 0) - ($m->desconto ?: 0)) / max(1, $n);
+            $primeiro = $m->primeiro_vencimento ? Carbon::parse($m->primeiro_vencimento) : Carbon::now()->addMonth()->day((int) ($m->dia_vencimento ?: 10));
+
+            for ($i = 0; $i < $n; $i++) {
+                $venc = $primeiro->copy()->addMonths($i);
+                if ($m->dia_vencimento) {
+                    $venc->day(min((int) $m->dia_vencimento, $venc->daysInMonth));
+                }
+                $parcelas[] = [
+                    'descricao' => 'Parcela ' . ($i + 1) . '/' . $n,
+                    'valor' => round($valorParcela, 2),
+                    'vencimento' => $venc->format('Y-m-d'),
+                ];
+            }
+        } else {
+            $pessoaId = $v['pessoa_id'] ?? null;
+            $parcelas[] = ['descricao' => 'Título avulso', 'valor' => null, 'vencimento' => Carbon::now()->addMonth()->format('Y-m-d')];
+        }
+
+        return view('financeiro.titulos-receber.gerar', array_merge($this->dadosGerar(), [
+            'parcelas' => $parcelas,
+            'gerarPara' => $v['gerar_para'],
+            'pessoaId' => $pessoaId,
+            'matriculaId' => $matriculaId,
+        ]));
+    }
+
+    /** Gera os títulos a receber a partir das parcelas confirmadas. */
+    public function gerar(Request $request)
+    {
+        $data = $request->validate([
+            'pessoa_id' => 'required|exists:pessoas,id',
+            'matricula_id' => 'nullable|exists:matriculas,id',
+            'categoria_receber_id' => 'nullable|exists:categorias_receber,id',
+            'conta_bancaria_id' => 'nullable|exists:contas_bancarias,id',
+            'forma_pagamento' => 'nullable|string|max:50',
+            'parcelas' => 'required|array|min:1',
+            'parcelas.*.descricao' => 'nullable|string|max:120',
+            'parcelas.*.valor' => 'required|numeric|min:0.01',
+            'parcelas.*.vencimento' => 'required|date',
+        ]);
+
+        $count = 0;
+        DB::transaction(function () use ($data, &$count) {
+            foreach ($data['parcelas'] as $p) {
+                TituloReceber::create([
+                    'pessoa_id' => $data['pessoa_id'],
+                    'matricula_id' => $data['matricula_id'] ?? null,
+                    'categoria_receber_id' => $data['categoria_receber_id'] ?? null,
+                    'conta_bancaria_id' => $data['conta_bancaria_id'] ?? null,
+                    'valor_original' => $p['valor'],
+                    'data_emissao' => now(),
+                    'data_vencimento' => $p['vencimento'],
+                    'forma_pagamento' => $data['forma_pagamento'] ?? null,
+                    'observacoes' => $p['descricao'] ?? null,
+                    'situacao' => 'aberto',
+                ]);
+                $count++;
+            }
+        });
+
+        return redirect()->route('financeiro.titulos-receber.index')
+            ->with('success', "{$count} título(s) a receber gerado(s) com sucesso.");
+    }
+
+    private function dadosGerar(): array
+    {
+        return [
+            'pessoas' => Pessoa::orderBy('nome')->get(),
+            'matriculas' => Matricula::with('aluno.pessoa', 'turma')->orderByDesc('id')->get(),
+            'categorias' => CategoriaReceber::orderBy('nome')->get(),
+            'contas' => ContaBancaria::where('ativo', true)->orderBy('nome')->get(),
+        ];
     }
 
     public function store(Request $request)
