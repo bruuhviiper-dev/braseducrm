@@ -1,6 +1,6 @@
 @props(['title', 'createRoute' => null, 'createLabel' => 'Novo', 'codigo' => null, 'breadcrumb' => null])
 
-<div class="bg-white rounded-xl border">
+<div class="bg-white rounded-xl border" x-data="{ showFiltros: false }" @toggle-filtros.window="showFiltros = !showFiltros">
     {{-- Header fiel ao EDUQ: código + título + breadcrumb à esquerda; Buscar... + refresh à direita --}}
     <div class="px-5 py-3 border-b flex items-center justify-between gap-3 flex-wrap">
         <div class="flex items-center gap-2">
@@ -26,17 +26,36 @@
         </div>
     </div>
 
+    @isset($filtros)
+    {{-- Painel de Filtros (aberto pelo funil flutuante, estilo EDUQ) --}}
+    <div x-show="showFiltros" x-cloak class="px-5 py-4 border-b bg-gray-50">
+        {{ $filtros }}
+    </div>
+    @endisset
+
     <div class="p-4">
         {{ $slot }}
     </div>
 </div>
 
-@if($createRoute)
-{{-- FAB "+" estilo EDUQ (canto inferior direito) --}}
-<a href="{{ $createRoute }}" class="group fixed bottom-6 right-6 z-40 flex items-center" title="{{ $createLabel }}">
-    <span class="mr-2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs font-medium px-2.5 py-1 rounded shadow-lg whitespace-nowrap">{{ $createLabel }}</span>
-    <span class="w-14 h-14 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full shadow-xl shadow-cyan-500/30 flex items-center justify-center transition-transform group-hover:scale-105 active:scale-95">
-        <i class="fa-solid fa-plus text-2xl"></i>
-    </span>
-</a>
-@endif
+{{-- Pilha de botões flutuantes (estilo EDUQ: expandir + funil + FAB "+") --}}
+<div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2.5">
+    <button onclick="document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()"
+            class="w-10 h-10 bg-white border shadow-md rounded-lg text-gray-500 hover:text-gray-800 flex items-center justify-center" title="Expandir">
+        <i class="fa-solid fa-up-right-and-down-left-from-center text-sm"></i>
+    </button>
+    @isset($filtros)
+    <button onclick="window.dispatchEvent(new CustomEvent('toggle-filtros'))"
+            class="w-10 h-10 bg-slate-600 shadow-md rounded-lg text-white hover:bg-slate-500 flex items-center justify-center" title="Filtros">
+        <i class="fa-solid fa-filter text-sm"></i>
+    </button>
+    @endisset
+    @if($createRoute)
+    <a href="{{ $createRoute }}" class="group flex items-center" title="{{ $createLabel }}">
+        <span class="mr-2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs font-medium px-2.5 py-1 rounded shadow-lg whitespace-nowrap">{{ $createLabel }}</span>
+        <span class="w-12 h-12 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full shadow-xl shadow-cyan-500/30 flex items-center justify-center transition-transform group-hover:scale-105 active:scale-95">
+            <i class="fa-solid fa-plus text-xl"></i>
+        </span>
+    </a>
+    @endif
+</div>

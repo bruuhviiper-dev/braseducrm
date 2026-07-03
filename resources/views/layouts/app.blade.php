@@ -54,7 +54,7 @@
                 {{-- ACADEMICO --}}
                 <div>
                     <button @click="openMod = openMod===0 ? null : 0" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('academico*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===0 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-graduation-cap text-lg"></i><span class="text-center px-0.5">Acadêmico</span></button>
-                    <div x-show="openMod===0" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===0" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('academico.calendarios.index') ? route('academico.calendarios.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.calendarios.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">35</span> Cadastro de Calendario</a>
                         <a href="{{ route('cadastros.index', 'escolas') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">8</span> Cadastro de Escola</a>
@@ -138,7 +138,7 @@
                 {{-- ADMINISTRATIVO --}}
                 <div>
                     <button @click="openMod = openMod===1 ? null : 1" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('admin*') || request()->routeIs('painel-cliente.*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===1 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-building text-lg"></i><span class="text-center px-0.5">Administrativo</span></button>
-                    <div x-show="openMod===1" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===1" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Acessos</p>
                         <a href="{{ Route::has('admin.grupos.index') ? route('admin.grupos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('admin.grupos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">43</span> Cadastro de Grupo de Operadores</a>
                         <a href="{{ Route::has('admin.operadores.index') ? route('admin.operadores.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('admin.operadores.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">44</span> Cadastro de Operador</a>
@@ -149,7 +149,7 @@
                 {{-- BIBLIOTECA --}}
                 <div>
                     <button @click="openMod = openMod===2 ? null : 2" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('biblioteca*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===2 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-book text-lg"></i><span class="text-center px-0.5">Biblioteca</span></button>
-                    <div x-show="openMod===2" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===2" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Acervo</p>
                         <a href="{{ Route::has('biblioteca.obras.index') ? route('biblioteca.obras.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('biblioteca.obras.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">288</span> Cadastro de Obra</a>
                         <a href="{{ Route::has('biblioteca.exemplares.index') ? route('biblioteca.exemplares.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('biblioteca.exemplares.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">286</span> Cadastro de Exemplares</a>
@@ -176,7 +176,7 @@
                 {{-- COMUNICACAO --}}
                 <div>
                     <button @click="openMod = openMod===3 ? null : 3" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('comunicacao*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===3 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-comments text-lg"></i><span class="text-center px-0.5">Comunicação</span></button>
-                    <div x-show="openMod===3" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===3" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Mensagens</p>
                         <a href="{{ Route::has('comunicacao.mensagens.avulsa') ? route('comunicacao.mensagens.avulsa') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('comunicacao.mensagens.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">84</span> Mensagens Avulsas</a>
                         <a href="{{ Route::has('comunicacao.mensagens.avisos') ? route('comunicacao.mensagens.avisos') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">88</span> Aviso de Cobranca</a>
@@ -195,7 +195,7 @@
                 {{-- ESTOQUE --}}
                 <div>
                     <button @click="openMod = openMod===4 ? null : 4" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('estoque*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===4 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-center px-0.5">Estoque</span></button>
-                    <div x-show="openMod===4" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===4" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('estoque.categorias.index') ? route('estoque.categorias.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">147</span> Cadastro de Categorias de Estoque</a>
                         <a href="{{ route('cadastros.index', 'depositos') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">153</span> Cadastro de Depositos de Estoque</a>
@@ -211,7 +211,7 @@
                 {{-- CRM --}}
                 <div>
                     <button @click="openMod = openMod===5 ? null : 5" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('crm*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===5 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-handshake text-lg"></i><span class="text-center px-0.5">CRM</span></button>
-                    <div x-show="openMod===5" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===5" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'categorias-interessado') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">207</span> Categorias (Interessados)</a>
                         <a href="{{ Route::has('crm.eventos.index') ? route('crm.eventos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">104</span> Eventos CRM</a>
@@ -240,7 +240,7 @@
                 {{-- EAD --}}
                 <div>
                     <button @click="openMod = openMod===6 ? null : 6" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('ead*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===6 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-laptop text-lg"></i><span class="text-center px-0.5">EAD</span></button>
-                    <div x-show="openMod===6" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===6" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('ead.cursos.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('ead.cursos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">152</span> Cadastro de Curso (EAD)</a>
                         <a href="{{ route('cadastros.index', 'agrupadores-curso') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">211</span> Cadastro de Agrupador de Cursos</a>
@@ -261,7 +261,7 @@
                 {{-- FINANCEIRO --}}
                 <div>
                     <button @click="openMod = openMod===7 ? null : 7" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('financeiro*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===7 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-dollar-sign text-lg"></i><span class="text-center px-0.5">Financeiro</span></button>
-                    <div x-show="openMod===7" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===7" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'bancos') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">47</span> Cadastro de Banco</a>
                         <a href="{{ route('cadastros.index', 'centros-custo') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">274</span> Cadastro de Centro de Custos</a>
@@ -315,7 +315,7 @@
                 {{-- GED --}}
                 <div>
                     <button @click="openMod = openMod===8 ? null : 8" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('ged*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===8 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-folder-open text-lg"></i><span class="text-center px-0.5">GED</span></button>
-                    <div x-show="openMod===8" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===8" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
                         <a href="{{ Route::has('ged.documentos.index') ? route('ged.documentos.index') : route('ged.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->is('ged*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">244</span> Documento (GED)</a>
                         <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">245</span> Categoria do Documento (GED)</a>
@@ -326,7 +326,7 @@
                 {{-- GERAL --}}
                 <div>
                     <button @click="openMod = openMod===9 ? null : 9" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===9 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-table-cells text-lg"></i><span class="text-center px-0.5">Geral</span></button>
-                    <div x-show="openMod===9" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===9" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Atendimentos</p>
                         <a href="{{ Route::has('atendimentos.index') ? route('atendimentos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">55</span> Manutencao de Atendimentos</a>
                         <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">172</span> Atendimentos Pool (Follow up)</a>
@@ -365,7 +365,7 @@
                 {{-- MATRICULA ONLINE --}}
                 <div>
                     <button @click="openMod = openMod===10 ? null : 10" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('matricula-online*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===10 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-globe text-lg"></i><span class="text-center px-0.5">Matr. Online</span></button>
-                    <div x-show="openMod===10" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===10" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Processos</p>
                         <a href="{{ Route::has('matricula-online.aberturas.index') ? route('matricula-online.aberturas.index') : route('matricula-online.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">140</span> Abertura de Matricula Online</a>
                         <a href="{{ Route::has('matricula-online.inscricoes.index') ? route('matricula-online.inscricoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">149</span> Acompanhamento de Inscricoes</a>
@@ -380,7 +380,7 @@
                 {{-- PORTAIS --}}
                 <div>
                     <button @click="openMod = openMod===11 ? null : 11" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('portais*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===11 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-desktop text-lg"></i><span class="text-center px-0.5">Portais</span></button>
-                    <div x-show="openMod===11" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1"><input type="text" placeholder="Buscar..." oninput="const q=this.value.toLowerCase(); this.closest('.overflow-y-auto').querySelectorAll('a.submenu-item').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'':'none')" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"></div>
+                    <div x-show="openMod===11" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Configuracao</p>
                         <a href="{{ Route::has('portais.configuracao') ? route('portais.configuracao') : route('portais.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">46</span> Configuracao Portal Aluno</a>
                         <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Publicacao (Portal do Aluno)</p>
@@ -403,14 +403,22 @@
         {{-- MAIN CONTENT --}}
         <div class="flex-1 ml-20">
 
-            {{-- TOPBAR (estilo EDUQ) --}}
-            <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-14 flex items-center justify-between px-3 shadow-sm">
-                <div class="flex items-center gap-2">
-                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-3 py-1.5 rounded-md {{ request()->routeIs('dashboard') ? 'bg-gray-100 text-gray-800' : 'text-gray-600 hover:bg-gray-50' }} font-medium text-sm border border-transparent {{ request()->routeIs('dashboard') ? 'border-gray-200' : '' }}">
-                        <i class="fa-solid fa-house text-xs text-primary-500"></i> Início
+            {{-- TOPBAR (fiel ao EDUQ: abas DENTRO da faixa cinza + botão "+" cyan) --}}
+            <header class="sticky top-0 z-30 bg-gray-100 border-b border-gray-200 h-14 flex items-center justify-between px-3 gap-3">
+                <div class="flex items-center gap-1 min-w-0 flex-1 overflow-x-auto scrollbar-thin" x-data="tabBar()" x-init="init()">
+                    {{-- Aba Início (fixa) --}}
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm shrink-0 {{ request()->routeIs('dashboard') ? 'bg-white shadow-sm text-gray-800 font-medium' : 'text-gray-500 hover:bg-white/70' }}">
+                        <i class="fa-solid fa-house text-xs"></i> Início
                     </a>
-                    {{-- Botao "+" azul: abre nova funcao (busca), assinatura do EDUQ --}}
-                    <button @click="searchOpen = !searchOpen" class="w-7 h-7 flex items-center justify-center rounded-md bg-cyan-500 hover:bg-cyan-400 text-white shadow-sm" title="Abrir nova função (Ctrl+K)">
+                    {{-- Abas dinâmicas (funções abertas) --}}
+                    <template x-for="tab in tabs" :key="tab.url">
+                        <div class="flex items-center rounded-md shrink-0 max-w-[200px]" :class="tab.url === current ? 'bg-white shadow-sm' : 'hover:bg-white/70'">
+                            <a :href="tab.url" class="pl-3 pr-1 py-1.5 text-sm truncate" :class="tab.url === current ? 'text-gray-800 font-medium' : 'text-gray-500'" x-text="tab.title"></a>
+                            <button @click.prevent="close(tab.url)" class="px-1.5 py-1 text-gray-400 hover:text-red-500" title="Fechar"><i class="fa-solid fa-xmark text-xs"></i></button>
+                        </div>
+                    </template>
+                    {{-- Botao "+" cyan: abre nova função (assinatura do EDUQ) --}}
+                    <button @click="searchOpen = !searchOpen" class="w-7 h-7 shrink-0 flex items-center justify-center rounded-md bg-cyan-500 hover:bg-cyan-400 text-white shadow-sm ml-1" title="Abrir nova função (Ctrl+K)">
                         <i class="fa-solid fa-plus text-xs"></i>
                     </button>
                 </div>
@@ -471,32 +479,9 @@
                 </div>
             </header>
 
-            {{-- BARRA DE ABAS (estilo EDUQ) --}}
+            {{-- Título da página p/ o tabBar --}}
             @php $pageTitle = trim($__env->yieldContent('title')); @endphp
-            <script>window.__PAGE_TITLE__ = @json($pageTitle !== '' ? $pageTitle : 'InÃ­cio');</script>
-            <div x-data="tabBar()" x-init="init()" x-cloak
-                 class="sticky top-14 z-20 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-stretch h-9 overflow-x-auto scrollbar-thin">
-                {{-- Aba Início fixa (estilo EDUQ) --}}
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-3 py-1.5 text-xs border-r border-gray-200 dark:border-gray-700 shrink-0 {{ request()->routeIs('dashboard') ? 'bg-white dark:bg-gray-800 text-primary-600 font-medium border-t-2 border-t-primary-500' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800' }}">
-                    <i class="fa-solid fa-house text-[10px]"></i> Início
-                </a>
-                <template x-for="(tab, i) in tabs" :key="tab.url">
-                    <div class="flex items-center border-r border-gray-200 group shrink-0 max-w-[220px]"
-                         :class="tab.url === current ? 'bg-white border-t-2 border-t-primary-500' : 'hover:bg-gray-50'">
-                        <a :href="tab.url" class="flex items-center gap-2 pl-3 pr-1 py-1.5 text-xs truncate"
-                           :class="tab.url === current ? 'text-primary-600 font-medium' : 'text-gray-600'">
-                            <i class="fa-solid fa-window-maximize text-[10px] opacity-60"></i>
-                            <span class="truncate" x-text="tab.title"></span>
-                        </a>
-                        <button @click.prevent="close(tab.url)" class="px-1.5 py-1 text-gray-400 hover:text-red-500 hover:bg-gray-200 rounded" title="Fechar">
-                            <i class="fa-solid fa-xmark text-xs"></i>
-                        </button>
-                    </div>
-                </template>
-                <button @click="closeAll()" x-show="tabs.length > 1" class="px-3 text-gray-400 hover:text-red-500 text-xs shrink-0" title="Fechar todas">
-                    <i class="fa-solid fa-trash-can"></i>
-                </button>
-            </div>
+            <script>window.__PAGE_TITLE__ = @json($pageTitle !== '' ? $pageTitle : 'Início');</script>
 
             {{-- SEARCH MODAL --}}
             <div x-show="searchOpen" x-cloak @keydown.escape.window="searchOpen = false" @keydown.ctrl.k.window.prevent="searchOpen = !searchOpen"
@@ -539,6 +524,60 @@
     </div>
 
     <script>
+        // ===== Flyout estilo EDUQ: categorias em acordeão (fechadas) + filtro Buscar/Somente Emissão =====
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('aside .fixed.overflow-y-auto').forEach(function (fly) {
+                if (fly.dataset.acc) return;
+                fly.dataset.acc = '1';
+                fly.querySelectorAll('p').forEach(function (h) {
+                    // agrupa os links seguintes até a próxima categoria
+                    var wrap = document.createElement('div');
+                    wrap.className = 'hidden';
+                    var n = h.nextElementSibling;
+                    while (n && n.tagName === 'A') { var nx = n.nextElementSibling; wrap.appendChild(n); n = nx; }
+                    h.after(wrap);
+                    // vira linha clicável com chevron (EDUQ)
+                    h.classList.add('cursor-pointer', 'flex', 'items-center', 'justify-between', 'hover:bg-white/10', 'rounded', 'select-none', 'mx-1');
+                    var ch = document.createElement('i');
+                    ch.className = 'fa-solid fa-chevron-right text-[9px] mr-2 transition-transform';
+                    h.appendChild(ch);
+                    h.addEventListener('click', function () {
+                        wrap.classList.toggle('hidden');
+                        ch.classList.toggle('rotate-90');
+                    });
+                });
+            });
+        });
+
+        // Filtro do flyout (Buscar + Somente Emissão): expande e filtra; limpo = volta ao acordeão fechado
+        window.filtraFlyout = function (el) {
+            var fly = el.closest('.overflow-y-auto');
+            var q = (fly.querySelector('input[type=text]').value || '').toLowerCase();
+            var so = fly.querySelector('input[type=checkbox]').checked;
+            var filtering = q.length > 0 || so;
+            fly.querySelectorAll('p').forEach(function (p) {
+                var wrap = p.nextElementSibling;
+                if (!wrap || wrap.tagName === 'A') return;
+                var vis = 0;
+                wrap.querySelectorAll('a').forEach(function (a) {
+                    var t = a.textContent.toLowerCase();
+                    var ok = (!q || t.indexOf(q) !== -1) && (!so || t.indexOf('emiss') !== -1);
+                    a.style.display = ok ? '' : 'none';
+                    if (ok) vis++;
+                });
+                var chev = p.querySelector('i.fa-chevron-right');
+                if (filtering) {
+                    wrap.classList.toggle('hidden', vis === 0);
+                    p.style.display = vis ? '' : 'none';
+                    if (chev) chev.classList.add('rotate-90');
+                } else {
+                    wrap.classList.add('hidden');
+                    p.style.display = '';
+                    if (chev) chev.classList.remove('rotate-90');
+                }
+            });
+        };
+
         function tabBar() {
             return {
                 tabs: [],
