@@ -24,8 +24,7 @@ class SalaController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'capacidade' => 'nullable|integer|min:0',
-            'bloco' => 'nullable|string|max:255',
+            'sigla' => 'nullable|string|max:60',
         ]);
 
         $data = $request->all();
@@ -46,8 +45,7 @@ class SalaController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'capacidade' => 'nullable|integer|min:0',
-            'bloco' => 'nullable|string|max:255',
+            'sigla' => 'nullable|string|max:60',
         ]);
 
         $data = $request->all();

@@ -15,7 +15,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {{-- Nome --}}
                 <div class="md:col-span-2">
-                    <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome <span class="text-red-500">*</span></label>
+                    <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Descrição <span class="text-red-500">*</span></label>
                     <input type="text" name="nome" id="nome" value="{{ old('nome', $sala->nome ?? '') }}" required
                            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none @error('nome') border-red-500 @enderror">
                     @error('nome')
@@ -25,8 +25,8 @@
 
                 {{-- Capacidade --}}
                 <div>
-                    <label for="capacidade" class="block text-sm font-medium text-gray-700 mb-1">Capacidade</label>
-                    <input type="number" name="capacidade" id="capacidade" value="{{ old('capacidade', $sala->capacidade ?? '') }}" min="0"
+                    <label for="sigla" class="block text-sm font-medium text-gray-700 mb-1">SIGLA</label>
+                    <input type="text" name="sigla" id="sigla" value="{{ old('sigla', $sala->sigla ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">capacidade ?? '') }}" min="0"
                            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none @error('capacidade') border-red-500 @enderror">
                     @error('capacidade')
                         <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -34,14 +34,6 @@
                 </div>
 
                 {{-- Bloco --}}
-                <div>
-                    <label for="bloco" class="block text-sm font-medium text-gray-700 mb-1">Bloco</label>
-                    <input type="text" name="bloco" id="bloco" value="{{ old('bloco', $sala->bloco ?? '') }}"
-                           class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none @error('bloco') border-red-500 @enderror">
-                    @error('bloco')
-                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
 
                 {{-- Ativo --}}
                 <div class="md:col-span-2">

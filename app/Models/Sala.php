@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sala extends Model
 {
-    protected $fillable = ['nome', 'capacidade', 'bloco', 'ativo'];
+    protected $fillable = ['nome', 'sigla', 'capacidade', 'bloco', 'ativo'];
 
     protected $casts = [
         'ativo' => 'boolean',

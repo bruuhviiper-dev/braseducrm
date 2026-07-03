@@ -15,17 +15,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {{-- Nome --}}
                 <div class="md:col-span-2">
-                    <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome <span class="text-red-500">*</span></label>
+                    <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Descrição <span class="text-red-500">*</span></label>
                     <input type="text" name="nome" id="nome" value="{{ old('nome', $periodo->nome ?? '') }}" required
                            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none @error('nome') border-red-500 @enderror">
                     @error('nome')
                         <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Descrição para o Histórico</label>
+                    <input type="text" name="descricao_historico" value="{{ old('descricao_historico', $periodo->descricao_historico ?? ($periodos_letivo->descricao_historico ?? '')) }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+                
 
                 {{-- Data Inicio --}}
                 <div>
-                    <label for="data_inicio" class="block text-sm font-medium text-gray-700 mb-1">Data Inicio</label>
+                    <label for="data_inicio" class="block text-sm font-medium text-gray-700 mb-1">Início das aulas <span class="text-red-500">*</span></label>
                     <input type="date" name="data_inicio" id="data_inicio" value="{{ old('data_inicio', isset($periodo) && $periodo->data_inicio ? $periodo->data_inicio->format('Y-m-d') : '') }}"
                            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none @error('data_inicio') border-red-500 @enderror">
                     @error('data_inicio')
@@ -35,7 +39,7 @@
 
                 {{-- Data Fim --}}
                 <div>
-                    <label for="data_fim" class="block text-sm font-medium text-gray-700 mb-1">Data Fim</label>
+                    <label for="data_fim" class="block text-sm font-medium text-gray-700 mb-1">Fim das aulas <span class="text-red-500">*</span></label>
                     <input type="date" name="data_fim" id="data_fim" value="{{ old('data_fim', isset($periodo) && $periodo->data_fim ? $periodo->data_fim->format('Y-m-d') : '') }}"
                            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none @error('data_fim') border-red-500 @enderror">
                     @error('data_fim')

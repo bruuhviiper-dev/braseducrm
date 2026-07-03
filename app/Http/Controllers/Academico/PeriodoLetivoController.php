@@ -24,6 +24,7 @@ class PeriodoLetivoController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
+            'descricao_historico' => 'nullable|string|max:255',
             'data_inicio' => 'nullable|date',
             'data_fim' => 'nullable|date|after_or_equal:data_inicio',
         ]);
@@ -48,6 +49,7 @@ class PeriodoLetivoController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
+            'descricao_historico' => 'nullable|string|max:255',
             'data_inicio' => 'nullable|date',
             'data_fim' => 'nullable|date|after_or_equal:data_inicio',
         ]);

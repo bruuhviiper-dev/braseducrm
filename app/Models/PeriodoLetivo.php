@@ -8,7 +8,7 @@ class PeriodoLetivo extends Model
 {
     protected $table = 'periodos_letivos';
 
-    protected $fillable = ['nome', 'data_inicio', 'data_fim', 'ativo'];
+    protected $fillable = ['nome', 'descricao_historico', 'data_inicio', 'data_fim', 'ativo'];
 
     protected $casts = [
         'data_inicio' => 'date',
