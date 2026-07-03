@@ -8,7 +8,7 @@ class CategoriaReceber extends Model
 {
     protected $table = 'categorias_receber';
 
-    protected $fillable = ['nome', 'plano_conta_id'];
+    protected $fillable = ['nome', 'plano_conta_id', 'ativo'];
 
     public function planoConta()
     {

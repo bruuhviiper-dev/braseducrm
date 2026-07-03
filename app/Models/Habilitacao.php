@@ -8,5 +8,5 @@ class Habilitacao extends Model
 {
     protected $table = 'habilitacoes';
 
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome', 'titulo_conferido'];
 }

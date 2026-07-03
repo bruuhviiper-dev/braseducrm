@@ -238,6 +238,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('categorias-pagar', CategoriaPagarController::class)->except('show');
         Route::resource('contas-bancarias', ContaBancariaController::class)->except('show');
         Route::resource('descontos', DescontoController::class)->parameters(['descontos' => 'desconto'])->except('show');
+        Route::resource('descontos-condicionais', \App\Http\Controllers\Financeiro\DescontoCondicionalController::class)->parameters(['descontos-condicionais' => 'desconto'])->except('show');
         Route::get('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'index'])->name('configuracao.index');
         Route::put('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'update']);
         Route::get('nfse', [\App\Http\Controllers\Financeiro\ConfiguracaoNfseController::class, 'index'])->name('nfse.index');

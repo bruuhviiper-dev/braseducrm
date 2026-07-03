@@ -56,6 +56,15 @@ class ContaBancariaController extends Controller
             'conta' => 'nullable|string|max:50',
             'tipo_conta' => 'nullable|string|max:50',
             'saldo_inicial' => 'nullable|numeric',
+            'tesouraria' => 'nullable|boolean',
+            'recebimento_caixa' => 'nullable|boolean',
+            'eh_conta_bancaria' => 'nullable|boolean',
+            'instituicao_ensino_id' => 'nullable|exists:instituicoes_ensino,id',
+            'ignorar_novos_planos' => 'nullable|boolean',
+            'ocultar_saldo_painel' => 'nullable|boolean',
+            'desconsiderar_relatorios' => 'nullable|boolean',
+            'descricao_resumida' => 'nullable|string|max:255',
+            'data_saldo' => 'nullable|date',
         ]);
     }
 }

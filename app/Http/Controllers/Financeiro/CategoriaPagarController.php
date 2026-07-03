@@ -25,6 +25,8 @@ class CategoriaPagarController extends Controller
     {
         $data = $request->validate([
             'nome' => 'required|string|max:255',
+            'grupo' => 'nullable|string|max:255',
+            'ativo' => 'nullable|boolean',
             'plano_conta_id' => 'nullable|exists:plano_contas,id',
         ]);
         CategoriaPagar::create($data);
@@ -42,6 +44,8 @@ class CategoriaPagarController extends Controller
     {
         $data = $request->validate([
             'nome' => 'required|string|max:255',
+            'grupo' => 'nullable|string|max:255',
+            'ativo' => 'nullable|boolean',
             'plano_conta_id' => 'nullable|exists:plano_contas,id',
         ]);
         $categorias_pagar->update($data);

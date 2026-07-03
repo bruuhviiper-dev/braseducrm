@@ -4,7 +4,7 @@
 @php $temAtivo = in_array('ativo', (new $cfg['model'])->getFillable()); @endphp
 
 @section('content')
-<x-data-table :title="$cfg['titulo']" :codigo="$cfg['codigo']" :createRoute="route('cadastros.create', $tipo)">
+<x-data-table :title="$cfg['titulo']" :codigo="$cfg['codigo']" :createRoute="empty($cfg['sem_criar']) ? route('cadastros.create', $tipo) : null">
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
@@ -43,7 +43,7 @@
                 </td>
                 @endif
                 <td class="px-4 py-3">
-                    <x-kebab :edit="route('cadastros.edit', [$tipo, $r->id])" :delete="route('cadastros.destroy', [$tipo, $r->id])" />
+                    <x-kebab :edit="route('cadastros.edit', [$tipo, $r->id])" :delete="empty($cfg['sem_criar']) ? route('cadastros.destroy', [$tipo, $r->id]) : null" />
                 </td>
             </tr>
             @empty

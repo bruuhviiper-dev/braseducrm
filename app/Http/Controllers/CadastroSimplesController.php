@@ -20,15 +20,27 @@ class CadastroSimplesController extends Controller
 
         return [
             // Acadêmico
-            'areas' => ['model' => \App\Models\AreaConhecimento::class, 'titulo' => 'Área de Conhecimento', 'codigo' => 24, 'fields' => [
-                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
-                ['name' => 'codigo', 'label' => 'Código', 'type' => 'text', 'required' => false],
+            'areas' => ['model' => \App\Models\AreaConhecimento::class, 'titulo' => 'Área', 'codigo' => 24, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
             ]],
-            'graus' => ['model' => \App\Models\Grau::class, 'titulo' => 'Grau', 'codigo' => 28, 'fields' => $nome],
-            'habilitacoes' => ['model' => \App\Models\Habilitacao::class, 'titulo' => 'Habilitação', 'codigo' => 29, 'fields' => $nome],
-            'modulos' => ['model' => \App\Models\Modulo::class, 'titulo' => 'Módulo', 'codigo' => 31, 'fields' => [
-                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
-                ['name' => 'ordem', 'label' => 'Ordem', 'type' => 'number', 'required' => false],
+            'graus' => ['model' => \App\Models\Grau::class, 'titulo' => 'Grau', 'codigo' => 28, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+                ['name' => 'codigo_cnae', 'label' => 'Código CNAE', 'type' => 'text', 'required' => false],
+                ['name' => 'aliquota_iss', 'label' => 'Alíquota ISS', 'type' => 'number', 'required' => false],
+                ['name' => 'codigo_servico_lc116', 'label' => 'Código de serviço (Lista Serviço, vide LC116)', 'type' => 'text', 'required' => false],
+                ['name' => 'codigo_servico_municipal', 'label' => 'Código do serviço municipal', 'type' => 'text', 'required' => false],
+                ['name' => 'codigo_nbs', 'label' => 'Código NBS', 'type' => 'text', 'required' => false],
+                ['name' => 'codigo_tributacao_nacional', 'label' => 'Código de Tributação Nacional', 'type' => 'text', 'required' => false],
+                ['name' => 'ibs_cbs_classificacao', 'label' => 'IBS/CBS - Classificação Tributária', 'type' => 'text', 'required' => false],
+                ['name' => 'ibs_cbs_indicador', 'label' => 'IBS/CBS - Cód. Indicador de Operação', 'type' => 'text', 'required' => false],
+                ['name' => 'nfe_percentual_personalizado', 'label' => 'Utilizar percentual personalizado para geração de NF-e?', 'type' => 'boolean', 'required' => false],
+            ]],
+            'habilitacoes' => ['model' => \App\Models\Habilitacao::class, 'titulo' => 'Habilitação', 'codigo' => 29, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+                ['name' => 'titulo_conferido', 'label' => 'Título conferido', 'type' => 'text', 'required' => false],
+            ]],
+            'modulos' => ['model' => \App\Models\Modulo::class, 'titulo' => 'Módulos', 'codigo' => 31, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
             ]],
             'conceitos-nota' => ['model' => \App\Models\Conceito::class, 'titulo' => 'Conceito de Notas', 'codigo' => 176, 'fields' => [
                 ['name' => 'descricao', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
@@ -53,7 +65,9 @@ class CadastroSimplesController extends Controller
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'descricao', 'label' => 'Descrição', 'type' => 'textarea', 'required' => false],
             ]],
-            'formas-ingresso' => ['model' => \App\Models\FormaIngresso::class, 'titulo' => 'Forma de Ingresso', 'codigo' => 21, 'fields' => $nome],
+            'formas-ingresso' => ['model' => \App\Models\FormaIngresso::class, 'titulo' => 'Forma de Ingresso', 'codigo' => 21, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+            ]],
             'escolas' => ['model' => \App\Models\Escola::class, 'titulo' => 'Escola', 'codigo' => 8, 'fields' => [
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'telefone', 'label' => 'Telefone (Fixo)', 'type' => 'text', 'required' => false],
@@ -71,7 +85,7 @@ class CadastroSimplesController extends Controller
                 ['name' => 'email', 'label' => 'E-mail', 'type' => 'text', 'required' => false],
             ]],
             // Financeiro
-            'bancos' => ['model' => \App\Models\Banco::class, 'titulo' => 'Banco', 'codigo' => 47, 'fields' => [
+            'bancos' => ['model' => \App\Models\Banco::class, 'titulo' => 'Cadastro de Banco', 'codigo' => 47, 'sem_criar' => true, 'fields' => [
                 ['name' => 'codigo', 'label' => 'Código (FEBRABAN)', 'type' => 'text', 'required' => false],
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
             ]],

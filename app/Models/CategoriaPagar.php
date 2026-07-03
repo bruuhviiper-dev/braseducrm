@@ -8,7 +8,7 @@ class CategoriaPagar extends Model
 {
     protected $table = 'categorias_pagar';
 
-    protected $fillable = ['nome', 'plano_conta_id'];
+    protected $fillable = ['nome', 'plano_conta_id', 'grupo', 'ativo'];
 
     public function planoConta()
     {

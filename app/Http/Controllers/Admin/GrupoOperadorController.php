@@ -18,7 +18,8 @@ class GrupoOperadorController extends Controller
     public function create()
     {
         $funcoesPorModulo = Funcao::where('ativo', true)->orderBy('modulo')->orderBy('codigo')->get()->groupBy('modulo');
-        return view('admin.grupos.form', compact('funcoesPorModulo'));
+        $gruposCopia = GrupoOperador::with('funcoes:id')->orderBy('nome')->get()->mapWithKeys(fn($g) => [$g->id => ['nome' => $g->nome, 'funcoes' => $g->funcoes->pluck('id')]]);
+        return view('admin.grupos.form', compact('funcoesPorModulo', 'gruposCopia'));
     }
 
     public function store(Request $request)
@@ -41,8 +42,9 @@ class GrupoOperadorController extends Controller
     public function edit(GrupoOperador $grupo)
     {
         $funcoesPorModulo = Funcao::where('ativo', true)->orderBy('modulo')->orderBy('codigo')->get()->groupBy('modulo');
+        $gruposCopia = GrupoOperador::with('funcoes:id')->where('id', '!=', $grupo->id)->orderBy('nome')->get()->mapWithKeys(fn($g) => [$g->id => ['nome' => $g->nome, 'funcoes' => $g->funcoes->pluck('id')]]);
         $selecionadas = $grupo->funcoes->pluck('id')->toArray();
-        return view('admin.grupos.form', compact('grupo', 'funcoesPorModulo', 'selecionadas'));
+        return view('admin.grupos.form', compact('grupo', 'funcoesPorModulo', 'selecionadas', 'gruposCopia'));
     }
 
     public function update(Request $request, GrupoOperador $grupo)

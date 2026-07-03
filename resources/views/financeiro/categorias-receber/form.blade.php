@@ -1,14 +1,22 @@
 @extends('layouts.app')
-@section('title', isset($categoria) ? 'Editar Categoria' : 'Nova Categoria')
+@section('title', 'Cadastro de Categorias (A Receber)')
 
 @section('content')
-<div class="max-w-lg mx-auto">
-    <div class="bg-white rounded-lg shadow-sm border">
-        <div class="flex items-center justify-between px-6 py-4 border-b">
-            <h2 class="text-base font-semibold text-gray-800">{{ isset($categoria) ? 'Editar Categoria' : 'Nova Categoria a Receber' }}</h2>
-            <a href="{{ route('financeiro.categorias-receber.index') }}" class="text-sm text-gray-500 hover:text-gray-700"><i class="fa-solid fa-arrow-left mr-1"></i>Voltar</a>
+<div class="max-w-3xl mx-auto"
+     x-data="{ aba: 'dados', ativo: {{ old('ativo', $categoria->ativo ?? true) ? 'true' : 'false' }} }">
+    <div class="bg-white rounded-xl border">
+        <div class="px-5 py-3 border-b flex items-center gap-2">
+            <span class="text-sm font-semibold text-gray-400">65</span>
+            <div>
+                <h1 class="text-lg font-bold text-gray-800">Cadastro de Categorias (A Receber)</h1>
+                <p class="text-xs text-primary-500">Financeiro › Cadastros Essenciais</p>
+            </div>
         </div>
-        <form method="POST" action="{{ isset($categoria) ? route('financeiro.categorias-receber.update', $categoria) : route('financeiro.categorias-receber.store') }}" class="p-6 space-y-4">
+        <div class="px-5 pt-3 border-b flex gap-5">
+            <button type="button" @click="aba = 'dados'" :class="aba === 'dados' ? 'text-cyan-600 border-cyan-500' : 'text-gray-500 border-transparent'" class="pb-2 text-sm font-semibold border-b-2">Dados Básicos</button>
+            <button type="button" @click="aba = 'config'" :class="aba === 'config' ? 'text-cyan-600 border-cyan-500' : 'text-gray-500 border-transparent'" class="pb-2 text-sm font-semibold border-b-2">Configuração</button>
+        </div>
+        <form method="POST" action="{{ isset($categoria) ? route('financeiro.categorias-receber.update', $categoria) : route('financeiro.categorias-receber.store') }}" class="p-5 space-y-4">
             @csrf
             @if(isset($categoria)) @method('PUT') @endif
 
@@ -18,26 +26,35 @@
             </div>
             @endif
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nome <span class="text-red-500">*</span></label>
-                <input type="text" name="nome" value="{{ old('nome', $categoria->nome ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            <div x-show="aba === 'dados'" class="space-y-4">
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="hidden" name="ativo" :value="ativo ? 1 : 0">
+                    <button type="button" @click="ativo = !ativo" :class="ativo ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
+                        <span :class="ativo ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+                    </button>
+                    <span class="text-sm font-medium text-gray-700">Ativo</span>
+                </label>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Descrição <span class="text-red-500">*</span></label>
+                    <input type="text" name="nome" value="{{ old('nome', $categoria->nome ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
+                </div>
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Plano de Contas</label>
-                <select name="plano_conta_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Selecione...</option>
-                    @foreach($planos as $p)
-                    <option value="{{ $p->id }}" {{ old('plano_conta_id', $categoria->plano_conta_id ?? '') == $p->id ? 'selected' : '' }}>{{ $p->codigo }} - {{ $p->nome }}</option>
-                    @endforeach
-                </select>
+            <div x-show="aba === 'config'" x-cloak class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Conta do Plano de Contas</label>
+                    <select name="plano_conta_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                        <option value="">Selecione...</option>
+                        @foreach(\App\Models\PlanoContas::where('tipo', 'analitica')->orderBy('codigo')->get() as $pc)
+                        <option value="{{ $pc->id }}" {{ old('plano_conta_id', $categoria->plano_conta_id ?? '') == $pc->id ? 'selected' : '' }}>{{ $pc->codigo }} - {{ $pc->nome }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
-            <div class="flex gap-3 pt-2">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
-                    {{ isset($categoria) ? 'Salvar Alteracoes' : 'Cadastrar' }}
-                </button>
-                <a href="{{ route('financeiro.categorias-receber.index') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
+            <div class="flex justify-end pt-3 border-t">
+                <button type="submit" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
             </div>
         </form>
     </div>

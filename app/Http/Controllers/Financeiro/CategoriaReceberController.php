@@ -25,6 +25,7 @@ class CategoriaReceberController extends Controller
     {
         $data = $request->validate([
             'nome' => 'required|string|max:255',
+            'ativo' => 'nullable|boolean',
             'plano_conta_id' => 'nullable|exists:plano_contas,id',
         ]);
         CategoriaReceber::create($data);
@@ -42,6 +43,7 @@ class CategoriaReceberController extends Controller
     {
         $data = $request->validate([
             'nome' => 'required|string|max:255',
+            'ativo' => 'nullable|boolean',
             'plano_conta_id' => 'nullable|exists:plano_contas,id',
         ]);
         $categorias_receber->update($data);
