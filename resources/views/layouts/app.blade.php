@@ -401,7 +401,7 @@
         <div x-show="openMod !== null" x-cloak @click="openMod = null" class="fixed inset-0 z-30"></div>
 
         {{-- MAIN CONTENT --}}
-        <div class="flex-1 ml-20">
+        <div class="flex-1 ml-20 min-w-0 overflow-x-hidden">
 
             {{-- TOPBAR (fiel ao EDUQ: abas DENTRO da faixa cinza + botão "+" cyan) --}}
             <header class="sticky top-0 z-30 bg-gray-100 border-b border-gray-200 h-14 flex items-center justify-between px-3 gap-3">
@@ -423,8 +423,8 @@
                     </button>
                 </div>
 
-                <div class="flex items-center gap-0.5">
-                    <button onclick="window.location.reload()" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Atualizar">
+                <div class="flex items-center gap-0.5 shrink-0">
+                    <button onclick="window.location.reload()" class="hidden md:block p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Atualizar">
                         <i class="fa-solid fa-rotate-right"></i>
                     </button>
                     <a href="{{ Route::has('notificacoes.index') ? route('notificacoes.index') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg relative" title="Notificações">
@@ -434,16 +434,16 @@
                         <span class="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full">{{ $notifCount > 9 ? '9+' : $notifCount }}</span>
                         @endif
                     </a>
-                    <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Mensagens">
+                    <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="hidden md:block p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Mensagens">
                         <i class="fa-regular fa-comment"></i>
                     </a>
-                    <a href="{{ Route::has('tickets.create') ? route('tickets.create') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Ajuda">
+                    <a href="{{ Route::has('tickets.create') ? route('tickets.create') : '#' }}" class="hidden md:block p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Ajuda">
                         <i class="fa-regular fa-circle-question"></i>
                     </a>
-                    <a href="{{ Route::has('configuracoes.index') ? route('configuracoes.index') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Configurações">
+                    <a href="{{ Route::has('configuracoes.index') ? route('configuracoes.index') : '#' }}" class="hidden md:block p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Configurações">
                         <i class="fa-solid fa-gear"></i>
                     </a>
-                    <button @click="dark = !dark; localStorage.setItem('braseducrm_dark', dark)" class="p-2 text-gray-400 hover:text-amber-500 hover:bg-gray-100 rounded-lg" title="Alternar tema">
+                    <button @click="dark = !dark; localStorage.setItem('braseducrm_dark', dark)" class="hidden md:block p-2 text-gray-400 hover:text-amber-500 hover:bg-gray-100 rounded-lg" title="Alternar tema">
                         <i class="fa-solid" :class="dark ? 'fa-moon' : 'fa-sun'"></i>
                     </button>
                     {{-- Botao Painel (EDUQ) --}}

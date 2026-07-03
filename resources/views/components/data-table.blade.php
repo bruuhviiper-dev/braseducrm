@@ -17,7 +17,7 @@
         <div class="flex items-center gap-2">
             <form method="GET" action="" class="relative">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Buscar..."
-                       class="w-64 pl-9 pr-4 py-2 border rounded-full text-sm focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none">
+                       class="w-36 sm:w-64 pl-9 pr-4 py-2 border rounded-full text-sm focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
             </form>
             <button onclick="window.location.href=window.location.pathname" class="p-2 text-gray-400 hover:text-gray-700 rounded-lg" title="Recarregar">
