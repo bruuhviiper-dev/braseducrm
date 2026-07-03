@@ -8,6 +8,7 @@
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Obra</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Biblioteca</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Pessoa</th>
@@ -19,14 +20,14 @@
         <tbody class="divide-y">
             @forelse($reservas as $r)
             <tr class="hover:bg-gray-50">
+                <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $r->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 font-medium text-gray-800">{{ $r->obra?->titulo ?? '—' }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $r->biblioteca?->nome ?? '—' }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $r->pessoa?->nome ?? '—' }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ optional($r->data_reserva)->format('d/m/Y') }}</td>
                 <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full {{ $badge($r->situacao) }}">{{ ucfirst($r->situacao) }}</span></td>
                 <td class="px-4 py-3">
-                    <div class="flex gap-1 items-center">
-                        @if($r->situacao === 'ativa')
+                    <x-kebab :delete="route('biblioteca.reservas.destroy', $r)">@if($r->situacao === 'ativa')
                         <form method="POST" action="{{ route('biblioteca.reservas.situacao', $r) }}">
                             @csrf @method('PUT')
                             <input type="hidden" name="situacao" value="atendida">
@@ -37,16 +38,11 @@
                             <input type="hidden" name="situacao" value="cancelada">
                             <button class="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs hover:bg-gray-300">Cancelar</button>
                         </form>
-                        @endif
-                        <form method="POST" action="{{ route('biblioteca.reservas.destroy', $r) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
-                </td>
+                        @endif</x-kebab>
+                        </td>
             </tr>
             @empty
-            <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhuma reserva.</td></tr>
+            <tr><td colspan="7" class="px-4 py-8 text-center text-gray-400">Nenhuma reserva.</td></tr>
             @endforelse
         </tbody>
     </table>

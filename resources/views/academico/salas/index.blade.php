@@ -7,6 +7,7 @@
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50">
                 <tr>
+                <th class="py-3 px-3 w-10"></th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Nome</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Capacidade</th>
@@ -18,6 +19,7 @@
             <tbody class="divide-y divide-gray-100">
                 @forelse($salas as $sala)
                 <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $sala->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                     <td class="px-4 py-3 text-gray-600">{{ $sala->id }}</td>
                     <td class="px-4 py-3 font-medium text-gray-800">{{ $sala->nome }}</td>
                     <td class="px-4 py-3 text-gray-600">{{ $sala->capacidade ?? '-' }}</td>
@@ -30,23 +32,12 @@
                         @endif
                     </td>
                     <td class="px-4 py-3">
-                        <div class="flex items-center gap-1">
-                            <a href="{{ route('academico.salas.edit', $sala) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Editar">
-                                <i class="fa-solid fa-pen-to-square text-sm"></i>
-                            </a>
-                            <form action="{{ route('academico.salas.destroy', $sala) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta sala?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Excluir">
-                                    <i class="fa-solid fa-trash-can text-sm"></i>
-                                </button>
-                            </form>
-                        </div>
+                        <x-kebab :edit="route('academico.salas.edit', $sala)" :delete="route('academico.salas.destroy', $sala)" />
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-4 py-8 text-center text-gray-500">Nenhuma sala encontrada.</td>
+                    <td colspan="7" class="px-4 py-8 text-center text-gray-500">Nenhuma sala encontrada.</td>
                 </tr>
                 @endforelse
             </tbody>

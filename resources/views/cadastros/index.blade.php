@@ -8,6 +8,7 @@
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                 @foreach($cfg['fields'] as $f)
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">{{ $f['label'] }}</th>
@@ -19,6 +20,7 @@
         <tbody class="divide-y">
             @forelse($registros as $r)
             <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $r->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 text-gray-500">{{ $r->id }}</td>
                 @foreach($cfg['fields'] as $f)
                 <td class="px-4 py-3 {{ $loop->first ? 'font-medium text-gray-800' : 'text-gray-600' }}">
@@ -41,13 +43,7 @@
                 </td>
                 @endif
                 <td class="px-4 py-3">
-                    <div class="flex gap-1">
-                        <a href="{{ route('cadastros.edit', [$tipo, $r->id]) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <form method="POST" action="{{ route('cadastros.destroy', [$tipo, $r->id]) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    <x-kebab :edit="route('cadastros.edit', [$tipo, $r->id])" :delete="route('cadastros.destroy', [$tipo, $r->id])" />
                 </td>
             </tr>
             @empty

@@ -99,6 +99,7 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b bg-gray-50">
+                <th class="py-3 px-3 w-10"></th>
                         <th class="text-left py-3 px-4 font-semibold text-gray-600">ID</th>
                         <th class="text-left py-3 px-4 font-semibold text-gray-600">Pessoa</th>
                         <th class="text-left py-3 px-4 font-semibold text-gray-600">Categoria</th>
@@ -118,6 +119,7 @@
                         $situacaoLabel = $vencido ? 'vencido' : $titulo->situacao;
                     @endphp
                     <tr class="border-b hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $titulo->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                         <td class="py-3 px-4 text-gray-500">{{ $titulo->id }}</td>
                         <td class="py-3 px-4 font-medium text-gray-800">{{ $titulo->pessoa->nome ?? '-' }}</td>
                         <td class="py-3 px-4 text-gray-600">{{ $titulo->categoriaPagar->nome ?? '-' }}</td>
@@ -145,24 +147,12 @@
                             @endswitch
                         </td>
                         <td class="py-3 px-4 text-center">
-                            <div class="flex items-center justify-center gap-1">
-                                <a href="{{ route('financeiro.titulos-pagar.edit', $titulo) }}" class="p-1.5 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded" title="Editar">
-                                    <i class="fa-solid fa-pen"></i>
-                                </a>
-                                <form method="POST" action="{{ route('financeiro.titulos-pagar.destroy', $titulo) }}" class="inline"
-                                      onsubmit="return confirm('Deseja realmente excluir este titulo?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded" title="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
+                            <x-kebab :edit="route('financeiro.titulos-pagar.edit', $titulo)" :delete="route('financeiro.titulos-pagar.destroy', $titulo)" />
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="10" class="py-8 text-center text-gray-400">
+                        <td colspan="11" class="py-8 text-center text-gray-400">
                             <i class="fa-solid fa-file-invoice text-3xl mb-2"></i>
                             <p>Nenhum titulo a pagar encontrado.</p>
                         </td>

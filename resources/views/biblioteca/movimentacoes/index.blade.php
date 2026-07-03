@@ -6,6 +6,7 @@
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Exemplar</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Pessoa</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Empréstimo</th>
@@ -19,6 +20,7 @@
         <tbody class="divide-y">
             @forelse($movimentacoes as $m)
             <tr class="hover:bg-gray-50">
+                <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $m->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 font-medium text-gray-800">{{ $m->exemplar?->obra?->titulo ?? '—' }} @if($m->renovacoes)<span class="text-xs text-gray-400">(renov. {{ $m->renovacoes }})</span>@endif</td>
                 <td class="px-4 py-3 text-gray-600">{{ $m->pessoa?->nome ?? '—' }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ optional($m->data_emprestimo)->format('d/m/Y') }}</td>
@@ -30,26 +32,22 @@
                 <td class="px-4 py-3 text-gray-600">{{ $m->multa > 0 ? 'R$ '.number_format($m->multa, 2, ',', '.') : '—' }}</td>
                 <td class="px-4 py-3 text-gray-500 text-xs">{{ $m->operador?->nome ?? '—' }}</td>
                 <td class="px-4 py-3">
-                    <div class="flex gap-1 items-center">
+                    <x-kebab :delete="route('biblioteca.movimentacoes.destroy', $m)" confirm="Remover esta movimentação?">
                         @if($m->situacao === 'emprestado')
                         <form method="POST" action="{{ route('biblioteca.movimentacoes.renovar', $m) }}">
                             @csrf @method('PUT')
-                            <button class="px-2.5 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"><i class="fa-solid fa-arrows-rotate mr-1"></i> Renovar</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-blue-700 hover:bg-blue-50"><i class="fa-solid fa-arrows-rotate mr-2"></i>Renovar</button>
                         </form>
                         <form method="POST" action="{{ route('biblioteca.movimentacoes.devolver', $m) }}">
                             @csrf @method('PUT')
-                            <button class="px-2.5 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"><i class="fa-solid fa-rotate-left mr-1"></i> Devolver</button>
+                            <button class="w-full text-left px-4 py-2 text-sm text-green-700 hover:bg-green-50"><i class="fa-solid fa-rotate-left mr-2"></i>Devolver</button>
                         </form>
                         @endif
-                        <form method="POST" action="{{ route('biblioteca.movimentacoes.destroy', $m) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    </x-kebab>
                 </td>
             </tr>
             @empty
-            <tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">Nenhuma movimentação.</td></tr>
+            <tr><td colspan="9" class="px-4 py-8 text-center text-gray-400">Nenhuma movimentação.</td></tr>
             @endforelse
         </tbody>
     </table>

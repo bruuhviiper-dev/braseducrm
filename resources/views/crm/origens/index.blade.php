@@ -6,6 +6,7 @@
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Nome</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Situacao</th>
@@ -15,6 +16,7 @@
         <tbody class="divide-y">
             @forelse($origens as $o)
             <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $o->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 text-gray-500">{{ $o->id }}</td>
                 <td class="px-4 py-3 font-medium text-gray-800">{{ $o->nome }}</td>
                 <td class="px-4 py-3">
@@ -25,17 +27,11 @@
                     @endif
                 </td>
                 <td class="px-4 py-3">
-                    <div class="flex gap-1">
-                        <a href="{{ route('crm.origens.edit', $o) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <form method="POST" action="{{ route('crm.origens.destroy', $o) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    <x-kebab :edit="route('crm.origens.edit', $o)" :delete="route('crm.origens.destroy', $o)" />
                 </td>
             </tr>
             @empty
-            <tr><td colspan="4" class="px-4 py-8 text-center text-gray-400">Nenhuma origem cadastrada.</td></tr>
+            <tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">Nenhuma origem cadastrada.</td></tr>
             @endforelse
         </tbody>
     </table>

@@ -35,6 +35,7 @@
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50 border-b">
                 <tr>
+                <th class="py-3 px-3 w-10"></th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Venda</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Operadora</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Modalidade</th>
@@ -49,6 +50,7 @@
             <tbody class="divide-y">
                 @forelse($recebimentos as $r)
                 <tr class="hover:bg-gray-50">
+                <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $r->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                     <td class="px-4 py-3 text-gray-600">{{ optional($r->data_venda)->format('d/m/Y') }}</td>
                     <td class="px-4 py-3 text-gray-800">{{ $r->contrato?->operadora ?? '—' }}<span class="block text-xs text-gray-400">{{ $r->bandeira }}</span></td>
                     <td class="px-4 py-3 text-gray-600">{{ \App\Models\RecebimentoCartao::MODALIDADES[$r->modalidade] ?? $r->modalidade }}{{ $r->modalidade==='credito_parcelado' ? ' '.$r->parcelas.'x' : '' }}</td>
@@ -64,22 +66,16 @@
                         @endif
                     </td>
                     <td class="px-4 py-3">
-                        <div class="flex gap-1">
-                            <form method="POST" action="{{ route('financeiro.conciliacao-cartao.conciliar', $r) }}">
+                        <x-kebab :delete="route('financeiro.conciliacao-cartao.destroy', $r)"><form method="POST" action="{{ route('financeiro.conciliacao-cartao.conciliar', $r) }}">
                                 @csrf
                                 <button class="p-1.5 {{ $r->conciliado ? 'text-amber-600 hover:bg-amber-50' : 'text-green-600 hover:bg-green-50' }} rounded" title="{{ $r->conciliado ? 'Desfazer conciliação' : 'Conciliar' }}">
                                     <i class="fa-solid {{ $r->conciliado ? 'fa-rotate-left' : 'fa-check-double' }}"></i>
                                 </button>
-                            </form>
-                            <form method="POST" action="{{ route('financeiro.conciliacao-cartao.destroy', $r) }}" onsubmit="return confirm('Remover?')">
-                                @csrf @method('DELETE')
-                                <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                            </form>
-                        </div>
-                    </td>
+                            </form></x-kebab>
+                        </td>
                 </tr>
                 @empty
-                <tr><td colspan="9" class="px-4 py-8 text-center text-gray-400">Nenhum recebimento lançado.</td></tr>
+                <tr><td colspan="10" class="px-4 py-8 text-center text-gray-400">Nenhum recebimento lançado.</td></tr>
                 @endforelse
             </tbody>
         </table>

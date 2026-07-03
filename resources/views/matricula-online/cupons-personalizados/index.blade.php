@@ -6,6 +6,7 @@
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Código</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Beneficiário</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Desconto</th>
@@ -17,6 +18,7 @@
         <tbody class="divide-y">
             @forelse($cupons as $c)
             <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $c->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 font-mono font-medium text-gray-800">{{ $c->codigo }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $c->beneficiario ?? '—' }}</td>
                 <td class="px-4 py-3 text-gray-800">{{ $c->tipo_desconto === 'percentual' ? number_format($c->valor_desconto, 0).'%' : 'R$ '.number_format($c->valor_desconto, 2, ',', '.') }}</td>
@@ -27,17 +29,11 @@
                     @else<span class="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">Disponível</span>@endif
                 </td>
                 <td class="px-4 py-3">
-                    <div class="flex gap-1">
-                        <a href="{{ route('matricula-online.cupons-personalizados.edit', $c) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <form method="POST" action="{{ route('matricula-online.cupons-personalizados.destroy', $c) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    <x-kebab :edit="route('matricula-online.cupons-personalizados.edit', $c)" :delete="route('matricula-online.cupons-personalizados.destroy', $c)" />
                 </td>
             </tr>
             @empty
-            <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhum cupom personalizado.</td></tr>
+            <tr><td colspan="7" class="px-4 py-8 text-center text-gray-400">Nenhum cupom personalizado.</td></tr>
             @endforelse
         </tbody>
     </table>

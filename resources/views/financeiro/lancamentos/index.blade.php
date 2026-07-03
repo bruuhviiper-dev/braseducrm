@@ -16,6 +16,7 @@ $badges = ['entrada' => 'bg-green-100 text-green-700', 'saida' => 'bg-red-100 te
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Data</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Descrição</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Conta</th>
@@ -27,23 +28,18 @@ $badges = ['entrada' => 'bg-green-100 text-green-700', 'saida' => 'bg-red-100 te
         <tbody class="divide-y">
             @forelse($lancamentos as $l)
             <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $l->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 text-gray-500">{{ $l->data_lancamento?->format('d/m/Y') }}</td>
                 <td class="px-4 py-3 font-medium text-gray-800">{{ $l->descricao }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $l->contaBancaria?->nome ?? '—' }}</td>
                 <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full capitalize {{ $badges[$l->tipo] ?? 'bg-gray-100' }}">{{ $l->tipo }}</span></td>
                 <td class="px-4 py-3 font-medium {{ $l->tipo === 'saida' ? 'text-red-600' : 'text-green-600' }}">R$ {{ number_format($l->valor, 2, ',', '.') }}</td>
                 <td class="px-4 py-3">
-                    <div class="flex gap-1">
-                        <a href="{{ route('financeiro.lancamentos.edit', $l) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <form method="POST" action="{{ route('financeiro.lancamentos.destroy', $l) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    <x-kebab :edit="route('financeiro.lancamentos.edit', $l)" :delete="route('financeiro.lancamentos.destroy', $l)" />
                 </td>
             </tr>
             @empty
-            <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhum lançamento registrado.</td></tr>
+            <tr><td colspan="7" class="px-4 py-8 text-center text-gray-400">Nenhum lançamento registrado.</td></tr>
             @endforelse
         </tbody>
     </table>

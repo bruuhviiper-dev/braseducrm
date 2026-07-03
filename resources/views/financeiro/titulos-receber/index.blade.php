@@ -100,6 +100,7 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b bg-gray-50">
+                        <th class="py-3 px-3 w-10"></th>
                         <th class="text-left py-3 px-4 font-semibold text-gray-600">ID</th>
                         <th class="text-left py-3 px-4 font-semibold text-gray-600">Pessoa</th>
                         <th class="text-left py-3 px-4 font-semibold text-gray-600">Categoria</th>
@@ -119,6 +120,7 @@
                         $situacaoLabel = $vencido ? 'vencido' : $titulo->situacao;
                     @endphp
                     <tr class="border-b hover:bg-gray-50">
+                        <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $titulo->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                         <td class="py-3 px-4 text-gray-500">{{ $titulo->id }}</td>
                         <td class="py-3 px-4 font-medium text-gray-800">{{ $titulo->pessoa->nome ?? '-' }}</td>
                         <td class="py-3 px-4 text-gray-600">{{ $titulo->categoriaReceber->nome ?? '-' }}</td>
@@ -149,33 +151,19 @@
                             @endswitch
                         </td>
                         <td class="py-3 px-4 text-center">
-                            <div class="flex items-center justify-center gap-1">
+                            <x-kebab :edit="route('financeiro.titulos-receber.edit', $titulo)" :delete="route('financeiro.titulos-receber.destroy', $titulo)" confirm="Deseja realmente excluir este titulo?">
                                 @if($titulo->situacao === 'aberto')
-                                <form method="POST" action="{{ route('financeiro.titulos-receber.baixar', $titulo) }}" class="inline"
-                                      onsubmit="return confirm('Confirma a baixa deste titulo?')">
+                                <form method="POST" action="{{ route('financeiro.titulos-receber.baixar', $titulo) }}" onsubmit="return confirm('Confirma a baixa deste titulo?')">
                                     @csrf
-                                    <button type="submit" class="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded" title="Baixar (marcar como pago)">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                    </button>
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-green-700 hover:bg-green-50"><i class="fa-solid fa-circle-check mr-2"></i>Baixar (pago)</button>
                                 </form>
                                 @endif
-                                <a href="{{ route('financeiro.titulos-receber.edit', $titulo) }}" class="p-1.5 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded" title="Editar">
-                                    <i class="fa-solid fa-pen"></i>
-                                </a>
-                                <form method="POST" action="{{ route('financeiro.titulos-receber.destroy', $titulo) }}" class="inline"
-                                      onsubmit="return confirm('Deseja realmente excluir este titulo?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded" title="Excluir">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
+                            </x-kebab>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="10" class="py-8 text-center text-gray-400">
+                        <td colspan="11" class="py-8 text-center text-gray-400">
                             <i class="fa-solid fa-file-invoice-dollar text-3xl mb-2"></i>
                             <p>Nenhum titulo a receber encontrado.</p>
                         </td>

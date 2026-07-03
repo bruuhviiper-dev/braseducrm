@@ -7,6 +7,7 @@
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50">
                 <tr>
+                <th class="py-3 px-3 w-10"></th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Nome</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Curso</th>
@@ -18,6 +19,7 @@
             <tbody class="divide-y divide-gray-100">
                 @forelse($matrizes as $matriz)
                 <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $matriz->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                     <td class="px-4 py-3 text-gray-600">{{ $matriz->id }}</td>
                     <td class="px-4 py-3 font-medium text-gray-800">{{ $matriz->nome }}</td>
                     <td class="px-4 py-3 text-gray-600">{{ $matriz->curso->nome ?? '-' }}</td>
@@ -34,23 +36,12 @@
                         @endif
                     </td>
                     <td class="px-4 py-3">
-                        <div class="flex items-center gap-1">
-                            <a href="{{ route('academico.matrizes.edit', $matriz) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Editar">
-                                <i class="fa-solid fa-pen-to-square text-sm"></i>
-                            </a>
-                            <form action="{{ route('academico.matrizes.destroy', $matriz) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta matriz curricular?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Excluir">
-                                    <i class="fa-solid fa-trash-can text-sm"></i>
-                                </button>
-                            </form>
-                        </div>
+                        <x-kebab :edit="route('academico.matrizes.edit', $matriz)" :delete="route('academico.matrizes.destroy', $matriz)" />
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-4 py-8 text-center text-gray-500">Nenhuma matriz curricular encontrada.</td>
+                    <td colspan="7" class="px-4 py-8 text-center text-gray-500">Nenhuma matriz curricular encontrada.</td>
                 </tr>
                 @endforelse
             </tbody>

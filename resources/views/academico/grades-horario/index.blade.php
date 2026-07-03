@@ -7,6 +7,7 @@
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50">
                 <tr>
+                <th class="py-3 px-3 w-10"></th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Descrição</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Turno</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Horários</th>
@@ -17,6 +18,7 @@
             <tbody class="divide-y divide-gray-100">
                 @forelse($grades as $grade)
                 <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $grade->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                     <td class="px-4 py-3 font-medium text-gray-800">{{ $grade->nome }}</td>
                     <td class="px-4 py-3 text-gray-600">{{ $grade->turno?->nome ?? '—' }}</td>
                     <td class="px-4 py-3 text-gray-600">{{ $grade->aulas_count }} horário(s)</td>
@@ -28,23 +30,12 @@
                         @endif
                     </td>
                     <td class="px-4 py-3">
-                        <div class="flex items-center gap-1">
-                            <a href="{{ route('academico.grades-horario.edit', $grade) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Editar">
-                                <i class="fa-solid fa-pen-to-square text-sm"></i>
-                            </a>
-                            <form action="{{ route('academico.grades-horario.destroy', $grade) }}" method="POST" onsubmit="return confirm('Excluir esta grade de horário?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Excluir">
-                                    <i class="fa-solid fa-trash-can text-sm"></i>
-                                </button>
-                            </form>
-                        </div>
+                        <x-kebab :edit="route('academico.grades-horario.edit', $grade)" :delete="route('academico.grades-horario.destroy', $grade)" />
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-4 py-8 text-center text-gray-500">Nenhuma grade de horário cadastrada.</td>
+                    <td colspan="6" class="px-4 py-8 text-center text-gray-500">Nenhuma grade de horário cadastrada.</td>
                 </tr>
                 @endforelse
             </tbody>

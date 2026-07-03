@@ -19,6 +19,7 @@
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50 border-b">
                 <tr>
+                <th class="py-3 px-3 w-10"></th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Indicador (aluno)</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Indicado</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Campanha</th>
@@ -29,6 +30,7 @@
             <tbody class="divide-y">
                 @forelse($indicacoes as $i)
                 <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $i->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                     <td class="px-4 py-3 font-medium text-gray-800">{{ $i->aluno?->pessoa?->nome ?? '—' }}</td>
                     <td class="px-4 py-3 text-gray-800">{{ $i->nome_indicado }}<span class="block text-xs text-gray-400">{{ $i->telefone_indicado ?? $i->email_indicado }}</span></td>
                     <td class="px-4 py-3 text-gray-600">{{ $i->campanha?->nome ?? '—' }}</td>
@@ -42,17 +44,11 @@
                         </form>
                     </td>
                     <td class="px-4 py-3">
-                        <div class="flex gap-1">
-                            <a href="{{ route('geral.indicacoes.edit', $i) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <form method="POST" action="{{ route('geral.indicacoes.destroy', $i) }}" onsubmit="return confirm('Remover?')">
-                                @csrf @method('DELETE')
-                                <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                            </form>
-                        </div>
+                        <x-kebab :edit="route('geral.indicacoes.edit', $i)" :delete="route('geral.indicacoes.destroy', $i)" />
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">Nenhuma indicação registrada.</td></tr>
+                <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhuma indicação registrada.</td></tr>
                 @endforelse
             </tbody>
         </table>

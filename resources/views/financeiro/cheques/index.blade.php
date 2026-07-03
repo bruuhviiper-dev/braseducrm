@@ -30,6 +30,7 @@
         <table class="w-full text-sm text-left">
             <thead class="bg-gray-50 border-b">
                 <tr>
+                <th class="py-3 px-3 w-10"></th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Nº / Banco</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Emitente</th>
                     <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Tipo</th>
@@ -42,6 +43,7 @@
             <tbody class="divide-y">
                 @forelse($cheques as $c)
                 <tr class="hover:bg-gray-50" x-data="{ open: false }">
+                <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $c->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                     <td class="px-4 py-3 font-medium text-gray-800">{{ $c->numero }}<span class="block text-xs text-gray-400">{{ $c->banco?->nome ?? '—' }}</span></td>
                     <td class="px-4 py-3 text-gray-600">{{ $c->emitente ?? '—' }}</td>
                     <td class="px-4 py-3 text-gray-600">{{ \App\Models\Cheque::TIPOS[$c->tipo] ?? $c->tipo }}</td>
@@ -53,13 +55,9 @@
                         @if($c->situacao === 'devolvido' && $c->motivoDevolucao)<span class="block text-xs text-gray-400 mt-0.5">{{ $c->motivoDevolucao->nome }}</span>@endif
                     </td>
                     <td class="px-4 py-3">
-                        <div class="flex gap-1">
-                            <button @click="open = !open" class="p-1.5 text-gray-600 hover:bg-gray-100 rounded" title="Alterar situação"><i class="fa-solid fa-arrows-rotate"></i></button>
-                            <a href="{{ route('financeiro.cheques.edit', $c) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <form method="POST" action="{{ route('financeiro.cheques.destroy', $c) }}" onsubmit="return confirm('Remover?')">
-                                @csrf @method('DELETE')
-                                <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                            </form>
+                        <x-kebab :edit="route('financeiro.cheques.edit', $c)" :delete="route('financeiro.cheques.destroy', $c)"><button @click="open = !open" class="p-1.5 text-gray-600 hover:bg-gray-100 rounded" title="Alterar situação"><i class="fa-solid fa-arrows-rotate"></i></button>
+                            
+                            
                         </div>
                         <div x-show="open" x-cloak class="mt-2 p-2 bg-gray-50 border rounded-lg" style="min-width:260px">
                             <form method="POST" action="{{ route('financeiro.cheques.situacao', $c) }}" class="space-y-2" x-data="{ sit: '{{ $c->situacao }}' }">
@@ -72,12 +70,11 @@
                                     @foreach($motivos ?? \App\Models\MotivoDevolucaoCheque::where('ativo',true)->orderBy('nome')->get() as $m)<option value="{{ $m->id }}">{{ $m->nome }}</option>@endforeach
                                 </select>
                                 <button class="w-full px-2 py-1.5 bg-primary-600 text-white rounded text-xs font-medium hover:bg-primary-700">Aplicar</button>
-                            </form>
-                        </div>
-                    </td>
+                            </form></x-kebab>
+                        </td>
                 </tr>
                 @empty
-                <tr><td colspan="7" class="px-4 py-8 text-center text-gray-400">Nenhum cheque cadastrado.</td></tr>
+                <tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">Nenhum cheque cadastrado.</td></tr>
                 @endforelse
             </tbody>
         </table>

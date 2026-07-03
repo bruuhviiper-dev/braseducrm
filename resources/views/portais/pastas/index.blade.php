@@ -6,6 +6,7 @@
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Nome</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Ordem</th>
@@ -17,6 +18,7 @@
         <tbody class="divide-y">
             @forelse($pastas as $p)
             <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $p->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 text-gray-500">{{ $p->id }}</td>
                 <td class="px-4 py-3 font-medium text-gray-800">{{ $p->nome }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $p->ordem }}</td>
@@ -29,17 +31,11 @@
                     @endif
                 </td>
                 <td class="px-4 py-3">
-                    <div class="flex gap-1">
-                        <a href="{{ route('portais.pastas.edit', $p) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <form method="POST" action="{{ route('portais.pastas.destroy', $p) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    <x-kebab :edit="route('portais.pastas.edit', $p)" :delete="route('portais.pastas.destroy', $p)" />
                 </td>
             </tr>
             @empty
-            <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhuma pasta cadastrada.</td></tr>
+            <tr><td colspan="7" class="px-4 py-8 text-center text-gray-400">Nenhuma pasta cadastrada.</td></tr>
             @endforelse
         </tbody>
     </table>

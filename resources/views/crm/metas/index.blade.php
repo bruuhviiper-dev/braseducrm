@@ -6,6 +6,7 @@
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Meta</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Funil</th>
@@ -19,6 +20,7 @@
         <tbody class="divide-y">
             @forelse($metas as $m)
             <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $m->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 text-gray-500">{{ $m->id }}</td>
                 <td class="px-4 py-3 font-medium text-gray-800">{{ $m->nome }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $m->funil->nome ?? '—' }}</td>
@@ -38,17 +40,11 @@
                     <div class="text-xs text-gray-400">{{ $m->data_inicio->format('d/m/Y') }} a {{ $m->data_fim->format('d/m/Y') }}</div>
                 </td>
                 <td class="px-4 py-3">
-                    <div class="flex gap-1">
-                        <a href="{{ route('crm.metas.edit', $m) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <form method="POST" action="{{ route('crm.metas.destroy', $m) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    <x-kebab :edit="route('crm.metas.edit', $m)" :delete="route('crm.metas.destroy', $m)" />
                 </td>
             </tr>
             @empty
-            <tr><td colspan="8" class="px-4 py-8 text-center text-gray-400">Nenhuma meta cadastrada.</td></tr>
+            <tr><td colspan="9" class="px-4 py-8 text-center text-gray-400">Nenhuma meta cadastrada.</td></tr>
             @endforelse
         </tbody>
     </table>

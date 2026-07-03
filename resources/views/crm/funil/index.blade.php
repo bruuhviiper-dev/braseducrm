@@ -7,6 +7,7 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="bg-gray-50 border-b">
+                <th class="py-3 px-3 w-10"></th>
                     <th class="text-left px-4 py-3 font-semibold text-gray-600">ID</th>
                     <th class="text-left px-4 py-3 font-semibold text-gray-600">Nome</th>
                     <th class="text-center px-4 py-3 font-semibold text-gray-600">Etapas</th>
@@ -19,6 +20,7 @@
             <tbody class="divide-y">
                 @forelse($funis as $funil)
                 <tr class="hover:bg-gray-50 transition">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $funil->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                     <td class="px-4 py-3 text-gray-500">{{ $funil->id }}</td>
                     <td class="px-4 py-3">
                         <a href="{{ route('crm.funil.show', $funil) }}" class="font-medium text-primary-600 hover:text-primary-700 hover:underline">
@@ -52,26 +54,12 @@
                         @endif
                     </td>
                     <td class="px-4 py-3 text-center">
-                        <div class="flex items-center justify-center gap-1">
-                            <a href="{{ route('crm.funil.show', $funil) }}" class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Kanban">
-                                <i class="fa-solid fa-columns"></i>
-                            </a>
-                            <a href="{{ route('crm.funil.edit', $funil) }}" class="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition" title="Editar">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                            <form method="POST" action="{{ route('crm.funil.destroy', $funil) }}" class="inline" onsubmit="return confirm('Tem certeza que deseja remover este funil e todas suas etapas?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Remover">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
-                            </form>
-                        </div>
+                        <x-kebab :show="route('crm.funil.show', $funil)" :edit="route('crm.funil.edit', $funil)" :delete="route('crm.funil.destroy', $funil)" />
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="px-4 py-8 text-center text-gray-400">
+                    <td colspan="8" class="px-4 py-8 text-center text-gray-400">
                         <i class="fa-solid fa-filter text-3xl mb-2"></i>
                         <p>Nenhum funil encontrado.</p>
                     </td>

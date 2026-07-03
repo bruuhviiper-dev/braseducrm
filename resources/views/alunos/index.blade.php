@@ -17,6 +17,7 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b bg-gray-50">
+                    <th class="py-3 px-3 w-10"></th>
                     <th class="text-left py-3 px-4 font-semibold text-gray-600">ID</th>
                     <th class="text-left py-3 px-4 font-semibold text-gray-600">RA</th>
                     <th class="text-left py-3 px-4 font-semibold text-gray-600">Nome</th>
@@ -29,6 +30,7 @@
             <tbody>
                 @forelse($alunos as $aluno)
                 <tr class="border-b hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $aluno->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                     <td class="py-3 px-4 text-gray-500">{{ $aluno->id }}</td>
                     <td class="py-3 px-4 font-medium text-gray-800">{{ $aluno->ra ?? '-' }}</td>
                     <td class="py-3 px-4">
@@ -46,27 +48,14 @@
                         @endif
                     </td>
                     <td class="py-3 px-4 text-center">
-                        <div class="flex items-center justify-center gap-1">
-                            <a href="{{ route('emissoes.historico', $aluno) }}" target="_blank" class="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded" title="Histórico Escolar (PDF)">
-                                <i class="fa-solid fa-file-pdf"></i>
-                            </a>
-                            <a href="{{ route('alunos.edit', $aluno) }}" class="p-1.5 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded" title="Editar">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
-                            <form method="POST" action="{{ route('alunos.destroy', $aluno) }}" class="inline"
-                                  onsubmit="return confirm('Deseja realmente excluir este aluno?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded" title="Excluir">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
-                        </div>
+                        <x-kebab :edit="route('alunos.edit', $aluno)" :delete="route('alunos.destroy', $aluno)" confirm="Deseja realmente excluir este aluno?">
+                            <a href="{{ route('emissoes.historico', $aluno) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-file-pdf mr-2 text-gray-400"></i>Histórico (PDF)</a>
+                        </x-kebab>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="py-8 text-center text-gray-400">
+                    <td colspan="8" class="py-8 text-center text-gray-400">
                         <i class="fa-solid fa-graduation-cap text-3xl mb-2"></i>
                         <p>Nenhum aluno encontrado.</p>
                     </td>

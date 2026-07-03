@@ -6,6 +6,7 @@
     <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
+                <th class="py-3 px-3 w-10"></th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Título</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Curso EAD</th>
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Nota Mínima</th>
@@ -17,6 +18,7 @@
         <tbody class="divide-y">
             @forelse($avaliacoes as $a)
             <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $a->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
                 <td class="px-4 py-3 font-medium text-gray-800">{{ $a->titulo }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ $a->cursoEad?->nome ?? '—' }}</td>
                 <td class="px-4 py-3 text-gray-600">{{ number_format($a->nota_minima, 2, ',', '.') }}</td>
@@ -26,17 +28,11 @@
                     @else<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Inativo</span>@endif
                 </td>
                 <td class="px-4 py-3">
-                    <div class="flex gap-1">
-                        <a href="{{ route('ead.avaliacoes.edit', $a) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen-to-square"></i></a>
-                        <form method="POST" action="{{ route('ead.avaliacoes.destroy', $a) }}" onsubmit="return confirm('Remover?')">
-                            @csrf @method('DELETE')
-                            <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    <x-kebab :edit="route('ead.avaliacoes.edit', $a)" :delete="route('ead.avaliacoes.destroy', $a)" />
                 </td>
             </tr>
             @empty
-            <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhuma avaliação EAD.</td></tr>
+            <tr><td colspan="7" class="px-4 py-8 text-center text-gray-400">Nenhuma avaliação EAD.</td></tr>
             @endforelse
         </tbody>
     </table>
