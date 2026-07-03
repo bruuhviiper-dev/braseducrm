@@ -2,17 +2,7 @@
 @section('title', 'Pessoas')
 
 @section('content')
-<x-data-table title="Pessoas" codigo="11" :createRoute="route('pessoas.create')" createLabel="Nova Pessoa">
-    {{-- Search --}}
-    <form method="GET" action="{{ route('pessoas.index') }}" class="mb-4">
-        <div class="relative max-w-md">
-            <input type="text" name="search" value="{{ request('search') }}"
-                   placeholder="Buscar por nome, CPF ou email..."
-                   class="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-        </div>
-    </form>
-
+<x-data-table title="Cadastro de Pessoa" codigo="11" breadcrumb="Geral › Pessoas" :createRoute="route('pessoas.create')" createLabel="Nova Pessoa">
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead>
