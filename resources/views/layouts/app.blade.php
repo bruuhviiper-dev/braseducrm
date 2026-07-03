@@ -30,12 +30,20 @@
         .submenu-item { font-size: 0.8rem; padding: 0.4rem 0.75rem 0.4rem 2.5rem; }
     </style>
     @stack('styles')
+    <style>
+        .fl-wrap{position:relative}
+        .fl-wrap>.fl-label{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:#94a3b8;font-size:13px;font-weight:400;transition:all .12s ease;white-space:nowrap;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;margin:0;z-index:1}
+        .fl-wrap.fl-area>.fl-label{top:18px;transform:none}
+        .fl-wrap.fl-float>.fl-label{top:0;transform:translateY(-50%);font-size:11px;color:#0891b2;background:#fff;padding:0 4px;max-width:none;font-weight:500}
+        .dark .fl-wrap.fl-float>.fl-label{background:#1f2937;color:#22d3ee}
+        .fl-wrap>input,.fl-wrap>select,.fl-wrap>textarea{padding-top:.7rem!important;padding-bottom:.7rem!important;border-radius:.5rem!important}
+    </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 min-h-screen" x-data="{ searchOpen: false, openMod: null, dark: localStorage.getItem('braseducrm_dark')==='true' }" x-init="document.documentElement.classList.toggle('dark', dark); $watch('dark', v => document.documentElement.classList.toggle('dark', v))">
     <div class="flex min-h-screen">
 
         {{-- SIDEBAR COM SUBMENUS EXPANDIVEIS --}}
-        <aside class="fixed top-0 left-0 z-40 h-screen bg-[#23272e] text-gray-300 flex flex-col w-20">
+        <aside class="fixed top-0 left-0 z-40 h-screen bg-[#23272e] text-gray-300 flex flex-col w-16">
 
             {{-- Logo (wordmark branca em bloco escuro, estilo EDUQ) --}}
             <div class="flex items-center justify-center h-14 border-b border-white/10 px-2 bg-black/30">
@@ -49,13 +57,13 @@
             <nav class="flex-1 overflow-y-auto scrollbar-thin py-1">
 
                 {{-- Dashboard --}}
-                <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->routeIs('dashboard') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}"><i class="fa-solid fa-house text-lg"></i><span class="text-center px-0.5">Dashboard</span></a>
+                <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->routeIs('dashboard') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}"><i class="fa-solid fa-house text-lg"></i><span class="text-center px-0.5">Dashboard</span></a>
 
                 {{-- ACADEMICO --}}
                 <div>
-                    <button @click="openMod = openMod===0 ? null : 0" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('academico*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===0 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-graduation-cap text-lg"></i><span class="text-center px-0.5">Acadêmico</span></button>
-                    <div x-show="openMod===0" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
+                    <button @click="openMod = openMod===0 ? null : 0" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('academico*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===0 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-graduation-cap text-lg"></i><span class="text-center px-0.5">Acadêmico</span></button>
+                    <div x-show="openMod===0" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Cadastros Essenciais</p>
                         <a href="{{ Route::has('academico.calendarios.index') ? route('academico.calendarios.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.calendarios.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">35</span> Cadastro de Calendario</a>
                         <a href="{{ route('cadastros.index', 'escolas') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">8</span> Cadastro de Escola</a>
                         <a href="{{ Route::has('academico.grades-horario.index') ? route('academico.grades-horario.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.grades-horario.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">36</span> Cadastro de Grade de Horario</a>
@@ -67,17 +75,17 @@
                         <a href="{{ Route::has('academico.frequencia.index') ? route('academico.frequencia.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.frequencia.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">268</span> Registro de Frequencia</a>
                         <a href="{{ Route::has('academico.tabelas-avaliacao.index') ? route('academico.tabelas-avaliacao.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.tabelas-avaliacao.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">5</span> Tabela de Avaliacao</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Diploma Digital</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Diploma Digital</p>
                         <a href="{{ Route::has('ged.diplomas.index') ? route('ged.diplomas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">215</span> Cadastro de Diploma Digital</a>
                         <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">226</span> Historico Escolar Digital</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Documentos</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Documentos</p>
                         <a href="{{ Route::has('documentos.index') ? route('documentos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">18</span> Cadastro de Documento</a>
                         <a href="{{ Route::has('academico.entregas-documento.consulta') ? route('academico.entregas-documento.consulta') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.entregas-documento.consulta') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">102</span> Consulta Docs nao Entregues</a>
                         <a href="{{ Route::has('academico.emissoes.documentos') ? route('academico.emissoes.documentos') : '#' }}" target="_blank" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">210</span> Emissao de Documentos</a>
                         <a href="{{ Route::has('academico.entregas-documento.index') ? route('academico.entregas-documento.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.entregas-documento.index') || request()->routeIs('academico.entregas-documento.gerenciar') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">19</span> Entrega de Documentos</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Matricula</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Matricula</p>
                         <a href="{{ route('alunos.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('alunos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">17</span> Cadastro de Aluno</a>
                         <a href="{{ Route::has('academico.matriculas.index') ? route('academico.matriculas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.matriculas.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">23</span> Matricula e Historico</a>
                         <a href="{{ route('cadastros.index', 'formas-ingresso') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">21</span> Forma de Ingresso</a>
@@ -91,7 +99,7 @@
                         <a href="{{ route('cadastros.index', 'motivos-cancelamento') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">242</span> Motivo de Cancelamento Matricula</a>
                         <a href="{{ Route::has('academico.emissoes.index') ? route('academico.emissoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">305</span> Emissao de Disciplinas dos Alunos</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Matriz Curricular</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Matriz Curricular</p>
                         <a href="{{ route('cadastros.index', 'areas') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">24</span> Cadastro de Area</a>
                         <a href="{{ Route::has('ged.atos.index') ? route('ged.atos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">216</span> Cadastro de Atos Regulatorios</a>
                         <a href="{{ route('cadastros.index', 'conceitos-nota') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">176</span> Cadastro de Conceito de Notas</a>
@@ -103,7 +111,7 @@
                         <a href="{{ route('cadastros.index', 'modulos') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">31</span> Cadastro de Modulos</a>
                         <a href="{{ Route::has('academico.emissoes.index') ? route('academico.emissoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">27</span> Emissao da Matriz Curricular</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Notas e Faltas</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Notas e Faltas</p>
                         <a href="{{ Route::has('academico.boletim.index') ? route('academico.boletim.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.boletim.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">2</span> Calculo do Boletim</a>
                         <a href="{{ Route::has('academico.emissoes.index') ? route('academico.emissoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">60</span> Emissao de Notas e Faltas</a>
                         <a href="{{ Route::has('academico.emissoes.index') ? route('academico.emissoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">91</span> Emissao do Diario de Classe</a>
@@ -113,15 +121,15 @@
                         <a href="{{ Route::has('academico.lancamento-notas.index') ? route('academico.lancamento-notas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.lancamento-notas.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">1</span> Lancamento de Avaliacao</a>
                         <a href="{{ Route::has('academico.liberacoes-frequencia.index') ? route('academico.liberacoes-frequencia.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.liberacoes-frequencia.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">262</span> Liberar Lancamento de Frequencia</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Plano de Ensino/Aula</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Plano de Ensino/Aula</p>
                         <a href="{{ Route::has('academico.estruturas-plano.index') ? route('academico.estruturas-plano.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.estruturas-plano.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">204</span> Cadastro de Estrutura do Plano</a>
                         <a href="{{ route('cadastros.index', 'topicos-plano') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">203</span> Cadastro de Topico do Plano</a>
                         <a href="{{ Route::has('academico.planos-ensino.index') ? route('academico.planos-ensino.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.planos-ensino.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">119</span> Preenchimento Plano de Ensino</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Requerimentos</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Requerimentos</p>
                         <a href="{{ Route::has('requerimentos.index') ? route('requerimentos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">96</span> Manutencao de Requerimentos</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Turmas</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Turmas</p>
                         <a href="{{ Route::has('academico.periodos-letivos.index') ? route('academico.periodos-letivos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">38</span> Cadastro de Periodo Letivo</a>
                         <a href="{{ Route::has('academico.turmas.index') ? route('academico.turmas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.turmas.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">40</span> Cadastro de Turma</a>
                         <a href="{{ route('cadastros.index', 'tags-turma-montada') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">251</span> Cadastro de Tag (Turma Montada)</a>
@@ -137,9 +145,9 @@
 
                 {{-- ADMINISTRATIVO --}}
                 <div>
-                    <button @click="openMod = openMod===1 ? null : 1" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('admin*') || request()->routeIs('painel-cliente.*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===1 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-building text-lg"></i><span class="text-center px-0.5">Administrativo</span></button>
-                    <div x-show="openMod===1" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Acessos</p>
+                    <button @click="openMod = openMod===1 ? null : 1" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('admin*') || request()->routeIs('painel-cliente.*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===1 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-building text-lg"></i><span class="text-center px-0.5">Administrativo</span></button>
+                    <div x-show="openMod===1" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Acessos</p>
                         <a href="{{ Route::has('admin.grupos.index') ? route('admin.grupos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('admin.grupos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">43</span> Cadastro de Grupo de Operadores</a>
                         <a href="{{ Route::has('admin.operadores.index') ? route('admin.operadores.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('admin.operadores.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">44</span> Cadastro de Operador</a>
                         <a href="{{ route('painel-cliente.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('painel-cliente.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">112</span> Painel do Cliente</a>
@@ -148,9 +156,9 @@
 
                 {{-- BIBLIOTECA --}}
                 <div>
-                    <button @click="openMod = openMod===2 ? null : 2" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('biblioteca*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===2 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-book text-lg"></i><span class="text-center px-0.5">Biblioteca</span></button>
-                    <div x-show="openMod===2" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Acervo</p>
+                    <button @click="openMod = openMod===2 ? null : 2" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('biblioteca*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===2 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-book text-lg"></i><span class="text-center px-0.5">Biblioteca</span></button>
+                    <div x-show="openMod===2" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Acervo</p>
                         <a href="{{ Route::has('biblioteca.obras.index') ? route('biblioteca.obras.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('biblioteca.obras.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">288</span> Cadastro de Obra</a>
                         <a href="{{ Route::has('biblioteca.exemplares.index') ? route('biblioteca.exemplares.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('biblioteca.exemplares.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">286</span> Cadastro de Exemplares</a>
                         <a href="{{ Route::has('biblioteca.movimentacoes.index') ? route('biblioteca.movimentacoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('biblioteca.movimentacoes.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">287</span> Movimentacoes de Exemplares</a>
@@ -158,7 +166,7 @@
                         <a href="{{ Route::has('biblioteca.emissoes.etiquetas') ? route('biblioteca.emissoes.etiquetas') : '#' }}" target="_blank" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">283</span> Emissao de Etiquetas</a>
                         <a href="{{ Route::has('biblioteca.emissoes.exemplares') ? route('biblioteca.emissoes.exemplares') : '#' }}" target="_blank" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">284</span> Emissao de Exemplares</a>
                         <a href="{{ Route::has('biblioteca.emissoes.movimentacoes') ? route('biblioteca.emissoes.movimentacoes') : '#' }}" target="_blank" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">285</span> Emissao de Movimentacoes</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Cadastros Essenciais</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'autores') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">290</span> Cadastro de Autores</a>
                         <a href="{{ route('cadastros.index', 'bibliotecas') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">291</span> Cadastro de Biblioteca</a>
                         <a href="{{ route('cadastros.index', 'colecoes') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">292</span> Cadastro de Colecao</a>
@@ -168,22 +176,22 @@
                         <a href="{{ route('cadastros.index', 'tipos-aquisicao') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">297</span> Tipo de Aquisicao</a>
                         <a href="{{ route('cadastros.index', 'tipos-material') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">298</span> Tipo de Material</a>
                         <a href="{{ route('cadastros.index', 'motivos-indisponibilidade') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">296</span> Motivo de Indisponibilidade</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Configuracao</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Configuracao</p>
                         <a href="{{ Route::has('biblioteca.configuracao.index') ? route('biblioteca.configuracao.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('biblioteca.configuracao.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">299</span> Configuracao do Biblioteca</a>
                     </div>
                 </div>
 
                 {{-- COMUNICACAO --}}
                 <div>
-                    <button @click="openMod = openMod===3 ? null : 3" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('comunicacao*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===3 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-comments text-lg"></i><span class="text-center px-0.5">Comunicação</span></button>
-                    <div x-show="openMod===3" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Mensagens</p>
+                    <button @click="openMod = openMod===3 ? null : 3" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('comunicacao*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===3 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-comments text-lg"></i><span class="text-center px-0.5">Comunicação</span></button>
+                    <div x-show="openMod===3" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Mensagens</p>
                         <a href="{{ Route::has('comunicacao.mensagens.avulsa') ? route('comunicacao.mensagens.avulsa') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('comunicacao.mensagens.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">84</span> Mensagens Avulsas</a>
                         <a href="{{ Route::has('comunicacao.mensagens.avisos') ? route('comunicacao.mensagens.avisos') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">88</span> Aviso de Cobranca</a>
                         <a href="{{ Route::has('comunicacao.mensagens.avisos') ? route('comunicacao.mensagens.avisos') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">86</span> Aviso de Vencimento</a>
                         <a href="{{ route('comunicacao.mensagens.aviso-pagamento') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('comunicacao.mensagens.aviso-pagamento') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">234</span> Aviso de Pagamento</a>
                         <a href="{{ route('comunicacao.mensagens.interessados') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('comunicacao.mensagens.interessados') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">62</span> Mensagens para Interessados CRM</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Configuracao</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Configuracao</p>
                         <a href="{{ route('comunicacao.templates.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('comunicacao.templates.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">87</span> Templates de Mensagens</a>
                         <a href="{{ Route::has('comunicacao.configuracao.index') ? route('comunicacao.configuracao.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('comunicacao.configuracao.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">85</span> Configuracao da Comunicacao</a>
                         <a href="{{ route('comunicacao.saldo-sms') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('comunicacao.saldo-sms') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">89</span> Consulta de Saldo SMS</a>
@@ -194,15 +202,15 @@
 
                 {{-- ESTOQUE --}}
                 <div>
-                    <button @click="openMod = openMod===4 ? null : 4" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('estoque*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===4 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-center px-0.5">Estoque</span></button>
-                    <div x-show="openMod===4" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
+                    <button @click="openMod = openMod===4 ? null : 4" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('estoque*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===4 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-center px-0.5">Estoque</span></button>
+                    <div x-show="openMod===4" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Cadastros Essenciais</p>
                         <a href="{{ Route::has('estoque.categorias.index') ? route('estoque.categorias.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">147</span> Cadastro de Categorias de Estoque</a>
                         <a href="{{ route('cadastros.index', 'depositos') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">153</span> Cadastro de Depositos de Estoque</a>
                         <a href="{{ route('estoque.produtos.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('estoque.produtos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">148</span> Cadastro de Produtos de Estoque</a>
                         <a href="{{ Route::has('estoque.unidades.index') ? route('estoque.unidades.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">146</span> Cadastro de Unidades de Medida</a>
                         <a href="{{ route('estoque.emissao') }}" target="_blank" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">186</span> Emissao de Produtos de Estoques</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Movimentacoes</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Movimentacoes</p>
                         <a href="{{ route('estoque.consulta.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('estoque.consulta.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">154</span> Consulta de Estoque</a>
                         <a href="{{ Route::has('estoque.movimentacoes.index') ? route('estoque.movimentacoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">150</span> Movimentacoes de Estoque</a>
                     </div>
@@ -210,9 +218,9 @@
 
                 {{-- CRM --}}
                 <div>
-                    <button @click="openMod = openMod===5 ? null : 5" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('crm*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===5 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-handshake text-lg"></i><span class="text-center px-0.5">CRM</span></button>
-                    <div x-show="openMod===5" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
+                    <button @click="openMod = openMod===5 ? null : 5" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('crm*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===5 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-handshake text-lg"></i><span class="text-center px-0.5">CRM</span></button>
+                    <div x-show="openMod===5" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'categorias-interessado') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">207</span> Categorias (Interessados)</a>
                         <a href="{{ Route::has('crm.eventos.index') ? route('crm.eventos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">104</span> Eventos CRM</a>
                         <a href="{{ Route::has('crm.funil.index') ? route('crm.funil.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('crm.funil.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">200</span> Cadastro de Funil de Oportunidades</a>
@@ -226,7 +234,7 @@
                         <a href="{{ Route::has('crm.configuracoes.index') ? route('crm.configuracoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('crm.configuracoes.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">166</span> Configuracao do CRM</a>
                         <a href="{{ route('cadastros.index', 'acoes-automaticas') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">256</span> Acao Automatica (CRM)</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Oportunidades</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Oportunidades</p>
                         <a href="{{ route('crm.interessados.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('crm.interessados.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">108</span> Cadastro de Interessados</a>
                         <a href="{{ route('crm.desempenho.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">190</span> Desempenho Individual do Consultor</a>
                         <a href="{{ route('crm.funil.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('crm.funil.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">110</span> Funil de Oportunidades</a>
@@ -239,9 +247,9 @@
 
                 {{-- EAD --}}
                 <div>
-                    <button @click="openMod = openMod===6 ? null : 6" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('ead*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===6 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-laptop text-lg"></i><span class="text-center px-0.5">EAD</span></button>
-                    <div x-show="openMod===6" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
+                    <button @click="openMod = openMod===6 ? null : 6" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('ead*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===6 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-laptop text-lg"></i><span class="text-center px-0.5">EAD</span></button>
+                    <div x-show="openMod===6" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Cadastros Essenciais</p>
                         <a href="{{ route('ead.cursos.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('ead.cursos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">152</span> Cadastro de Curso (EAD)</a>
                         <a href="{{ route('cadastros.index', 'agrupadores-curso') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">211</span> Cadastro de Agrupador de Cursos</a>
                         <a href="{{ route('ead.sub-agrupadores.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('ead.sub-agrupadores.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">266</span> Cadastro de Sub Agrupador (EAD)</a>
@@ -260,9 +268,9 @@
 
                 {{-- FINANCEIRO --}}
                 <div>
-                    <button @click="openMod = openMod===7 ? null : 7" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('financeiro*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===7 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-dollar-sign text-lg"></i><span class="text-center px-0.5">Financeiro</span></button>
-                    <div x-show="openMod===7" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
+                    <button @click="openMod = openMod===7 ? null : 7" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('financeiro*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===7 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-dollar-sign text-lg"></i><span class="text-center px-0.5">Financeiro</span></button>
+                    <div x-show="openMod===7" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Cadastros Essenciais</p>
                         <a href="{{ route('cadastros.index', 'bancos') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">47</span> Cadastro de Banco</a>
                         <a href="{{ route('cadastros.index', 'centros-custo') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">274</span> Cadastro de Centro de Custos</a>
                         <a href="{{ Route::has('financeiro.categorias-pagar.index') ? route('financeiro.categorias-pagar.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">51</span> Categorias (A Pagar)</a>
@@ -276,31 +284,31 @@
                         <a href="{{ Route::has('financeiro.configuracao.index') ? route('financeiro.configuracao.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.configuracao.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">59</span> Configuracao do Financeiro</a>
                         <a href="{{ route('financeiro.nfse.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.nfse.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">227</span> Configuracoes de NFS-e</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Caixa (Movimentacoes)</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Caixa (Movimentacoes)</p>
                         <a href="{{ Route::has('financeiro.caixas.index') ? route('financeiro.caixas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.caixas.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">68</span> Movimentacoes de Caixas</a>
                         <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.emissoes.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">106</span> Emissao do Fechamento de Caixa</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Cartoes</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Cartoes</p>
                         <a href="{{ route('financeiro.contratos-cartao.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.contratos-cartao.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">70</span> Contratos de Cartoes</a>
                         <a href="{{ route('financeiro.conciliacao-cartao.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.conciliacao-cartao.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">71</span> Conciliacao de Recebimentos (Cartao)</a>
                         <a href="{{ route('financeiro.cartoes-empresariais.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.cartoes-empresariais.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">136</span> Cartao de Credito Empresarial</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Cheques</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Cheques</p>
                         <a href="{{ route('financeiro.cheques.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.cheques.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">72</span> Manutencao de Cheques</a>
                         <a href="{{ route('cadastros.index', 'motivos-devolucao-cheque') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">73</span> Motivo de Devolucao (Cheque)</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Lancamentos Financeiros</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Lancamentos Financeiros</p>
                         <a href="{{ Route::has('financeiro.dre.index') ? route('financeiro.dre.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.dre.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">111</span> Demonstrativo de Resultados (DRE)</a>
                         <a href="{{ route('financeiro.fluxo-caixa.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">78</span> Fluxo de Caixa (Mensal)</a>
                         <a href="{{ Route::has('financeiro.lancamentos.index') ? route('financeiro.lancamentos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.lancamentos.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">61</span> Lancamentos Financeiros</a>
                         <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">195</span> Fluxo de Caixa (Diario)</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Titulos a pagar</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Titulos a pagar</p>
                         <a href="{{ route('financeiro.titulos-pagar.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.titulos-pagar.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">52</span> Manutencao de Titulos a Pagar</a>
                         <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.emissoes.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">173</span> Emissao de Titulos a Pagar</a>
                         <a href="{{ route('financeiro.emissoes.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.emissoes.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">180</span> Emissao de Comissoes</a>
 
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Titulos a receber</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Titulos a receber</p>
                         <a href="{{ route('financeiro.titulos-receber.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.titulos-receber.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">64</span> Manutencao de Titulos a Receber</a>
                         <a href="{{ Route::has('financeiro.renegociacoes.index') ? route('financeiro.renegociacoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.renegociacoes.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">80</span> Renegociacoes de Parcelas</a>
                         <a href="{{ Route::has('financeiro.retorno.index') ? route('financeiro.retorno.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('financeiro.retorno.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">82</span> Importacao do Arquivo de Retorno</a>
@@ -314,9 +322,9 @@
 
                 {{-- GED --}}
                 <div>
-                    <button @click="openMod = openMod===8 ? null : 8" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('ged*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===8 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-folder-open text-lg"></i><span class="text-center px-0.5">GED</span></button>
-                    <div x-show="openMod===8" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Cadastros Essenciais</p>
+                    <button @click="openMod = openMod===8 ? null : 8" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('ged*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===8 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-folder-open text-lg"></i><span class="text-center px-0.5">GED</span></button>
+                    <div x-show="openMod===8" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Cadastros Essenciais</p>
                         <a href="{{ Route::has('ged.documentos.index') ? route('ged.documentos.index') : route('ged.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->is('ged*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">244</span> Documento (GED)</a>
                         <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">245</span> Categoria do Documento (GED)</a>
                         <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">252</span> Tipo de Documento</a>
@@ -325,25 +333,25 @@
 
                 {{-- GERAL --}}
                 <div>
-                    <button @click="openMod = openMod===9 ? null : 9" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===9 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-table-cells text-lg"></i><span class="text-center px-0.5">Geral</span></button>
-                    <div x-show="openMod===9" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Atendimentos</p>
+                    <button @click="openMod = openMod===9 ? null : 9" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===9 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-table-cells text-lg"></i><span class="text-center px-0.5">Geral</span></button>
+                    <div x-show="openMod===9" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Atendimentos</p>
                         <a href="{{ Route::has('atendimentos.index') ? route('atendimentos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">55</span> Manutencao de Atendimentos</a>
                         <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">172</span> Atendimentos Pool (Follow up)</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Cadastros Essenciais</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Cadastros Essenciais</p>
                         <a href="{{ Route::has('admin.departamentos.index') ? route('admin.departamentos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">67</span> Cadastro de Departamento</a>
                         <a href="{{ route('cadastros.index', 'instituicoes') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">7</span> Cadastro de Instituicao de Ensino</a>
                         <a href="{{ Route::has('geral.questionarios.index') ? route('geral.questionarios.index') : route('geral.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">118</span> Cadastro de Questionarios NPS</a>
                         <a href="{{ route('cadastros.index', 'atributos-adicionais') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">97</span> Cadastro de Atributos Adicionais</a>
                         <a href="{{ route('geral.consultas.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('geral.consultas.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">221</span> Consulta Personalizada</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Configuracoes de Emissoes</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Configuracoes de Emissoes</p>
                         <a href="{{ route('cadastros.index', 'assinaturas') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">6</span> Cadastro de Assinatura</a>
                         <a href="{{ route('geral.modelos-documento.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('geral.modelos-documento.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">9</span> Cadastro de Modelo de Documentos</a>
                         <a href="{{ route('cadastros.index', 'cabecalhos') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">48</span> Modelos de Cabecalho</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Indicacao</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Indicacao</p>
                         <a href="{{ route('geral.campanhas-indicacao.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('geral.campanhas-indicacao.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">225</span> Campanha de Indicacao</a>
                         <a href="{{ route('geral.indicacoes.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('geral.indicacoes.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">223</span> Controle de Indicacoes</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Pessoas</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Pessoas</p>
                         <a href="{{ route('pessoas.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('pessoas.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">11</span> Cadastro de Pessoa</a>
                         <a href="{{ Route::has('profissionais.index') ? route('profissionais.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('profissionais.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">12</span> Cadastro de Profissional</a>
                         <a href="{{ route('cadastros.index', 'profissoes') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">145</span> Cadastro de Profissoes</a>
@@ -357,16 +365,16 @@
                 </div>
 
                 {{-- INTEGRACOES --}}
-                <a href="{{ route('integracoes.index') }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('integracoes*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-600' }}">
+                <a href="{{ route('integracoes.index') }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('integracoes*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-600' }}">
                     <i class="fa-solid fa-plug text-lg"></i>
                     <span class="text-center px-0.5">Integracoes</span>
                 </a>
 
                 {{-- MATRICULA ONLINE --}}
                 <div>
-                    <button @click="openMod = openMod===10 ? null : 10" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('matricula-online*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===10 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-globe text-lg"></i><span class="text-center px-0.5">Matr. Online</span></button>
-                    <div x-show="openMod===10" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Processos</p>
+                    <button @click="openMod = openMod===10 ? null : 10" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('matricula-online*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===10 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-globe text-lg"></i><span class="text-center px-0.5">Matr. Online</span></button>
+                    <div x-show="openMod===10" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Processos</p>
                         <a href="{{ Route::has('matricula-online.aberturas.index') ? route('matricula-online.aberturas.index') : route('matricula-online.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">140</span> Abertura de Matricula Online</a>
                         <a href="{{ Route::has('matricula-online.inscricoes.index') ? route('matricula-online.inscricoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">149</span> Acompanhamento de Inscricoes</a>
                         <a href="{{ Route::has('matricula-online.cupons.index') ? route('matricula-online.cupons.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">182</span> Cadastro de Cupons de Desconto</a>
@@ -379,14 +387,14 @@
 
                 {{-- PORTAIS --}}
                 <div>
-                    <button @click="openMod = openMod===11 ? null : 11" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('portais*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===11 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-desktop text-lg"></i><span class="text-center px-0.5">Portais</span></button>
-                    <div x-show="openMod===11" x-cloak class="fixed left-20 top-14 z-50 w-72 h-[calc(100vh-3.5rem)] bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Configuracao</p>
+                    <button @click="openMod = openMod===11 ? null : 11" class="w-full flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight transition-colors hover:bg-white/10 {{ request()->is('portais*') ? 'bg-black/50 text-white rounded-xl' : 'text-gray-400' }}" :class="openMod===11 ? 'bg-black/50 text-white rounded-xl' : ''"><i class="fa-solid fa-desktop text-lg"></i><span class="text-center px-0.5">Portais</span></button>
+                    <div x-show="openMod===11" x-cloak class="fixed left-16 top-0 z-50 w-80 h-screen bg-[#2a2f36] shadow-2xl border border-black/30 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-sm text-white placeholder-gray-400 outline-none border border-white/10 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-300 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium">Configuracao</p>
                         <a href="{{ Route::has('portais.configuracao') ? route('portais.configuracao') : route('portais.index') }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">46</span> Configuracao Portal Aluno</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Publicacao (Portal do Aluno)</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Publicacao (Portal do Aluno)</p>
                         <a href="{{ Route::has('portais.pastas.index') ? route('portais.pastas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">76</span> Cadastro de Pastas Portal Aluno</a>
                         <a href="{{ Route::has('portais.publicacoes.index') ? route('portais.publicacoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">77</span> Publicacoes Portal Aluno</a>
-                        <p class="px-4 py-1.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold mt-1">Feedbacks</p>
+                        <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Feedbacks</p>
                         <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">69</span> Resultados Feedback Professores</a>
                     </div>
                 </div>
@@ -394,14 +402,14 @@
 
             {{-- Ajuda --}}
             <div class="border-t border-white/10 p-2">
-                <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[10px] leading-tight text-white bg-cyan-500 hover:bg-cyan-400 rounded-xl"><i class="fa-solid fa-circle-question text-lg"></i><span>Ajuda</span></a>
+                <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="flex flex-col items-center justify-center gap-1 py-2 text-[9px] leading-tight text-white bg-cyan-500 hover:bg-cyan-400 rounded-xl"><i class="fa-solid fa-circle-question text-lg"></i><span>Ajuda</span></a>
             </div>
         </aside>
 
         <div x-show="openMod !== null" x-cloak @click="openMod = null" class="fixed inset-0 z-30"></div>
 
         {{-- MAIN CONTENT --}}
-        <div class="flex-1 ml-20 min-w-0 overflow-x-hidden">
+        <div class="flex-1 ml-16 min-w-0 overflow-x-hidden">
 
             {{-- TOPBAR (fiel ao EDUQ: abas DENTRO da faixa cinza + botão "+" cyan) --}}
             <header class="sticky top-0 z-30 bg-gray-100 border-b border-gray-200 h-14 flex items-center justify-between px-3 gap-3">
@@ -418,43 +426,53 @@
                         </div>
                     </template>
                     {{-- Botao "+" cyan: abre nova função (assinatura do EDUQ) --}}
-                    <button @click="searchOpen = !searchOpen" class="w-7 h-7 shrink-0 flex items-center justify-center rounded-md bg-cyan-500 hover:bg-cyan-400 text-white shadow-sm ml-1" title="Abrir nova função (Ctrl+K)">
+                    <button @click="searchOpen = !searchOpen" class="w-7 h-7 shrink-0 flex items-center justify-center rounded-md bg-cyan-100 hover:bg-cyan-200 text-cyan-600 ml-1" title="Abrir nova função (Ctrl+K)">
                         <i class="fa-solid fa-plus text-xs"></i>
                     </button>
                 </div>
 
                 <div class="flex items-center gap-0.5 shrink-0">
-                    <button onclick="window.location.reload()" class="hidden md:block p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Atualizar">
-                        <i class="fa-solid fa-rotate-right"></i>
-                    </button>
-                    <a href="{{ Route::has('notificacoes.index') ? route('notificacoes.index') : '#' }}" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg relative" title="Notificações">
-                        <i class="fa-solid fa-bell"></i>
+                    <a href="{{ route('dashboard') }}" class="hidden md:block p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg" title="Início">
+                        <i class="fa-solid fa-house"></i>
+                    </a>
+                    <a href="#" class="hidden md:block p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg" title="Novidades">
+                        <i class="fa-solid fa-gift"></i>
+                    </a>
+                    <a href="{{ Route::has('notificacoes.index') ? route('notificacoes.index') : '#' }}" class="p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg relative" title="Notificações">
+                        <i class="fa-regular fa-bell"></i>
                         @php $notifCount = \App\Models\Notificacao::where('user_id', Auth::id())->where('lida', false)->count() ?? 0; @endphp
                         @if($notifCount > 0)
-                        <span class="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full">{{ $notifCount > 9 ? '9+' : $notifCount }}</span>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
                         @endif
                     </a>
-                    <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="hidden md:block p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Mensagens">
-                        <i class="fa-regular fa-comment"></i>
+                    <a href="{{ Route::has('agenda.index') ? route('agenda.index') : '#' }}" class="hidden md:block p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg relative" title="Agenda">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
                     </a>
-                    <a href="{{ Route::has('tickets.create') ? route('tickets.create') : '#' }}" class="hidden md:block p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Ajuda">
+                    <a href="{{ Route::has('tickets.index') ? route('tickets.index') : '#' }}" class="hidden md:block p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg" title="Tickets">
+                        <i class="fa-solid fa-ticket-simple"></i>
+                    </a>
+                    <a href="{{ Route::has('tickets.create') ? route('tickets.create') : '#' }}" class="hidden md:block p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg" title="Ajuda">
                         <i class="fa-regular fa-circle-question"></i>
                     </a>
-                    <a href="{{ Route::has('configuracoes.index') ? route('configuracoes.index') : '#' }}" class="hidden md:block p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg" title="Configurações">
+                    <a href="#" class="hidden md:block p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg" title="Reportar problema">
+                        <i class="fa-solid fa-bug"></i>
+                    </a>
+                    <a href="{{ Route::has('configuracoes.index') ? route('configuracoes.index') : '#' }}" class="hidden md:block p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg" title="Configurações">
                         <i class="fa-solid fa-gear"></i>
                     </a>
-                    <button @click="dark = !dark; localStorage.setItem('braseducrm_dark', dark)" class="hidden md:block p-2 text-gray-400 hover:text-amber-500 hover:bg-gray-100 rounded-lg" title="Alternar tema">
+                    <button @click="dark = !dark; localStorage.setItem('braseducrm_dark', dark)" class="hidden md:block p-2 text-amber-400 hover:text-amber-500 hover:bg-gray-200/60 rounded-lg" title="Alternar tema">
                         <i class="fa-solid" :class="dark ? 'fa-moon' : 'fa-sun'"></i>
                     </button>
                     {{-- Botao Painel (EDUQ) --}}
-                    <a href="{{ route('painel-cliente.index') }}" class="ml-1 hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium shadow-sm">
+                    <a href="{{ route('painel-cliente.index') }}" class="ml-1 hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 text-primary-600 text-sm font-medium">
                         <i class="fa-solid fa-table-cells-large text-xs"></i> Painel
                     </a>
 
                     {{-- User Menu (chip com tenant, estilo EDUQ) --}}
                     <div class="relative ml-1" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center gap-2 pl-1 pr-2 py-1 rounded-lg hover:bg-gray-100">
-                            <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                        <button @click="open = !open" class="flex items-center gap-2 pl-1 pr-2 py-1 rounded-xl bg-white border border-gray-200 hover:bg-gray-50">
+                            <div class="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 text-xs font-bold">
                                 {{ strtoupper(substr(Auth::user()->nome, 0, 2)) }}
                             </div>
                             <div class="text-left hidden lg:block leading-tight">
@@ -607,5 +625,38 @@
         }
     </script>
     @stack('scripts')
+    <script>
+        // Labels flutuantes estilo Material (EDUQ) - transforma pares label+campo
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('form').forEach(function (f) {
+                if (f.closest('header') || f.closest('aside')) return;
+                f.querySelectorAll('label').forEach(function (lb) {
+                    var el = lb.nextElementSibling;
+                    if (!el) return;
+                    var tag = el.tagName;
+                    if (tag !== 'INPUT' && tag !== 'SELECT' && tag !== 'TEXTAREA') return;
+                    if (tag === 'INPUT' && ['checkbox', 'radio', 'file', 'hidden', 'submit', 'button'].indexOf(el.type) !== -1) return;
+                    if (lb.querySelector('input,select,textarea,button')) return;
+                    var wrap = document.createElement('div');
+                    wrap.className = 'fl-wrap' + (tag === 'TEXTAREA' ? ' fl-area' : '');
+                    lb.parentNode.insertBefore(wrap, lb);
+                    wrap.appendChild(el);
+                    wrap.appendChild(lb);
+                    lb.classList.add('fl-label');
+                    lb.classList.remove('block', 'mb-1', 'mb-2');
+                    if ((tag === 'INPUT' || tag === 'TEXTAREA') && !el.placeholder) el.placeholder = ' ';
+                    function upd() {
+                        var has;
+                        if (tag === 'SELECT') has = true;
+                        else if (tag === 'INPUT' && ['date', 'time', 'datetime-local', 'month', 'week'].indexOf(el.type) !== -1) has = true;
+                        else has = !!el.value || document.activeElement === el || (el.placeholder && el.placeholder.trim() !== '');
+                        wrap.classList.toggle('fl-float', has);
+                    }
+                    ['focus', 'blur', 'input', 'change'].forEach(function (ev) { el.addEventListener(ev, upd); });
+                    upd();
+                });
+            });
+        });
+    </script>
 </body>
 </html>
