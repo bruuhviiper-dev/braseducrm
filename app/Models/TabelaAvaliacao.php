@@ -8,7 +8,7 @@ class TabelaAvaliacao extends Model
 {
     protected $table = 'tabelas_avaliacao';
 
-    protected $fillable = ['nome', 'nota_maxima', 'media_aprovacao', 'descricao'];
+    protected $fillable = ['nome', 'nota_maxima', 'media_aprovacao', 'descricao', 'formula', 'visibilidade_operador', 'operador_id'];
 
     protected $casts = [
         'nota_maxima' => 'decimal:2',

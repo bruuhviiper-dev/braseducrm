@@ -8,7 +8,7 @@ class Documento extends Model
 {
     protected $table = 'documentos';
 
-    protected $fillable = ['nome', 'obrigatorio', 'curso_id', 'ativo'];
+    protected $fillable = ['nome', 'obrigatorio', 'curso_id', 'ativo', 'sigla', 'tipo_ged', 'idade_minima', 'visibilidade_matriz', 'obrigatorio_generos', 'grau', 'forma_ingresso_id'];
 
     protected $casts = [
         'obrigatorio' => 'boolean',

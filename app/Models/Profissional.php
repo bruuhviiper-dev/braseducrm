@@ -8,7 +8,7 @@ class Profissional extends Model
 {
     protected $table = 'profissionais';
 
-    protected $fillable = ['pessoa_id', 'tipo_profissional_id', 'titularidade_id', 'registro_profissional', 'ativo'];
+    protected $fillable = ['pessoa_id', 'tipo_profissional_id', 'titularidade_id', 'registro_profissional', 'ativo', 'data_admissao', 'data_demissao', 'cargo', 'informacoes_adicionais', 'informacoes_curriculares', 'assinatura_path'];
 
     protected $casts = [
         'ativo' => 'boolean',

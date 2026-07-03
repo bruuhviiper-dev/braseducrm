@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academico;
 use App\Http\Controllers\Controller;
 use App\Models\TabelaAvaliacao;
 use App\Models\TabelaAvaliacaoItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TabelaAvaliacaoController extends Controller
@@ -17,7 +18,8 @@ class TabelaAvaliacaoController extends Controller
 
     public function create()
     {
-        return view('academico.tabelas-avaliacao.form');
+        $operadores = User::where('ativo', true)->orderBy('nome')->get();
+        return view('academico.tabelas-avaliacao.form', compact('operadores'));
     }
 
     public function store(Request $request)
@@ -25,8 +27,11 @@ class TabelaAvaliacaoController extends Controller
         $validated = $this->validateData($request);
         $tabela = TabelaAvaliacao::create([
             'nome' => $validated['nome'],
-            'nota_maxima' => $validated['nota_maxima'],
-            'media_aprovacao' => $validated['media_aprovacao'],
+            'nota_maxima' => $validated['nota_maxima'] ?? 10,
+            'media_aprovacao' => $validated['media_aprovacao'] ?? 7,
+            'formula' => $validated['formula'] ?? null,
+            'visibilidade_operador' => $request->boolean('visibilidade_operador'),
+            'operador_id' => $request->boolean('visibilidade_operador') ? ($validated['operador_id'] ?? null) : null,
             'descricao' => $validated['descricao'] ?? null,
         ]);
         $this->syncItens($tabela, $validated['itens'] ?? []);
@@ -36,7 +41,8 @@ class TabelaAvaliacaoController extends Controller
     public function edit(TabelaAvaliacao $tabelas_avaliacao)
     {
         $tabela = $tabelas_avaliacao->load('itens');
-        return view('academico.tabelas-avaliacao.form', compact('tabela'));
+        $operadores = User::where('ativo', true)->orderBy('nome')->get();
+        return view('academico.tabelas-avaliacao.form', compact('tabela', 'operadores'));
     }
 
     public function update(Request $request, TabelaAvaliacao $tabelas_avaliacao)
@@ -44,8 +50,11 @@ class TabelaAvaliacaoController extends Controller
         $validated = $this->validateData($request);
         $tabelas_avaliacao->update([
             'nome' => $validated['nome'],
-            'nota_maxima' => $validated['nota_maxima'],
-            'media_aprovacao' => $validated['media_aprovacao'],
+            'nota_maxima' => $validated['nota_maxima'] ?? 10,
+            'media_aprovacao' => $validated['media_aprovacao'] ?? 7,
+            'formula' => $validated['formula'] ?? null,
+            'visibilidade_operador' => $request->boolean('visibilidade_operador'),
+            'operador_id' => $request->boolean('visibilidade_operador') ? ($validated['operador_id'] ?? null) : null,
             'descricao' => $validated['descricao'] ?? null,
         ]);
         $this->syncItens($tabelas_avaliacao, $validated['itens'] ?? []);
@@ -81,8 +90,11 @@ class TabelaAvaliacaoController extends Controller
     {
         return $request->validate([
             'nome' => 'required|string|max:255',
-            'nota_maxima' => 'required|numeric|min:1',
-            'media_aprovacao' => 'required|numeric|min:0',
+            'nota_maxima' => 'nullable|numeric|min:1',
+            'media_aprovacao' => 'nullable|numeric|min:0',
+            'formula' => 'nullable|string|max:250',
+            'visibilidade_operador' => 'nullable|boolean',
+            'operador_id' => 'nullable|exists:users,id',
             'descricao' => 'nullable|string',
             'itens' => 'nullable|array',
             'itens.*.id' => 'nullable|integer',

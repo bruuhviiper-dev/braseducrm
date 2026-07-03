@@ -1,14 +1,18 @@
 @extends('layouts.app')
-@section('title', isset($documento) ? 'Editar Documento' : 'Novo Documento')
+@section('title', 'Cadastro de Documento')
 
 @section('content')
-<div class="max-w-lg mx-auto">
-    <div class="bg-white rounded-lg shadow-sm border">
-        <div class="flex items-center justify-between px-6 py-4 border-b">
-            <h2 class="text-base font-semibold text-gray-800">{{ isset($documento) ? 'Editar Documento' : 'Novo Documento' }}</h2>
-            <a href="{{ route('documentos.index') }}" class="text-sm text-gray-500 hover:text-gray-700"><i class="fa-solid fa-arrow-left mr-1"></i>Voltar</a>
+<div class="max-w-3xl mx-auto"
+     x-data="{
+        visMatriz: {{ old('visibilidade_matriz', $documento->visibilidade_matriz ?? false) ? 'true' : 'false' }},
+        obrigGen: {{ old('obrigatorio_generos', $documento->obrigatorio_generos ?? true) ? 'true' : 'false' }}
+     }">
+    <div class="bg-white rounded-xl border">
+        <div class="px-5 py-3 border-b flex items-center gap-2">
+            <span class="text-sm font-semibold text-gray-400">18</span>
+            <h1 class="text-lg font-bold text-gray-800">Cadastro de Documento</h1>
         </div>
-        <form method="POST" action="{{ isset($documento) ? route('documentos.update', $documento) : route('documentos.store') }}" class="p-6 space-y-4">
+        <form method="POST" action="{{ isset($documento) ? route('documentos.update', $documento) : route('documentos.store') }}" class="p-5 space-y-4">
             @csrf
             @if(isset($documento)) @method('PUT') @endif
 
@@ -19,13 +23,59 @@
             @endif
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nome <span class="text-red-500">*</span></label>
-                <input type="text" name="nome" value="{{ old('nome', $documento->nome ?? '') }}" placeholder="Ex.: RG, CPF, Histórico Escolar" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <label class="block text-sm font-medium text-gray-700 mb-1">SIGLA</label>
+                <input type="text" name="sigla" maxlength="20" value="{{ old('sigla', $documento->sigla ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Curso (opcional)</label>
-                <select name="curso_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Descrição <span class="text-red-500">*</span></label>
+                <input type="text" name="nome" value="{{ old('nome', $documento->nome ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de documento GED</label>
+                <select name="tipo_ged" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <option value="">Selecione...</option>
+                    @foreach(['Documento Pessoal', 'Documento Acadêmico', 'Comprovante', 'Contrato', 'Outros'] as $t)
+                    <option value="{{ $t }}" {{ old('tipo_ged', $documento->tipo_ged ?? '') == $t ? 'selected' : '' }}>{{ $t }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Idade Mínima</label>
+                <input type="number" min="0" max="120" name="idade_minima" value="{{ old('idade_minima', $documento->idade_minima ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            </div>
+
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="visibilidade_matriz" :value="visMatriz ? 1 : 0">
+                <button type="button" @click="visMatriz = !visMatriz" :class="visMatriz ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
+                    <span :class="visMatriz ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+                </button>
+                <span class="text-sm font-medium text-gray-700">Adicionar visibilidade por matriz?</span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="obrigatorio_generos" :value="obrigGen ? 1 : 0">
+                <button type="button" @click="obrigGen = !obrigGen" :class="obrigGen ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
+                    <span :class="obrigGen ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+                </button>
+                <span class="text-sm font-medium text-gray-700">Obrigatório para todos os gêneros?</span>
+            </label>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Grau</label>
+                <select name="grau" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <option value="">Selecione...</option>
+                    @foreach(['Graduação', 'Pós-Graduação', 'Técnico', 'Livre', 'Extensão'] as $g)
+                    <option value="{{ $g }}" {{ old('grau', $documento->grau ?? '') == $g ? 'selected' : '' }}>{{ $g }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Cursos</label>
+                <select name="curso_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
                     <option value="">Todos os cursos</option>
                     @foreach($cursos as $c)
                     <option value="{{ $c->id }}" {{ old('curso_id', $documento->curso_id ?? '') == $c->id ? 'selected' : '' }}>{{ $c->nome }}</option>
@@ -33,22 +83,18 @@
                 </select>
             </div>
 
-            <div class="flex items-center gap-6">
-                <label class="flex items-center gap-2">
-                    <input type="checkbox" name="obrigatorio" value="1" {{ old('obrigatorio', $documento->obrigatorio ?? false) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                    <span class="text-sm text-gray-700">Obrigatório para matrícula</span>
-                </label>
-                <label class="flex items-center gap-2">
-                    <input type="checkbox" name="ativo" value="1" {{ old('ativo', $documento->ativo ?? true) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                    <span class="text-sm text-gray-700">Ativo</span>
-                </label>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Formas de Ingressos</label>
+                <select name="forma_ingresso_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <option value="">Todas</option>
+                    @foreach($formasIngresso as $f)
+                    <option value="{{ $f->id }}" {{ old('forma_ingresso_id', $documento->forma_ingresso_id ?? '') == $f->id ? 'selected' : '' }}>{{ $f->nome }}</option>
+                    @endforeach
+                </select>
             </div>
 
-            <div class="flex gap-3 pt-2">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
-                    {{ isset($documento) ? 'Salvar Alteracoes' : 'Cadastrar' }}
-                </button>
-                <a href="{{ route('documentos.index') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
+            <div class="flex justify-end pt-3 border-t">
+                <button type="submit" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold">Salvar</button>
             </div>
         </form>
     </div>

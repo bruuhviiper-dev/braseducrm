@@ -35,12 +35,15 @@ class PlanoContasController extends Controller
             'pai_id' => 'nullable|exists:plano_contas,id',
             'tipo' => 'required|in:sintetica,analitica',
             'natureza' => 'required|in:receita,despesa',
+            'mascara_filhos' => 'nullable|string|max:50',
+            'tesouraria' => 'nullable|boolean',
+            'identificador_integracao' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
 
-        if ($data['pai_id']) {
-            $pai = PlanoContas::find($data['pai_id']);
+        if ($request->input('pai_id')) {
+            $pai = PlanoContas::find($request->input('pai_id'));
             $data['nivel'] = $pai->nivel + 1;
         } else {
             $data['nivel'] = 1;
@@ -75,12 +78,15 @@ class PlanoContasController extends Controller
             'pai_id' => 'nullable|exists:plano_contas,id',
             'tipo' => 'required|in:sintetica,analitica',
             'natureza' => 'required|in:receita,despesa',
+            'mascara_filhos' => 'nullable|string|max:50',
+            'tesouraria' => 'nullable|boolean',
+            'identificador_integracao' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
 
-        if ($data['pai_id']) {
-            $pai = PlanoContas::find($data['pai_id']);
+        if ($request->input('pai_id')) {
+            $pai = PlanoContas::find($request->input('pai_id'));
             $data['nivel'] = $pai->nivel + 1;
         } else {
             $data['nivel'] = 1;

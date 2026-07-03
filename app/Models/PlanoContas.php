@@ -10,7 +10,7 @@ class PlanoContas extends Model
 
     protected $fillable = [
         'codigo', 'nome', 'pai_id', 'tipo',
-        'natureza', 'nivel', 'ordem', 'ativo',
+        'natureza', 'nivel', 'ordem', 'ativo', 'mascara_filhos', 'tesouraria', 'identificador_integracao',
     ];
 
     protected $casts = [

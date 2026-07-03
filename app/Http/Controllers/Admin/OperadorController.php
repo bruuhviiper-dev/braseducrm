@@ -22,7 +22,8 @@ class OperadorController extends Controller
     {
         $grupos = GrupoOperador::where('ativo', true)->orderBy('nome')->get();
         $departamentos = Departamento::where('ativo', true)->orderBy('nome')->get();
-        return view('admin.operadores.form', compact('grupos', 'departamentos'));
+        $profissionais = \App\Models\Profissional::with('pessoa')->where('ativo', true)->get();
+        return view('admin.operadores.form', compact('grupos', 'departamentos', 'profissionais'));
     }
 
     public function store(Request $request)
@@ -34,9 +35,12 @@ class OperadorController extends Controller
             'password' => 'required|string|min:6',
             'grupo_operador_id' => 'nullable|exists:grupo_operadores,id',
             'departamento_id' => 'nullable|exists:departamentos,id',
+            'profissional_id' => 'nullable|exists:profissionais,id',
         ]);
         $data['password'] = Hash::make($data['password']);
         $data['ativo'] = $request->boolean('ativo', true);
+        $data['is_admin'] = $request->boolean('is_admin');
+        $data['exigir_troca_senha'] = $request->boolean('exigir_troca_senha');
         User::create($data);
         return redirect()->route('admin.operadores.index')->with('success', 'Operador criado com sucesso.');
     }
@@ -45,7 +49,8 @@ class OperadorController extends Controller
     {
         $grupos = GrupoOperador::where('ativo', true)->orderBy('nome')->get();
         $departamentos = Departamento::where('ativo', true)->orderBy('nome')->get();
-        return view('admin.operadores.form', compact('operador', 'grupos', 'departamentos'));
+        $profissionais = \App\Models\Profissional::with('pessoa')->where('ativo', true)->get();
+        return view('admin.operadores.form', compact('operador', 'grupos', 'departamentos', 'profissionais'));
     }
 
     public function update(Request $request, User $operador)
@@ -57,13 +62,16 @@ class OperadorController extends Controller
             'password' => 'nullable|string|min:6',
             'grupo_operador_id' => 'nullable|exists:grupo_operadores,id',
             'departamento_id' => 'nullable|exists:departamentos,id',
+            'profissional_id' => 'nullable|exists:profissionais,id',
         ]);
         if (!empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
         }
-        $data['ativo'] = $request->boolean('ativo');
+        $data['ativo'] = $request->boolean('ativo', true);
+        $data['is_admin'] = $request->boolean('is_admin');
+        $data['exigir_troca_senha'] = $request->boolean('exigir_troca_senha');
         $operador->update($data);
         return redirect()->route('admin.operadores.index')->with('success', 'Operador atualizado com sucesso.');
     }

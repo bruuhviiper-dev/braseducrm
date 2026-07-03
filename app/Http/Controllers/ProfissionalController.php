@@ -26,6 +26,9 @@ class ProfissionalController extends Controller
     {
         $data = $this->validateData($request);
         $data['ativo'] = $request->boolean('ativo', true);
+        if ($request->hasFile('assinatura')) {
+            $data['assinatura_path'] = $request->file('assinatura')->store('assinaturas', 'public');
+        }
         Profissional::create($data);
         return redirect()->route('profissionais.index')->with('success', 'Profissional criado com sucesso.');
     }
@@ -38,7 +41,10 @@ class ProfissionalController extends Controller
     public function update(Request $request, Profissional $profissional)
     {
         $data = $this->validateData($request);
-        $data['ativo'] = $request->boolean('ativo');
+        $data['ativo'] = $request->boolean('ativo', true);
+        if ($request->hasFile('assinatura')) {
+            $data['assinatura_path'] = $request->file('assinatura')->store('assinaturas', 'public');
+        }
         $profissional->update($data);
         return redirect()->route('profissionais.index')->with('success', 'Profissional atualizado com sucesso.');
     }
@@ -65,6 +71,11 @@ class ProfissionalController extends Controller
             'tipo_profissional_id' => 'nullable|exists:tipos_profissional,id',
             'titularidade_id' => 'nullable|exists:titularidades,id',
             'registro_profissional' => 'nullable|string|max:255',
+            'data_admissao' => 'nullable|date',
+            'data_demissao' => 'nullable|date|after_or_equal:data_admissao',
+            'cargo' => 'nullable|string|max:255',
+            'informacoes_adicionais' => 'nullable|string|max:2000',
+            'informacoes_curriculares' => 'nullable|string|max:20000',
         ]);
     }
 }
