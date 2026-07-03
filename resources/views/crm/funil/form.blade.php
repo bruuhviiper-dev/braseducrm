@@ -130,7 +130,7 @@ function funilForm() {
     const defaultColors = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1'];
 
     return {
-        etapas: @json(old('etapas', isset($funil) ? $funil->etapas->map(fn($e) => ['id' => $e->id, 'nome' => $e->nome, 'cor' => $e->cor, 'ordem' => $e->ordem, 'prazo_dias' => $e->prazo_dias])->toArray() : [])),
+        etapas: {!! json_encode(old('etapas', isset($funil) ? $funil->etapas->map(fn($e) => ['id' => $e->id, 'nome' => $e->nome, 'cor' => $e->cor, 'ordem' => $e->ordem, 'prazo_dias' => $e->prazo_dias])->toArray() : [])) !!},
 
         addEtapa() {
             const nextOrder = this.etapas.length + 1;

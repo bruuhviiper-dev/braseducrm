@@ -87,7 +87,7 @@
             <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <i class="fa-solid fa-lock text-primary-500"></i> Alterar Senha
             </h3>
-            <form method="POST" action="{{ route('perfil.update-password') }}">
+            <form method="POST" action="{{ route('perfil.senha') }}">
                 @csrf
                 @method('PUT')
 
