@@ -15,7 +15,7 @@
 
         {{-- Abas (estilo EDUQ) --}}
         <div class="border-b px-4 flex gap-1 overflow-x-auto">
-            @foreach(['basicos'=>'Informações Básicas','modulos'=>'Módulos','anotacoes'=>'Anotações'] as $k => $t)
+            @foreach(['basicos'=>'Informações Básicas','modulos'=>'Módulos','anotacoes'=>'Anotações','mec'=>'Dados MEC'] as $k => $t)
             <button type="button" @click="tab='{{ $k }}'" :class="tab==='{{ $k }}' ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap">{{ $t }}</button>
             @endforeach
         </div>
@@ -36,10 +36,6 @@
                     <input type="checkbox" name="ativo" value="1" {{ old('ativo', $matriz->ativo ?? true) ? 'checked' : '' }} class="rounded text-primary-600 w-5 h-5">
                 </label>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Início da Vigência <span class="text-red-500">*</span></label>
-                    <input type="date" name="inicio_vigencia" value="{{ old('inicio_vigencia', optional($matriz->inicio_vigencia ?? null)->format('Y-m-d')) }}" class="w-full border rounded-lg px-3 py-2 text-sm">
-                </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">SIGLA <span class="text-red-500">*</span></label>
                     <input type="text" name="sigla" value="{{ old('sigla', $matriz->sigla ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
@@ -117,17 +113,9 @@
                 <div class="border-t pt-4">
                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Configurações</p>
                     <div class="space-y-3">
-                        <div class="flex flex-wrap items-center gap-4">
-                            <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="controla_horas_compl" value="1" {{ old('controla_horas_compl', $matriz->controla_horas_compl ?? false) ? 'checked' : '' }} class="rounded text-primary-600"> Controlar horas complementares?</label>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-gray-500">Qtd.</span>
-                                <input type="number" name="horas_compl" value="{{ old('horas_compl', $matriz->horas_compl ?? '') }}" min="0" class="w-24 border rounded px-2 py-1 text-sm">
-                                <span class="text-xs text-gray-500">Mín. p/ aprovação</span>
-                                <input type="number" name="horas_compl_min" value="{{ old('horas_compl_min', $matriz->horas_compl_min ?? '') }}" min="0" class="w-24 border rounded px-2 py-1 text-sm">
-                            </div>
-                        </div>
-                        <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="controla_extensao" value="1" {{ old('controla_extensao', $matriz->controla_extensao ?? false) ? 'checked' : '' }} class="rounded text-primary-600"> Controlar carga horária de extensão</label>
-                        <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="controla_estagio" value="1" {{ old('controla_estagio', $matriz->controla_estagio ?? false) ? 'checked' : '' }} class="rounded text-primary-600"> Controlar carga horária de estágio</label>
+                        <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="controla_horas_compl" value="1" {{ old('controla_horas_compl', $matriz->controla_horas_compl ?? false) ? 'checked' : '' }} class="rounded text-primary-600"> É para controlar horas complementares?</label>
+                        <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="controla_extensao" value="1" {{ old('controla_extensao', $matriz->controla_extensao ?? false) ? 'checked' : '' }} class="rounded text-primary-600"> É para controlar carga horária de extensão</label>
+                        <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="controla_estagio" value="1" {{ old('controla_estagio', $matriz->controla_estagio ?? false) ? 'checked' : '' }} class="rounded text-primary-600"> É para controlar carga horária de estágio</label>
                         <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="historico_parcial_portal" value="1" {{ old('historico_parcial_portal', $matriz->historico_parcial_portal ?? false) ? 'checked' : '' }} class="rounded text-primary-600"> Alunos podem emitir histórico parcial no portal?</label>
                     </div>
                 </div>
@@ -182,6 +170,26 @@
                         </template>
                         <p x-show="discs.length===0" class="text-sm text-gray-400 text-center py-3">Nenhuma disciplina. Clique em "Disciplina".</p>
                     </div>
+                </div>
+            </div>
+
+            {{-- ============ DADOS MEC ============ --}}
+            <div x-show="tab==='mec'" x-cloak class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Código do curso EMEC</label>
+                    <input type="text" name="codigo_emec" value="{{ old('codigo_emec', $matriz->codigo_emec ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ato regulatório de Autorização</label>
+                    <input type="text" name="ato_autorizacao" value="{{ old('ato_autorizacao', $matriz->ato_autorizacao ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ato regulatório de Reconhecimento</label>
+                    <input type="text" name="ato_reconhecimento" value="{{ old('ato_reconhecimento', $matriz->ato_reconhecimento ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ato regulatório de Renovação do Reconhecimento</label>
+                    <input type="text" name="ato_renovacao" value="{{ old('ato_renovacao', $matriz->ato_renovacao ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
                 </div>
             </div>
 

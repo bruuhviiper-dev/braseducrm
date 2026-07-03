@@ -20,7 +20,8 @@ class AtendimentoController extends Controller
     {
         $pessoas = Pessoa::orderBy('nome')->get();
         $categorias = CategoriaAtendimento::orderBy('nome')->get();
-        return view('administrativo.atendimentos.form', compact('pessoas', 'categorias'));
+        $responsaveis = \App\Models\User::where('ativo', true)->orderBy('nome')->get();
+        return view('administrativo.atendimentos.form', compact('pessoas', 'categorias', 'responsaveis'));
     }
 
     public function store(Request $request)
@@ -35,7 +36,8 @@ class AtendimentoController extends Controller
     {
         $pessoas = Pessoa::orderBy('nome')->get();
         $categorias = CategoriaAtendimento::orderBy('nome')->get();
-        return view('administrativo.atendimentos.form', compact('atendimento', 'pessoas', 'categorias'));
+        $responsaveis = \App\Models\User::where('ativo', true)->orderBy('nome')->get();
+        return view('administrativo.atendimentos.form', compact('atendimento', 'pessoas', 'categorias', 'responsaveis'));
     }
 
     public function update(Request $request, Atendimento $atendimento)
@@ -57,7 +59,12 @@ class AtendimentoController extends Controller
             'pessoa_id' => 'required|exists:pessoas,id',
             'categoria_atendimento_id' => 'nullable|exists:categorias_atendimento,id',
             'descricao' => 'required|string',
-            'situacao' => 'required|in:aberto,em_andamento,concluido,falha',
+            'situacao' => 'nullable|in:aberto,em_andamento,concluido,falha',
+            'responsavel_id' => 'nullable|exists:users,id',
+            'canal' => 'nullable|string|max:100',
+            'portal_aluno' => 'nullable|boolean',
+            'precisa_retorno' => 'nullable|boolean',
+            'departamentos_responsavel' => 'nullable|boolean',
             'resolucao' => 'nullable|string',
         ]);
     }

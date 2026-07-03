@@ -1,14 +1,27 @@
 @extends('layouts.app')
-@section('title', isset($atendimento) ? 'Editar Atendimento' : 'Novo Atendimento')
+@section('title', 'Manutenção de Atendimentos')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-lg shadow-sm border">
-        <div class="flex items-center justify-between px-6 py-4 border-b">
-            <h2 class="text-base font-semibold text-gray-800">{{ isset($atendimento) ? 'Editar Atendimento' : 'Novo Atendimento' }}</h2>
-            <a href="{{ route('atendimentos.index') }}" class="text-sm text-gray-500 hover:text-gray-700"><i class="fa-solid fa-arrow-left mr-1"></i>Voltar</a>
+<div class="max-w-3xl mx-auto"
+     x-data="{
+        portal: {{ old('portal_aluno', $atendimento->portal_aluno ?? false) ? 'true' : 'false' }},
+        finalizado: {{ old('situacao', $atendimento->situacao ?? 'aberto') === 'concluido' ? 'true' : 'false' }},
+        retorno: {{ old('precisa_retorno', $atendimento->precisa_retorno ?? false) ? 'true' : 'false' }},
+        deptos: {{ old('departamentos_responsavel', $atendimento->departamentos_responsavel ?? false) ? 'true' : 'false' }}
+     }">
+    <div class="bg-white rounded-xl border">
+        <div class="px-5 py-3 border-b flex items-center gap-3">
+            <a href="{{ route('atendimentos.index') }}" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-arrow-left"></i></a>
+            <span class="text-sm font-semibold text-gray-400">55</span>
+            <div>
+                <h1 class="text-lg font-bold text-gray-800">Manutenção de Atendimentos</h1>
+                <p class="text-xs text-primary-500">Pós Vendas › Atendimentos</p>
+            </div>
         </div>
-        <form method="POST" action="{{ isset($atendimento) ? route('atendimentos.update', $atendimento) : route('atendimentos.store') }}" class="p-6 space-y-4">
+        <div class="px-5 pt-3 border-b">
+            <span class="inline-block pb-2 text-sm font-semibold text-cyan-600 border-b-2 border-cyan-500">Dados Básicos</span>
+        </div>
+        <form method="POST" action="{{ isset($atendimento) ? route('atendimentos.update', $atendimento) : route('atendimentos.store') }}" class="p-5 space-y-4">
             @csrf
             @if(isset($atendimento)) @method('PUT') @endif
 
@@ -18,52 +31,92 @@
             </div>
             @endif
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Pessoa <span class="text-red-500">*</span></label>
-                    <select name="pessoa_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <option value="">Selecione...</option>
-                        @foreach($pessoas as $p)
-                        <option value="{{ $p->id }}" {{ old('pessoa_id', $atendimento->pessoa_id ?? '') == $p->id ? 'selected' : '' }}>{{ $p->nome }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                    <select name="categoria_atendimento_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">Selecione...</option>
-                        @foreach($categorias as $c)
-                        <option value="{{ $c->id }}" {{ old('categoria_atendimento_id', $atendimento->categoria_atendimento_id ?? '') == $c->id ? 'selected' : '' }}>{{ $c->nome }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Situação <span class="text-red-500">*</span></label>
-                <select name="situacao" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    <option value="aberto" {{ old('situacao', $atendimento->situacao ?? 'aberto') == 'aberto' ? 'selected' : '' }}>Aberto</option>
-                    <option value="em_andamento" {{ old('situacao', $atendimento->situacao ?? '') == 'em_andamento' ? 'selected' : '' }}>Em andamento</option>
-                    <option value="concluido" {{ old('situacao', $atendimento->situacao ?? '') == 'concluido' ? 'selected' : '' }}>Concluído</option>
-                    <option value="falha" {{ old('situacao', $atendimento->situacao ?? '') == 'falha' ? 'selected' : '' }}>Falha</option>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Pessoa <span class="text-red-500">*</span></label>
+                <select name="pessoa_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
+                    <option value="">Selecione...</option>
+                    @foreach($pessoas as $p)
+                    <option value="{{ $p->id }}" @selected(old('pessoa_id', $atendimento->pessoa_id ?? '') == $p->id)>{{ $p->nome }}</option>
+                    @endforeach
                 </select>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Descrição <span class="text-red-500">*</span></label>
-                <textarea name="descricao" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>{{ old('descricao', $atendimento->descricao ?? '') }}</textarea>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Categoria de Atendimento</label>
+                <select name="categoria_atendimento_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <option value="">Selecione...</option>
+                    @foreach($categorias as $c)
+                    <option value="{{ $c->id }}" @selected(old('categoria_atendimento_id', $atendimento->categoria_atendimento_id ?? '') == $c->id)>{{ $c->nome }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Resolução</label>
-                <textarea name="resolucao" rows="2" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('resolucao', $atendimento->resolucao ?? '') }}</textarea>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Responsável pelo Contato</label>
+                <select name="responsavel_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <option value="">Selecione...</option>
+                    @foreach($responsaveis as $r)
+                    <option value="{{ $r->id }}" @selected(old('responsavel_id', $atendimento->responsavel_id ?? '') == $r->id)>{{ $r->nome }}</option>
+                    @endforeach
+                </select>
             </div>
 
-            <div class="flex gap-3 pt-2">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
-                    {{ isset($atendimento) ? 'Salvar Alteracoes' : 'Cadastrar' }}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Canal de atendimento</label>
+                <select name="canal" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <option value="">Selecione...</option>
+                    @foreach(['Presencial', 'Telefone', 'WhatsApp', 'E-mail', 'Portal do Aluno', 'Redes Sociais'] as $canal)
+                    <option value="{{ $canal }}" @selected(old('canal', $atendimento->canal ?? '') == $canal)>{{ $canal }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="portal_aluno" :value="portal ? 1 : 0">
+                <button type="button" @click="portal = !portal" :class="portal ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
+                    <span :class="portal ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
                 </button>
-                <a href="{{ route('atendimentos.index') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
+                <span class="text-sm font-medium text-gray-700">Apresentar atendimento no portal do aluno?</span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="situacao" :value="finalizado ? 'concluido' : 'aberto'">
+                <button type="button" @click="finalizado = !finalizado" :class="finalizado ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
+                    <span :class="finalizado ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+                </button>
+                <span class="text-sm font-medium text-gray-700">Atendimento foi finalizado?</span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="precisa_retorno" :value="retorno ? 1 : 0">
+                <button type="button" @click="retorno = !retorno" :class="retorno ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
+                    <span :class="retorno ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+                </button>
+                <span class="text-sm font-medium text-gray-700">Será preciso dar algum retorno para este atendimento?</span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="departamentos_responsavel" :value="deptos ? 1 : 0">
+                <button type="button" @click="deptos = !deptos" :class="deptos ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
+                    <span :class="deptos ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+                </button>
+                <span class="text-sm font-medium text-gray-700">Adicionar departamentos como responsável?</span>
+            </label>
+
+            <div class="border-t pt-4">
+                <h3 class="text-sm font-bold text-gray-700 mb-3">Histórico</h3>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Descrição <span class="text-red-500">*</span></label>
+                    <textarea name="descricao" rows="4" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>{{ old('descricao', $atendimento->descricao ?? '') }}</textarea>
+                </div>
+                <div class="mt-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Resolução</label>
+                    <textarea name="resolucao" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">{{ old('resolucao', $atendimento->resolucao ?? '') }}</textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-3 border-t">
+                <button type="submit" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
             </div>
         </form>
     </div>

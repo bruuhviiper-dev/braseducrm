@@ -77,6 +77,7 @@ class InteressadoController extends Controller
             'email' => 'nullable|email|max:255',
             'cpf' => 'nullable|string|max:20',
             'telefone' => 'nullable|string|max:20',
+            'codigo_pais' => 'nullable|string|max:10',
             'celular' => 'nullable|string|max:20',
             'origem_id' => 'nullable|exists:origens_interessado,id',
             'responsavel_id' => 'nullable|exists:users,id',

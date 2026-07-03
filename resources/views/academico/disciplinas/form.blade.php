@@ -79,13 +79,6 @@
 
             {{-- ============ PLANO DE ENSINO (fiel: Estrutura de Plano de Ensino) ============ --}}
             <div x-show="tab==='plano'" x-cloak class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Estrutura de Plano de Ensino</label>
-                    <select name="estrutura_plano_ensino_id" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <option value="">Selecione...</option>
-                        @foreach($estruturasPlano as $ep)<option value="{{ $ep->id }}" @selected(old('estrutura_plano_ensino_id', $disciplina->estrutura_plano_ensino_id ?? '')==$ep->id)>{{ $ep->nome }}</option>@endforeach
-                    </select>
-                </div>
             </div>
 
             {{-- ============ MATRIZES CURRICULARES (read-only) ============ --}}

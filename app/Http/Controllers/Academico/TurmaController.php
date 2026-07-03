@@ -55,11 +55,20 @@ class TurmaController extends Controller
     private function validar(Request $request): array
     {
         $v = $request->validate([
-            'codigo' => 'required|string|max:50',                 // SIGLA
+            'codigo' => 'nullable|string|max:50',                 // SIGLA
             'nome' => 'required|string|max:255',                  // Descrição
-            'instituicao_ensino_id' => 'required|exists:instituicoes_ensino,id',
+            'instituicao_ensino_id' => 'nullable|exists:instituicoes_ensino,id',
             'matriz_curricular_id' => 'required|exists:matrizes_curriculares,id',
-            'turno_id' => 'required|exists:turnos,id',
+            'turno_id' => 'nullable|exists:turnos,id',
+            'comissionavel' => 'nullable|boolean',
+            'cor' => 'nullable|string|max:20',
+            'modelo_documento_id' => 'nullable|exists:modelos_documento,id',
+            'conta_id' => 'nullable|exists:contas_bancarias,id',
+            'cidade_aulas' => 'nullable|string|max:255',
+            'tipo_turma' => 'nullable|string|max:50',
+            'descricao_horario' => 'nullable|string',
+            'nao_enviar_contrato' => 'nullable|boolean',
+            'finalizada' => 'nullable|boolean',
             'vagas' => 'nullable|integer|min:0',                  // Quantidade máxima de alunos
         ]);
 
@@ -68,13 +77,21 @@ class TurmaController extends Controller
         $finalizada = $request->boolean('finalizada');
 
         return [
-            'codigo' => $v['codigo'],
+            'codigo' => $v['codigo'] ?? null,
             'nome' => $v['nome'],
             'instituicao_ensino_id' => $v['instituicao_ensino_id'] ?? null,
             'matriz_curricular_id' => $v['matriz_curricular_id'],
             'curso_id' => $matriz?->curso_id,
             'turno_id' => $v['turno_id'] ?? null,
             'vagas' => $v['vagas'] ?? null,
+            'comissionavel' => (bool) ($v['comissionavel'] ?? false),
+            'cor' => $v['cor'] ?? null,
+            'modelo_documento_id' => $v['modelo_documento_id'] ?? null,
+            'conta_id' => $v['conta_id'] ?? null,
+            'cidade_aulas' => $v['cidade_aulas'] ?? null,
+            'tipo_turma' => $v['tipo_turma'] ?? null,
+            'descricao_horario' => $v['descricao_horario'] ?? null,
+            'nao_enviar_contrato' => (bool) ($v['nao_enviar_contrato'] ?? false),
             'finalizada' => $finalizada,
             // EDUQ usa toggle "Turma finalizada?"; derivamos a situacao textual p/ compat do schema
             'situacao' => $finalizada ? 'finalizada' : 'ativa',
@@ -92,6 +109,8 @@ class TurmaController extends Controller
             'turma' => $turma,
             'instituicoes' => InstituicaoEnsino::orderBy('nome')->get(),
             'matrizes' => MatrizCurricular::with('curso')->orderBy('nome')->get(),
+            'modelos' => \App\Models\ModeloDocumento::orderBy('nome')->get(),
+            'contas' => \App\Models\ContaBancaria::orderBy('nome')->get(),
             'turnos' => Turno::orderBy('nome')->get(),
         ];
     }

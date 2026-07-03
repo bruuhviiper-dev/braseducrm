@@ -10,7 +10,7 @@ class Atendimento extends Model
 
     protected $fillable = [
         'pessoa_id', 'categoria_atendimento_id', 'operador_id',
-        'descricao', 'situacao', 'motivo_falha_id', 'resolucao',
+        'descricao', 'situacao', 'motivo_falha_id', 'resolucao', 'responsavel_id', 'canal', 'portal_aluno', 'precisa_retorno', 'departamentos_responsavel',
     ];
 
     public function pessoa()

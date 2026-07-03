@@ -8,7 +8,7 @@ class Turma extends Model
 {
     protected $fillable = [
         'nome', 'codigo', 'curso_id', 'matriz_curricular_id', 'turno_id',
-        'periodo_letivo_id', 'instituicao_ensino_id', 'data_inicio', 'data_fim', 'vagas', 'situacao', 'finalizada',
+        'periodo_letivo_id', 'instituicao_ensino_id', 'data_inicio', 'data_fim', 'vagas', 'situacao', 'finalizada', 'comissionavel', 'cor', 'modelo_documento_id', 'conta_id', 'cidade_aulas', 'tipo_turma', 'descricao_horario', 'nao_enviar_contrato',
     ];
 
     protected $casts = [

@@ -27,15 +27,6 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Qualificação</label>
-                    <select name="qualificacao" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <option value="">Selecione...</option>
-                        @foreach(['quente'=>'🔥 Quente','morno'=>'🌤️ Morno','frio'=>'❄️ Frio'] as $val=>$lbl)
-                        <option value="{{ $val }}" @selected(old('qualificacao', $oportunidade->qualificacao ?? '')===$val)>{{ $lbl }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Interessado <span class="text-red-500">*</span></label>
                     <select name="interessado_id" required class="w-full border rounded-lg px-3 py-2 text-sm">
                         <option value="">Selecione...</option>
@@ -78,31 +69,11 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Produtos e serviços (Curso)</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Produtos e serviços</label>
                     <select name="curso_id" class="w-full border rounded-lg px-3 py-2 text-sm">
                         <option value="">Selecione...</option>
                         @foreach($cursos as $cur)<option value="{{ $cur->id }}" @selected(old('curso_id', $oportunidade->curso_id ?? '')==$cur->id)>{{ $cur->nome }}</option>@endforeach
                     </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                    <input type="text" name="titulo" value="{{ old('titulo', $oportunidade->titulo ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
-                    <input type="number" step="0.01" min="0" name="valor" value="{{ old('valor', $oportunidade->valor ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Situação <span class="text-red-500">*</span></label>
-                    <select name="situacao" required class="w-full border rounded-lg px-3 py-2 text-sm">
-                        @foreach(['aberta'=>'Aberta','ganha'=>'Ganha','perdida'=>'Perdida','pausada'=>'Pausada'] as $val=>$lbl)
-                        <option value="{{ $val }}" @selected(old('situacao', $oportunidade->situacao ?? 'aberta')===$val)>{{ $lbl }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Previsão de Fechamento</label>
-                    <input type="date" name="data_previsao_fechamento" value="{{ old('data_previsao_fechamento', optional($oportunidade->data_previsao_fechamento ?? null)->format('Y-m-d')) }}" class="w-full border rounded-lg px-3 py-2 text-sm">
                 </div>
             </div>
 

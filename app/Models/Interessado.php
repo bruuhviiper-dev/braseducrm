@@ -9,7 +9,7 @@ class Interessado extends Model
     protected $table = 'interessados';
 
     protected $fillable = [
-        'pessoa_id', 'nome', 'e_empresa', 'nao_enviar_mensagens', 'email', 'cpf', 'telefone', 'celular',
+        'pessoa_id', 'nome', 'e_empresa', 'nao_enviar_mensagens', 'email', 'cpf', 'telefone', 'celular', 'codigo_pais',
         'origem_id', 'responsavel_id', 'categoria_id', 'profissao_id', 'cidade', 'formacao',
         'instagram', 'facebook', 'curso_id', 'observacoes', 'ativo',
     ];

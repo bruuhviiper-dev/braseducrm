@@ -12,7 +12,7 @@ class MatrizCurricular extends Model
         'nome', 'sigla', 'curso_id', 'area_conhecimento_id', 'grau_id', 'habilitacao_id',
         'configuracao_boletim_id', 'tabela_avaliacao_id', 'estrutura_plano_aula_id', 'estrutura_plano_ensino_id',
         'carga_horaria_total', 'carga_horaria_descritiva', 'situacao', 'ativo', 'inicio_vigencia',
-        'observacoes', 'anotacoes',
+        'observacoes', 'anotacoes', 'codigo_emec', 'ato_autorizacao', 'ato_reconhecimento', 'ato_renovacao',
         'matricular_todas', 'permite_duplicadas', 'percentual_frequencia', 'sistema_curricular',
         'controla_horas_compl', 'horas_compl', 'horas_compl_min',
         'controla_extensao', 'controla_estagio', 'historico_parcial_portal',
