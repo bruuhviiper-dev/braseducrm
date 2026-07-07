@@ -2,17 +2,7 @@
 @section('title', 'Cadastro de Grupo de Operadores')
 
 @section('content')
-<div class="w-full"
-     x-data="{
-        aba: 'permissoes',
-        grupos: {!! json_encode($gruposCopia ?? []) !!},
-        copiarDe(id) {
-            if (!id || !this.grupos[id]) return;
-            const ids = this.grupos[id].funcoes.map(String);
-            document.querySelectorAll('input[name=\'funcoes[]\']').forEach(c => c.checked = ids.includes(c.value));
-        },
-        marcarTodos(modulo, val) { document.querySelectorAll('[data-modulo=\'' + modulo + '\']').forEach(c => c.checked = val); }
-     }">
+<div class="w-full" x-data="grupoOperadoresForm()">
     <div class="bg-white">
         <div class="px-5 py-3 border-b flex items-center gap-2">
             <span class="text-sm font-semibold text-gray-400">43</span>
@@ -90,4 +80,21 @@
         </form>
     </div>
 </div>
+
+<script>
+function grupoOperadoresForm() {
+    return {
+        aba: 'permissoes',
+        grupos: @json($gruposCopia ?? []),
+        copiarDe(id) {
+            if (!id || !this.grupos[id]) return;
+            const ids = this.grupos[id].funcoes.map(String);
+            document.querySelectorAll('input[name="funcoes[]"]').forEach(c => c.checked = ids.includes(c.value));
+        },
+        marcarTodos(modulo, val) {
+            document.querySelectorAll('[data-modulo="' + modulo + '"]').forEach(c => c.checked = val);
+        },
+    };
+}
+</script>
 @endsection
