@@ -39,6 +39,12 @@ class Matricula extends Model
         return $this->belongsTo(Turma::class);
     }
 
+    /** Vendedor da matrícula (222 — Cálculo de Comissões). */
+    public function consultor()
+    {
+        return $this->belongsTo(User::class, 'consultor_id');
+    }
+
     public function turmaMontada()
     {
         return $this->belongsTo(TurmaMontada::class);
