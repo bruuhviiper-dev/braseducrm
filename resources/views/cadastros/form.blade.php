@@ -34,6 +34,8 @@
                     <option value="{{ $v }}" {{ (string) $valorAtual === (string) $v ? 'selected' : '' }}>{{ $optLabel }}</option>
                     @endforeach
                 </select>
+                @elseif($f['type'] === 'date')
+                <input type="date" name="{{ $f['name'] }}" value="{{ old($f['name'], isset($registro) && $registro?->{$f['name']} ? \Illuminate\Support\Carbon::parse($registro->{$f['name']})->format('Y-m-d') : '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" {{ ($f['required'] ?? false) ? 'required' : '' }}>
                 @elseif($f['type'] === 'number')
                 <input type="number" step="0.01" name="{{ $f['name'] }}" value="{{ old($f['name'], $registro->{$f['name']} ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" {{ ($f['required'] ?? false) ? 'required' : '' }}>
                 @elseif($f['type'] === 'boolean')

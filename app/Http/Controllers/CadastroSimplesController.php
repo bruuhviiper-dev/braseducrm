@@ -95,6 +95,22 @@ class CadastroSimplesController extends Controller
             'motivos-falha-atendimento' => ['model' => \App\Models\MotivoFalhaAtendimento::class, 'titulo' => 'Cadastro Motivos de Falha (Atendimentos)', 'codigo' => 178, 'fields' => [
                 ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
             ]],
+            'agrupadores-titulo' => ['model' => \App\Models\AgrupadorTitulo::class, 'titulo' => 'Cadastro de Agrupador de Títulos', 'codigo' => 217, 'fields' => $nome],
+            'grupos-categoria-pagar' => ['model' => \App\Models\GrupoCategoriaPagar::class, 'titulo' => 'Grupo de Categorias (A Pagar)', 'codigo' => 243, 'fields' => $nome],
+            'motivos-restricao' => ['model' => \App\Models\MotivoRestricao::class, 'titulo' => 'Motivo de Restrição', 'codigo' => 261, 'fields' => $nome],
+            'modelos-papel' => ['model' => \App\Models\ModeloPapel::class, 'titulo' => 'Cadastro de Modelo de Papel', 'codigo' => 49, 'fields' => [
+                ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
+                ['name' => 'tamanho', 'label' => 'Tamanho do papel', 'type' => 'select', 'required' => false, 'options' => ['A4' => 'A4', 'A5' => 'A5', 'Carta' => 'Carta', 'Ofício' => 'Ofício']],
+                ['name' => 'descricao', 'label' => 'Descrição', 'type' => 'textarea', 'required' => false],
+            ]],
+            'motivos-finalizacao-atividade' => ['model' => \App\Models\MotivoFinalizacaoAtividade::class, 'titulo' => 'Motivo de Finalização de Atividade (CRM)', 'codigo' => 264, 'fields' => $nome],
+            'eventos-portal' => ['model' => \App\Models\EventoPortalAluno::class, 'titulo' => 'Cadastro de Eventos (Portal Aluno)', 'codigo' => 240, 'fields' => [
+                ['name' => 'titulo', 'label' => 'Título', 'type' => 'text', 'required' => true],
+                ['name' => 'descricao', 'label' => 'Descrição', 'type' => 'textarea', 'required' => false],
+                ['name' => 'data_inicio', 'label' => 'Data de início', 'type' => 'date', 'required' => false],
+                ['name' => 'data_fim', 'label' => 'Data de término', 'type' => 'date', 'required' => false],
+                ['name' => 'publicado', 'label' => 'Publicar no Portal do Aluno?', 'type' => 'boolean', 'required' => false],
+            ]],
             'escolas' => ['model' => \App\Models\Escola::class, 'titulo' => 'Escola', 'codigo' => 8, 'fields' => [
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'telefone', 'label' => 'Telefone (Fixo)', 'type' => 'text', 'required' => false],
@@ -259,6 +275,7 @@ class CadastroSimplesController extends Controller
             $r[] = ($f['required'] ?? false) ? 'required' : 'nullable';
             $r[] = match ($f['type']) {
                 'number' => 'numeric',
+                'date' => 'date',
                 default => 'string',
             };
             if ($f['type'] === 'text') {

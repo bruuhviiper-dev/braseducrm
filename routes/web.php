@@ -67,6 +67,10 @@ use App\Http\Controllers\PainelClienteController;
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::post('/contato', [LandingController::class, 'contato'])->name('landing.contato');
 
+// Link de pagamento público (230 — o aluno abre sem login; baixa automática ao pagar)
+Route::get('/pagar/{token}', [\App\Http\Controllers\Financeiro\LinkPagamentoController::class, 'publico'])->name('pagamento.publico');
+Route::post('/pagar/{token}', [\App\Http\Controllers\Financeiro\LinkPagamentoController::class, 'pagar'])->name('pagamento.publico.pagar');
+
 // Auth
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -259,6 +263,23 @@ Route::middleware('auth')->group(function () {
         Route::get('emissoes/resumo-pessoa', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'resumoPessoa'])->name('emissoes.resumo-pessoa');
         Route::get('emissoes/fechamento-caixa', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'fechamentoCaixa'])->name('emissoes.fechamento-caixa');
         Route::get('emissoes/comissoes', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'comissoes'])->name('emissoes.comissoes');
+        Route::get('emissoes/titulos-receber', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'titulosReceber'])->name('emissoes.titulos-receber');
+        Route::get('emissoes/lancamentos', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'lancamentos'])->name('emissoes.lancamentos');
+        Route::get('emissoes/plano-contas', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'planoContas'])->name('emissoes.plano-contas');
+        Route::get('emissoes/declaracao-pagamentos', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'declaracaoPagamentos'])->name('emissoes.declaracao-pagamentos');
+        Route::get('emissoes/pagamentos-contas-pagar', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'pagamentosContasPagar'])->name('emissoes.pagamentos-contas-pagar');
+        Route::get('emissoes/renegociacoes', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'renegociacoes'])->name('emissoes.renegociacoes');
+        Route::get('emissoes/resumo-cartao', [\App\Http\Controllers\Financeiro\FinanceiroEmissaoController::class, 'resumoCartao'])->name('emissoes.resumo-cartao');
+
+        // Comissões editáveis por matrícula (222), Recebimento Coletivo (259), Índice (175), Link de Pagamento (230)
+        Route::get('comissoes', [\App\Http\Controllers\Financeiro\ComissaoController::class, 'index'])->name('comissoes.index');
+        Route::post('comissoes', [\App\Http\Controllers\Financeiro\ComissaoController::class, 'salvar'])->name('comissoes.salvar');
+        Route::get('recebimento-coletivo', [\App\Http\Controllers\Financeiro\RecebimentoColetivoController::class, 'index'])->name('recebimento-coletivo.index');
+        Route::post('recebimento-coletivo', [\App\Http\Controllers\Financeiro\RecebimentoColetivoController::class, 'processar'])->name('recebimento-coletivo.processar');
+        Route::get('atualizacao-indice', [\App\Http\Controllers\Financeiro\AtualizacaoIndiceController::class, 'index'])->name('atualizacao-indice.index');
+        Route::post('atualizacao-indice', [\App\Http\Controllers\Financeiro\AtualizacaoIndiceController::class, 'aplicar'])->name('atualizacao-indice.aplicar');
+        Route::get('link-pagamento', [\App\Http\Controllers\Financeiro\LinkPagamentoController::class, 'index'])->name('link-pagamento.index');
+        Route::post('link-pagamento', [\App\Http\Controllers\Financeiro\LinkPagamentoController::class, 'gerar'])->name('link-pagamento.gerar');
 
         // Financeiro avançado (P4)
         Route::resource('lancamentos', \App\Http\Controllers\Financeiro\LancamentoFinanceiroController::class)->parameters(['lancamentos' => 'lancamento'])->except('show');
@@ -384,6 +405,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('indicacoes', \App\Http\Controllers\Geral\IndicacaoController::class)->parameters(['indicacoes' => 'indicaco'])->except('show');
         Route::post('indicacoes/{indicaco}/status', [\App\Http\Controllers\Geral\IndicacaoController::class, 'status'])->name('indicacoes.status');
 
+        // Emissões do Geral (254/131/181/235/263)
+        Route::get('emissoes/pessoas', [\App\Http\Controllers\Geral\GeralEmissaoController::class, 'pessoas'])->name('emissoes.pessoas');
+        Route::get('emissoes/profissionais', [\App\Http\Controllers\Geral\GeralEmissaoController::class, 'profissionais'])->name('emissoes.profissionais');
+        Route::get('emissoes/professores', [\App\Http\Controllers\Geral\GeralEmissaoController::class, 'professores'])->name('emissoes.professores');
+        Route::get('emissoes/atendimentos', [\App\Http\Controllers\Geral\GeralEmissaoController::class, 'atendimentos'])->name('emissoes.atendimentos');
+        Route::get('emissoes/atividades-crm', [\App\Http\Controllers\Geral\GeralEmissaoController::class, 'atividadesCrm'])->name('emissoes.atividades-crm');
+
         // Consulta Personalizada (221)
         Route::resource('consultas', \App\Http\Controllers\Geral\ConsultaPersonalizadaController::class)->parameters(['consultas' => 'consulta'])->except('show');
         Route::get('consultas/{consulta}/executar', [\App\Http\Controllers\Geral\ConsultaPersonalizadaController::class, 'executar'])->name('consultas.executar');
@@ -416,5 +444,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/configuracao', [PortaisController::class, 'salvarConfiguracao'])->name('configuracao.salvar');
         Route::resource('pastas', \App\Http\Controllers\Portais\PastaPortalController::class)->parameters(['pastas' => 'pasta'])->except('show');
         Route::resource('publicacoes', \App\Http\Controllers\Portais\PublicacaoPortalController::class)->parameters(['publicacoes' => 'publicaco'])->except('show');
+
+        // Configuração do Portal de Inscrição (92)
+        Route::get('config-inscricao', [\App\Http\Controllers\Portais\ConfigInscricaoController::class, 'index'])->name('config-inscricao.index');
+        Route::put('config-inscricao', [\App\Http\Controllers\Portais\ConfigInscricaoController::class, 'update'])->name('config-inscricao.update');
     });
 });

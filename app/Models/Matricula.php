@@ -11,6 +11,7 @@ class Matricula extends Model
         'data_matricula', 'situacao', 'forma_ingresso_id', 'observacoes',
         'valor_total', 'desconto', 'num_parcelas', 'valor_parcela',
         'dia_vencimento', 'primeiro_vencimento', 'forma_pagamento_id',
+        'consultor_id', 'comissao_percentual',
     ];
 
     protected $casts = [

@@ -187,6 +187,126 @@ class FinanceiroEmissaoController extends Controller
             ['Pagamento', 'Cliente', 'Valor pago', '%', 'Comissão'], $linhas, 'comissoes');
     }
 
+    /** 116 — Emissão de Títulos a Receber. */
+    public function titulosReceber(Request $request)
+    {
+        $query = TituloReceber::with(['pessoa', 'categoriaReceber']);
+        if ($request->filled('situacao')) {
+            $query->where('situacao', $request->situacao);
+        }
+        $linhas = $query->orderBy('data_vencimento')->get()->map(fn ($t) => [
+            '#' . $t->id,
+            $t->pessoa?->nome ?? '—',
+            $t->categoriaReceber?->nome ?? '—',
+            optional($t->data_vencimento)->format('d/m/Y') ?? '—',
+            'R$ ' . number_format((float) $t->valor_original, 2, ',', '.'),
+            ucfirst($t->situacao),
+        ]);
+
+        return $this->pdf('Emissão de Títulos a Receber', null,
+            ['Título', 'Pessoa', 'Categoria', 'Vencimento', 'Valor', 'Situação'], $linhas, 'titulos_a_receber');
+    }
+
+    /** 161 — Emissão de Lançamentos Financeiros. */
+    public function lancamentos()
+    {
+        $linhas = \App\Models\LancamentoFinanceiro::with(['contaBancaria', 'planoConta'])
+            ->orderByDesc('data_lancamento')->get()->map(fn ($l) => [
+                optional($l->data_lancamento)->format('d/m/Y') ?? '—',
+                ucfirst($l->tipo),
+                $l->descricao,
+                $l->contaBancaria?->nome ?? '—',
+                $l->planoConta?->nome ?? '—',
+                'R$ ' . number_format((float) $l->valor, 2, ',', '.'),
+            ]);
+
+        return $this->pdf('Emissão de Lançamentos Financeiros', null,
+            ['Data', 'Tipo', 'Descrição', 'Conta', 'Plano de Contas', 'Valor'], $linhas, 'lancamentos');
+    }
+
+    /** 162 — Emissão do Plano de Contas. */
+    public function planoContas()
+    {
+        $linhas = \App\Models\PlanoContas::orderBy('codigo')->get()->map(fn ($c) => [
+            $c->codigo,
+            str_repeat('    ', max(0, ($c->nivel ?? 1) - 1)) . $c->nome,
+            $c->tipo === 'sintetica' ? 'S' : 'A',
+            ucfirst($c->natureza),
+            $c->ativo ? 'Ativa' : 'Inativa',
+        ]);
+
+        return $this->pdf('Emissão do Plano de Contas', 'S = Sintética (agrupadora, sem movimento) · A = Analítica (operacional)',
+            ['Código', 'Conta', 'S/A', 'Natureza', 'Situação'], $linhas, 'plano_de_contas');
+    }
+
+    /** 99 — Emissão de Declaração de Pagamentos (títulos quitados por pessoa). */
+    public function declaracaoPagamentos(Request $request)
+    {
+        $query = TituloReceber::with(['pessoa', 'categoriaReceber'])->where('situacao', 'pago');
+        if ($request->filled('pessoa_id')) {
+            $query->where('pessoa_id', $request->pessoa_id);
+        }
+        $linhas = $query->orderBy('pessoa_id')->orderBy('data_pagamento')->get()->map(fn ($t) => [
+            $t->pessoa?->nome ?? '—',
+            $t->categoriaReceber?->nome ?? '—',
+            optional($t->data_pagamento)->format('d/m/Y') ?? '—',
+            'R$ ' . number_format((float) $t->valor_pago, 2, ',', '.'),
+            $t->pagador ?: ($t->pessoa?->nome ?? '—'),
+        ]);
+
+        return $this->pdf('Declaração de Pagamentos', null,
+            ['Pessoa', 'Categoria', 'Data do Pagamento', 'Valor Pago', 'Pagador'], $linhas, 'declaracao_pagamentos');
+    }
+
+    /** 258 — Emissão de Pagamentos (Contas a Pagar quitadas). */
+    public function pagamentosContasPagar()
+    {
+        $linhas = TituloPagar::with('pessoa')->where('situacao', 'pago')
+            ->orderByDesc('data_pagamento')->get()->map(fn ($t) => [
+                $t->numero_documento ?? ('#' . $t->id),
+                $t->pessoa?->nome ?? '—',
+                $t->descricao ?? '—',
+                optional($t->data_pagamento)->format('d/m/Y') ?? '—',
+                'R$ ' . number_format((float) ($t->valor_pago ?? $t->valor_original), 2, ',', '.'),
+            ]);
+
+        return $this->pdf('Emissão de Pagamentos — Contas a Pagar', null,
+            ['Documento', 'Fornecedor', 'Descrição', 'Pagamento', 'Valor'], $linhas, 'pagamentos_contas_pagar');
+    }
+
+    /** 275 — Emissão de Renegociação de Parcelas. */
+    public function renegociacoes()
+    {
+        $linhas = TituloReceber::with('pessoa')->where('situacao', 'renegociado')
+            ->orderByDesc('updated_at')->get()->map(fn ($t) => [
+                '#' . $t->id,
+                $t->pessoa?->nome ?? '—',
+                optional($t->data_vencimento)->format('d/m/Y') ?? '—',
+                'R$ ' . number_format((float) $t->valor_original, 2, ',', '.'),
+                optional($t->updated_at)->format('d/m/Y') ?? '—',
+            ]);
+
+        return $this->pdf('Emissão de Renegociação de Parcelas', 'Títulos com situação Renegociado',
+            ['Título', 'Pessoa', 'Vencimento Original', 'Valor', 'Renegociado em'], $linhas, 'renegociacoes');
+    }
+
+    /** 255 — Resumo de Recebimentos (Cartão). */
+    public function resumoCartao()
+    {
+        $linhas = \App\Models\RecebimentoCartao::with('contrato')
+            ->orderByDesc('id')->get()->map(fn ($r) => [
+                optional($r->data_venda)->format('d/m/Y') ?? '—',
+                $r->contrato?->operadora ?? '—',
+                ucfirst(str_replace('_', ' ', (string) $r->modalidade)),
+                'R$ ' . number_format((float) $r->valor_bruto, 2, ',', '.'),
+                'R$ ' . number_format((float) $r->valor_liquido, 2, ',', '.'),
+                $r->conciliado ? 'Conciliado' : 'Pendente',
+            ]);
+
+        return $this->pdf('Resumo de Recebimentos (Cartão)', null,
+            ['Data', 'Operadora', 'Modalidade', 'Bruto', 'Líquido', 'Conciliação'], $linhas, 'resumo_cartao');
+    }
+
     private function pdf(string $titulo, ?string $subtitulo, array $colunas, $linhas, string $arquivo)
     {
         $linhas = collect($linhas)->map(fn ($l) => array_values((array) $l))->all();
