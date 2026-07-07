@@ -149,6 +149,17 @@ Route::middleware('auth')->group(function () {
         Route::resource('matriculas', MatriculaController::class);
         Route::get('matriculas/{matricula}/historico', [\App\Http\Controllers\Academico\HistoricoEscolarController::class, 'editar'])->name('matriculas.historico');
         Route::put('matriculas/{matricula}/historico', [\App\Http\Controllers\Academico\HistoricoEscolarController::class, 'salvar'])->name('matriculas.historico.salvar');
+        // Ficha "Matrícula e Histórico" (23) fiel ao EDUQ
+        Route::get('matriculas/{matricula}/ficha', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'ficha'])->name('matriculas.ficha');
+        Route::put('matriculas/{matricula}/ficha', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'salvar'])->name('matriculas.ficha.salvar');
+        Route::post('matriculas/{matricula}/ficha/enturmar', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'enturmar'])->name('matriculas.ficha.enturmar');
+        Route::delete('matriculas/{matricula}/ficha/enturmacoes/{enturmacao}', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'desenturmar'])->name('matriculas.ficha.desenturmar');
+        Route::post('matriculas/{matricula}/ficha/transferir', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'transferirTurma'])->name('matriculas.ficha.transferir');
+        Route::post('matriculas/{matricula}/ficha/aprovar-documentos', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'aprovarDocumentos'])->name('matriculas.ficha.aprovar-documentos');
+        Route::post('matriculas/{matricula}/ficha/enade', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'enadeAdicionar'])->name('matriculas.ficha.enade');
+        Route::delete('matriculas/{matricula}/ficha/enade/{enade}', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'enadeRemover'])->name('matriculas.ficha.enade.remover');
+        Route::post('matriculas/{matricula}/ficha/assinatura', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'assinaturaCriar'])->name('matriculas.ficha.assinatura');
+        Route::delete('matriculas/{matricula}/ficha/assinatura/{assinatura}', [\App\Http\Controllers\Academico\FichaMatriculaController::class, 'assinaturaRemover'])->name('matriculas.ficha.assinatura.remover');
         Route::resource('periodos-letivos', PeriodoLetivoController::class);
         Route::resource('turnos', TurnoController::class);
         Route::resource('salas', SalaController::class);

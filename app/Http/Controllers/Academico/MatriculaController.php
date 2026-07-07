@@ -15,7 +15,7 @@ class MatriculaController extends Controller
 {
     public function index()
     {
-        $matriculas = Matricula::with(['aluno.pessoa', 'turma'])->orderByDesc('id')->paginate(15);
+        $matriculas = Matricula::with(['aluno.pessoa', 'turma.curso', 'turmaMontada', 'consultor', 'assinaturasEletronicas'])->orderByDesc('id')->paginate(15);
 
         return view('academico.matriculas.index', compact('matriculas'));
     }
