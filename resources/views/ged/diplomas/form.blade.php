@@ -4,8 +4,8 @@
 @php $tipos = \App\Models\DiplomaDigital::situacoes(); @endphp
 
 @section('content')
-<div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-lg shadow-sm border">
+<div class="w-full">
+    <div class="bg-white">
         <div class="flex items-center justify-between px-6 py-4 border-b">
             <h2 class="text-base font-semibold text-gray-800">{{ isset($diploma) ? 'Editar Diploma Digital' : 'Novo Diploma Digital' }}</h2>
             <a href="{{ route('ged.diplomas.index') }}" class="text-sm text-gray-500 hover:text-gray-700"><i class="fa-solid fa-arrow-left mr-1"></i>Voltar</a>
@@ -91,7 +91,7 @@
             </div>
 
             <div class="flex gap-3 pt-2">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">{{ isset($diploma) ? 'Salvar Alteracoes' : 'Cadastrar' }}</button>
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30">{{ isset($diploma) ? 'Salvar Alteracoes' : 'Cadastrar' }}</button>
                 <a href="{{ route('ged.diplomas.index') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
             </div>
         </form>

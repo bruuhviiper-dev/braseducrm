@@ -6,8 +6,8 @@
 @endphp
 
 @section('content')
-<div class="max-w-3xl mx-auto" x-data="questaoForm(@js($questao->tipo ?? 'multipla_escolha'), @js($altIniciais))">
-    <div class="bg-white rounded-xl border">
+<div class="w-full" x-data="questaoForm(@js($questao->tipo ?? 'multipla_escolha'), @js($altIniciais))">
+    <div class="bg-white">
         <div class="px-6 py-4 border-b flex items-center gap-3">
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">238</span>
             <h1 class="text-lg font-semibold text-gray-800">{{ $questao ? 'Editar' : 'Nova' }} Questão Avulsa</h1>

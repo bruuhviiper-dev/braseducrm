@@ -2,7 +2,7 @@
 @section('title', isset($titulo) ? 'Editar Titulo a Receber' : 'Novo Titulo a Receber')
 
 @section('content')
-<div class="bg-white rounded-xl border">
+<div class="bg-white">
     <div class="p-5 border-b flex items-center justify-between">
         <div class="flex items-center gap-3">
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">64</span>

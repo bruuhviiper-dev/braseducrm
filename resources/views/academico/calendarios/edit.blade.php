@@ -9,7 +9,7 @@
 
 @section('content')
 <div x-data="{ mes: 1 }">
-    <form action="{{ route('academico.calendarios.update', $calendario) }}" method="POST" class="bg-white rounded-xl border">
+    <form action="{{ route('academico.calendarios.update', $calendario) }}" method="POST" class="bg-white">
         @csrf
         @method('PUT')
 

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('mainbg', '!bg-gray-100')
 @section('title', 'Dashboard')
 
 @section('content')

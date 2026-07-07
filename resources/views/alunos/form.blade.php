@@ -6,8 +6,8 @@
     $respIni = ($aluno ?? null) ? $aluno->responsaveis->map(fn($r)=>['nome'=>$r->nome,'parentesco'=>$r->parentesco,'cpf'=>$r->cpf,'telefone'=>$r->telefone,'email'=>$r->email])->values() : [];
     $formIni = ($aluno ?? null) ? $aluno->formacoes->map(fn($f)=>['nivel'=>$f->nivel,'instituicao'=>$f->instituicao,'curso'=>$f->curso,'ano_conclusao'=>$f->ano_conclusao])->values() : [];
 @endphp
-<div class="max-w-5xl mx-auto" x-data="alunoForm(@js($respIni), @js($formIni))">
-    <div class="bg-white rounded-xl border">
+<div class="w-full" x-data="alunoForm(@js($respIni), @js($formIni))">
+    <div class="bg-white">
         <div class="px-6 py-4 border-b flex items-center gap-3">
             <a href="{{ route('alunos.index') }}" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-arrow-left"></i></a>
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">17</span>
@@ -174,9 +174,9 @@
                 @endif
             </div>
 
-            <div class="flex justify-end gap-3 pt-4 mt-4 border-t">
+            <div class="flex justify-end items-center gap-3 pt-4 mt-4 sticky bottom-4 z-10">
                 <a href="{{ route('alunos.index') }}" class="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
-                <button type="submit" class="px-6 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700"><i class="fa-solid fa-check mr-1"></i> Salvar</button>
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30"><i class="fa-solid fa-check mr-1"></i> Salvar</button>
             </div>
         </form>
     </div>

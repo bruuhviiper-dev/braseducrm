@@ -2,7 +2,7 @@
 @section('title', isset($ticket) ? 'Editar Ticket' : 'Novo Ticket')
 
 @section('content')
-<div class="max-w-3xl mx-auto">
+<div class="w-full">
     <div class="flex items-center gap-3 mb-6">
         <a href="{{ route('tickets.index') }}" class="text-gray-400 hover:text-gray-600">
             <i class="fa-solid fa-arrow-left"></i>

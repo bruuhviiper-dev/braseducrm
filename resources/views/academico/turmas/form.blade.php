@@ -2,14 +2,14 @@
 @section('title', 'Cadastro de Turma')
 
 @section('content')
-<div class="max-w-3xl mx-auto"
+<div class="w-full"
      x-data="{
         aba: 'dados',
         finalizada: {{ old('finalizada', $turma->finalizada ?? false) ? 'true' : 'false' }},
         comissionavel: {{ old('comissionavel', $turma->comissionavel ?? false) ? 'true' : 'false' }},
         naoEnviar: {{ old('nao_enviar_contrato', $turma->nao_enviar_contrato ?? false) ? 'true' : 'false' }}
      }">
-    <div class="bg-white rounded-xl border">
+    <div class="bg-white">
         <div class="px-5 py-3 border-b flex items-center gap-3">
             <a href="{{ route('academico.turmas.index') }}" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-arrow-left"></i></a>
             <span class="text-sm font-semibold text-gray-400">40</span>
@@ -141,8 +141,8 @@
                 </label>
             </div>
 
-            <div class="flex justify-end pt-3 border-t">
-                <button type="submit" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
+            <div class="flex justify-end pt-3 sticky bottom-4 z-10">
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
             </div>
         </form>
     </div>

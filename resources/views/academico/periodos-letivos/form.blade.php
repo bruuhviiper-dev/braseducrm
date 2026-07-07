@@ -2,7 +2,7 @@
 @section('title', isset($periodo) ? 'Editar Periodo Letivo' : 'Novo Periodo Letivo')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="w-full">
     <div class="bg-white rounded-xl border p-6">
         <h1 class="text-lg font-semibold text-gray-800 mb-6">{{ isset($periodo) ? 'Editar Periodo Letivo' : 'Novo Periodo Letivo' }}</h1>
 

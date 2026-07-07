@@ -2,7 +2,7 @@
 @section('title', isset($sala) ? 'Editar Sala' : 'Nova Sala')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="w-full">
     <div class="bg-white rounded-xl border p-6">
         <h1 class="text-lg font-semibold text-gray-800 mb-6">{{ isset($sala) ? 'Editar Sala' : 'Nova Sala' }}</h1>
 

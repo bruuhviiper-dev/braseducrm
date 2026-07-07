@@ -5,8 +5,8 @@
 @php
     $docIni = ($matricula ?? null) ? $matricula->documentos->map(fn($d)=>['documento'=>$d->documento,'entregue'=>(bool)$d->entregue,'observacao'=>$d->observacao])->values() : [];
 @endphp
-<div class="max-w-5xl mx-auto" x-data="matriculaForm(@js($docIni))">
-    <div class="bg-white rounded-xl border">
+<div class="w-full" x-data="matriculaForm(@js($docIni))">
+    <div class="bg-white">
         <div class="px-6 py-4 border-b flex items-center gap-3">
             <a href="{{ route('academico.matriculas.index') }}" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-arrow-left"></i></a>
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">23</span>
@@ -137,9 +137,9 @@
                 <p x-show="docs.length===0" class="text-xs text-gray-400 py-2">Nenhum documento na lista.</p>
             </div>
 
-            <div class="flex justify-end gap-3 pt-4 mt-4 border-t">
+            <div class="flex justify-end items-center gap-3 pt-4 mt-4 sticky bottom-4 z-10">
                 <a href="{{ route('academico.matriculas.index') }}" class="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
-                <button type="submit" class="px-6 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700"><i class="fa-solid fa-check mr-1"></i> Salvar</button>
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30"><i class="fa-solid fa-check mr-1"></i> Salvar</button>
             </div>
         </form>
     </div>

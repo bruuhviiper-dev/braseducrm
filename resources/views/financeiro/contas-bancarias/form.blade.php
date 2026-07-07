@@ -2,7 +2,7 @@
 @section('title', 'Cadastro de Contas')
 
 @section('content')
-<div class="max-w-3xl mx-auto"
+<div class="w-full"
      x-data="{
         aba: 'contas',
         tesouraria: {{ old('tesouraria', $conta->tesouraria ?? false) ? 'true' : 'false' }},
@@ -12,7 +12,7 @@
         ocultarSaldo: {{ old('ocultar_saldo_painel', $conta->ocultar_saldo_painel ?? false) ? 'true' : 'false' }},
         descRelatorios: {{ old('desconsiderar_relatorios', $conta->desconsiderar_relatorios ?? false) ? 'true' : 'false' }}
      }">
-    <div class="bg-white rounded-xl border">
+    <div class="bg-white">
         <div class="px-5 py-3 border-b flex items-center gap-2">
             <span class="text-sm font-semibold text-gray-400">63</span>
             <div>
@@ -140,8 +140,8 @@
                 <p class="text-sm text-gray-500">Nenhum gateway de pagamento configurado para esta conta. As integrações são definidas em <strong>167 - Integrações</strong>.</p>
             </div>
 
-            <div class="flex justify-end pt-3 border-t">
-                <button type="submit" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
+            <div class="flex justify-end pt-3 sticky bottom-4 z-10">
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
             </div>
         </form>
     </div>

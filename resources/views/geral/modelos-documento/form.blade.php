@@ -2,8 +2,8 @@
 @section('title', $modelo ? 'Editar Modelo' : 'Novo Modelo de Documento')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="bg-white rounded-xl border">
+<div class="w-full">
+    <div class="bg-white">
         <div class="px-6 py-4 border-b flex items-center gap-3">
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">9</span>
             <h1 class="text-lg font-semibold text-gray-800">{{ $modelo ? 'Editar Modelo' : 'Novo Modelo de Documento' }}</h1>

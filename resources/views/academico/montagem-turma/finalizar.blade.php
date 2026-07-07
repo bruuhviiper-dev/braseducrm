@@ -2,8 +2,8 @@
 @section('title', 'Finalizar Turma')
 
 @section('content')
-<div class="max-w-5xl mx-auto">
-    <div class="bg-white rounded-xl border">
+<div class="w-full">
+    <div class="bg-white">
         <div class="px-6 py-4 border-b flex items-center gap-3">
             <a href="{{ route('academico.montagem-turma.edit', $turmaMontada) }}" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-arrow-left"></i></a>
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">41</span>
@@ -85,9 +85,9 @@
                 <p class="text-xs text-gray-400 mt-1">Alunos inadimplentes entram na nova turma com matrícula "Não Confirmada" até regularizarem o financeiro.</p>
             </div>
 
-            <div class="flex justify-end gap-3 pt-4 border-t">
+            <div class="flex justify-end items-center gap-3 pt-4 sticky bottom-4 z-10">
                 <a href="{{ route('academico.montagem-turma.edit', $turmaMontada) }}" class="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
-                <button type="submit" onclick="return confirm('Finalizar a turma? Esta ação processa o encerramento do período letivo em lote.')" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-flag-checkered mr-1"></i> Finalizar Turma</button>
+                <button type="submit" onclick="return confirm('Finalizar a turma? Esta ação processa o encerramento do período letivo em lote.')" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30"><i class="fa-solid fa-flag-checkered mr-1"></i> Finalizar Turma</button>
             </div>
         </form>
     </div>

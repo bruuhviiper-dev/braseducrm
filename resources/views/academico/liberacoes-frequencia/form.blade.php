@@ -2,8 +2,8 @@
 @section('title', $registro ? 'Editar Liberação' : 'Nova Liberação de Frequência')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-xl border">
+<div class="w-full">
+    <div class="bg-white">
         <div class="px-6 py-4 border-b flex items-center gap-3">
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">262</span>
             <h1 class="text-lg font-semibold text-gray-800">{{ $registro ? 'Editar' : 'Nova' }} Liberação de Frequência</h1>

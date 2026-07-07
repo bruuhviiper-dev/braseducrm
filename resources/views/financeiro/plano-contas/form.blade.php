@@ -2,9 +2,9 @@
 @section('title', 'Cadastro do Plano de Contas')
 
 @section('content')
-<div class="max-w-3xl mx-auto"
+<div class="w-full"
      x-data="{ tesouraria: {{ old('tesouraria', $conta->tesouraria ?? false) ? 'true' : 'false' }} }">
-    <div class="bg-white rounded-xl border">
+    <div class="bg-white">
         <div class="px-5 py-3 border-b flex items-center gap-2">
             <span class="text-sm font-semibold text-gray-400">50</span>
             <h1 class="text-lg font-bold text-gray-800">Cadastro do Plano de Contas</h1>
@@ -80,8 +80,8 @@
 
             <input type="hidden" name="ativo" value="1">
 
-            <div class="flex justify-end pt-3 border-t">
-                <button type="submit" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold">Salvar</button>
+            <div class="flex justify-end pt-3 sticky bottom-4 z-10">
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30">Salvar</button>
             </div>
         </form>
     </div>

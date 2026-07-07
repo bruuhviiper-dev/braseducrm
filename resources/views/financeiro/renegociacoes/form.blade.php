@@ -2,9 +2,9 @@
 @section('title', 'Nova Renegociação')
 
 @section('content')
-<div class="max-w-3xl mx-auto space-y-6">
+<div class="w-full space-y-6">
     {{-- Passo 1: selecionar pessoa --}}
-    <div class="bg-white rounded-lg shadow-sm border">
+    <div class="bg-white">
         <div class="flex items-center justify-between px-6 py-4 border-b">
             <h2 class="text-base font-semibold text-gray-800">Nova Renegociação</h2>
             <a href="{{ route('financeiro.renegociacoes.index') }}" class="text-sm text-gray-500 hover:text-gray-700"><i class="fa-solid fa-arrow-left mr-1"></i>Voltar</a>
@@ -28,7 +28,7 @@
         @if($titulos->isEmpty())
         <div class="bg-white rounded-xl border p-8 text-center text-gray-400">Nenhum título em aberto para esta pessoa.</div>
         @else
-        <form method="POST" action="{{ route('financeiro.renegociacoes.store') }}" class="bg-white rounded-lg shadow-sm border"
+        <form method="POST" action="{{ route('financeiro.renegociacoes.store') }}" class="bg-white"
               x-data="{ total: 0, parcelas: 1, recalc() { this.total = 0; document.querySelectorAll('.tit:checked').forEach(c => this.total += parseFloat(c.dataset.valor)); } }"
               x-init="recalc()">
             @csrf
@@ -84,7 +84,7 @@
             </div>
 
             <div class="px-6 pb-6 flex gap-3">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700" onclick="return confirm('Confirmar renegociação? Os títulos selecionados serão baixados e novas parcelas geradas.')">Renegociar</button>
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30" onclick="return confirm('Confirmar renegociação? Os títulos selecionados serão baixados e novas parcelas geradas.')">Renegociar</button>
                 <a href="{{ route('financeiro.renegociacoes.index') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
             </div>
         </form>

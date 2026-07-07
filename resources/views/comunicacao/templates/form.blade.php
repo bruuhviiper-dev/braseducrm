@@ -2,7 +2,7 @@
 @section('title', isset($template) ? 'Editar Template' : 'Novo Template')
 
 @section('content')
-<div class="max-w-3xl mx-auto">
+<div class="w-full">
     <div class="bg-white rounded-xl border p-6">
         <h1 class="text-lg font-semibold text-gray-800 mb-6">{{ isset($template) ? 'Editar Template' : 'Novo Template de Mensagem' }}</h1>
 
@@ -53,7 +53,7 @@
 
             <div class="flex justify-end gap-3">
                 <a href="{{ route('comunicacao.templates.index') }}" class="px-4 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-50">Cancelar</a>
-                <button type="submit" class="px-6 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700">Salvar</button>
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30">Salvar</button>
             </div>
         </form>
     </div>

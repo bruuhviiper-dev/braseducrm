@@ -2,7 +2,7 @@
 @section('title', 'Manutenção de Atendimentos')
 
 @section('content')
-<div class="max-w-3xl mx-auto"
+<div class="w-full"
      x-data="{
         portal: {{ old('portal_aluno', $atendimento->portal_aluno ?? false) ? 'true' : 'false' }},
         finalizado: {{ old('situacao', $atendimento->situacao ?? 'aberto') === 'concluido' ? 'true' : 'false' }},
@@ -10,7 +10,7 @@
         deptos: {{ old('departamentos_responsavel', $atendimento->departamentos_responsavel ?? false) ? 'true' : 'false' }},
         objetivo: {{ old('objetivo_alcancado', $atendimento->objetivo_alcancado ?? true) ? 'true' : 'false' }}
      }">
-    <div class="bg-white rounded-xl border">
+    <div class="bg-white">
         <div class="px-5 py-3 border-b flex items-center gap-3">
             <a href="{{ route('atendimentos.index') }}" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-arrow-left"></i></a>
             <span class="text-sm font-semibold text-gray-400">55</span>
@@ -141,8 +141,8 @@
                 </div>
             </div>
 
-            <div class="flex justify-end pt-3 border-t">
-                <button type="submit" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
+            <div class="flex justify-end pt-3 sticky bottom-4 z-10">
+                <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
             </div>
         </form>
     </div>
