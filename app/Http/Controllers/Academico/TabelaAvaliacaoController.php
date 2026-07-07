@@ -72,14 +72,21 @@ class TabelaAvaliacaoController extends Controller
     {
         $existingIds = [];
         foreach ($itens as $i => $item) {
+            $attrs = [
+                'nome' => $item['nome'],
+                'peso' => $item['peso'],
+                'ordem' => $i + 1,
+                // EDUQ: o item marcado como REC é a nota de recuperação (fica fora da Média Parcial)
+                'recuperacao' => !empty($item['recuperacao']),
+            ];
             if (!empty($item['id'])) {
                 $registro = TabelaAvaliacaoItem::where('id', $item['id'])->where('tabela_avaliacao_id', $tabela->id)->first();
                 if ($registro) {
-                    $registro->update(['nome' => $item['nome'], 'peso' => $item['peso'], 'ordem' => $i + 1]);
+                    $registro->update($attrs);
                     $existingIds[] = $registro->id;
                 }
             } else {
-                $novo = $tabela->itens()->create(['nome' => $item['nome'], 'peso' => $item['peso'], 'ordem' => $i + 1]);
+                $novo = $tabela->itens()->create($attrs);
                 $existingIds[] = $novo->id;
             }
         }
@@ -100,6 +107,7 @@ class TabelaAvaliacaoController extends Controller
             'itens.*.id' => 'nullable|integer',
             'itens.*.nome' => 'required|string|max:255',
             'itens.*.peso' => 'required|numeric|min:0',
+            'itens.*.recuperacao' => 'nullable|boolean',
         ]);
     }
 }

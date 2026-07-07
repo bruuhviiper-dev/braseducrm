@@ -40,6 +40,31 @@
                 <p class="text-xs text-gray-400 mt-1">Campo informativo. O cálculo usa os pesos definidos na Tabela de Avaliação.</p>
             </div>
 
+            {{-- Modelos de recuperação dos docs do EDUQ (Graduação / Pós / Livres) --}}
+            <div class="border rounded-lg p-4 bg-gray-50 space-y-3" x-data="{ modelo: '{{ old('modelo', $config->modelo ?? 'direto') }}' }">
+                <label class="block text-sm font-medium text-gray-700">Modelo de Recuperação (Média Final)</label>
+                <select name="modelo" x-model="modelo" class="w-full border rounded-lg px-3 py-2 text-sm">
+                    <option value="direto">Sem recuperação — Média Final = Média Parcial (Cursos Livres)</option>
+                    <option value="recuperacao_media">Recuperação com média — MF = (M1 + REC) / 2 (Graduação)</option>
+                    <option value="recuperacao_substitui">Recuperação substitui — MF = REC (Pós-Graduação)</option>
+                </select>
+                <div x-show="modelo !== 'direto'" x-cloak class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">REC abre de (M1 ≥)</label>
+                        <input type="number" step="0.01" min="0" name="rec_min" value="{{ old('rec_min', $config->rec_min ?? '0') }}" class="w-full border rounded-lg px-2 py-1.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">até (M1 ≤)</label>
+                        <input type="number" step="0.01" min="0" name="rec_max" value="{{ old('rec_max', $config->rec_max ?? '5.99') }}" class="w-full border rounded-lg px-2 py-1.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Aprovação pós-REC</label>
+                        <input type="number" step="0.01" min="0" name="media_aprovacao_final" value="{{ old('media_aprovacao_final', $config->media_aprovacao_final ?? '5') }}" class="w-full border rounded-lg px-2 py-1.5 text-sm">
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400" x-show="modelo !== 'direto'" x-cloak>A recuperação só é liberada automaticamente se a Média Parcial (M1) ficar na faixa acima. Se a REC for nula (aluno passou direto), a Média Final repete a M1. Marque o item "REC" na Tabela de Avaliação.</p>
+            </div>
+
             <div class="flex gap-3 pt-2">
                 <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30">
                     {{ isset($config) ? 'Salvar Alteracoes' : 'Cadastrar' }}

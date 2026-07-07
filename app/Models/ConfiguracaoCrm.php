@@ -9,7 +9,7 @@ class ConfiguracaoCrm extends Model
     protected $table = 'configuracoes_crm';
 
     protected $fillable = [
-        'roleta_ativa', 'dias_perda_automatica',
+        'roleta_ativa', 'dias_perda_automatica', 'minutos_estagnacao', 'considerar_dias_uteis',
         'rd_station_token', 'rd_station_url', 'configuracoes',
     ];
 

@@ -36,7 +36,46 @@ class OportunidadeController extends Controller
             'data_fechamento' => now(),
         ]);
 
-        return back()->with('success', 'Oportunidade marcada como Ganha (efetivação de matrícula).');
+        $msgAcoes = $this->executarAcoesAutomaticas($oportunidade);
+
+        return back()->with('success', 'Oportunidade marcada como Ganha (efetivação de matrícula).' . $msgAcoes);
+    }
+
+    /**
+     * Ações automáticas do EDUQ (256): no gatilho "Oportunidade Ganha", duplica o card
+     * para o funil de Pós-Vendas trocando o responsável (ex.: secretaria acompanha o
+     * acolhimento do aluno). O card duplicado não contabiliza valor (protege o DRE comercial).
+     */
+    private function executarAcoesAutomaticas(Oportunidade $oportunidade): string
+    {
+        $acoes = \App\Models\AcaoAutomaticaCrm::where('ativo', true)
+            ->where('gatilho', 'oportunidade_ganha')
+            ->where('acao', 'duplicar_oportunidade')
+            ->whereNotNull('funil_destino_id')
+            ->get();
+
+        $executadas = 0;
+        foreach ($acoes as $acao) {
+            $primeiraEtapa = EtapaFunil::where('funil_id', $acao->funil_destino_id)->orderBy('ordem')->first();
+            if (!$primeiraEtapa) {
+                continue; // funil de destino sem etapas configuradas
+            }
+            Oportunidade::create([
+                'interessado_id' => $oportunidade->interessado_id,
+                'origem_id' => $oportunidade->origem_id,
+                'funil_id' => $acao->funil_destino_id,
+                'etapa_funil_id' => $primeiraEtapa?->id,
+                'consultor_id' => $acao->responsavel_destino_id ?: $oportunidade->consultor_id,
+                'curso_id' => $oportunidade->curso_id,
+                'titulo' => 'Pós-venda: ' . ($oportunidade->titulo ?: ($oportunidade->interessado?->nome ?? 'aluno')),
+                'valor' => null, // não soma na faturação do funil comercial
+                'situacao' => 'aberta',
+                'observacoes' => 'Gerada automaticamente pela ação "' . $acao->nome . '" ao ganhar a oportunidade #' . $oportunidade->id . '.',
+            ]);
+            $executadas++;
+        }
+
+        return $executadas ? " Card duplicado para o funil de pós-vendas ({$executadas} ação automática executada)." : '';
     }
 
     /** EDUQ: a justificativa é obrigatória ao dar o card como perdido. */
@@ -65,12 +104,22 @@ class OportunidadeController extends Controller
     public function store(Request $request)
     {
         $data = $this->validar($request);
+
+        // Roleta do CRM (docs do EDUQ): lead sem responsável é distribuído automaticamente
+        // pela proporção configurada (A recebe 3, B recebe 2...), priorizando o topo da lista
+        $viaRoleta = false;
+        if (empty($data['oportunidade']['consultor_id']) && \App\Models\ConfiguracaoCrm::current()->roleta_ativa) {
+            $data['oportunidade']['consultor_id'] = ConfiguracaoCrmController::proximoOperadorRoleta();
+            $viaRoleta = (bool) $data['oportunidade']['consultor_id'];
+        }
+
         DB::transaction(function () use ($data) {
             $op = Oportunidade::create($data['oportunidade']);
             $op->tags()->sync($data['tags']);
         });
 
-        return redirect()->route('crm.oportunidades.index')->with('success', 'Oportunidade criada com sucesso.');
+        return redirect()->route('crm.oportunidades.index')
+            ->with('success', 'Oportunidade criada com sucesso.' . ($viaRoleta ? ' Lead distribuído pela roleta do CRM.' : ''));
     }
 
     public function edit(Oportunidade $oportunidade)

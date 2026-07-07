@@ -7,6 +7,7 @@ $badges = [
     'reprovado' => ['bg-red-100 text-red-700', 'Reprovado'],
     'reprovado_falta' => ['bg-orange-100 text-orange-700', 'Reprovado por falta'],
     'cursando' => ['bg-blue-100 text-blue-700', 'Cursando'],
+    'em_recuperacao' => ['bg-yellow-100 text-yellow-700', 'Em recuperação'],
 ];
 @endphp
 
@@ -59,11 +60,22 @@ $badges = [
         <div class="bg-white rounded-xl border overflow-hidden">
             <div class="px-5 py-3 border-b">
                 <h2 class="text-sm font-semibold text-gray-700">Resultado <span class="font-normal text-gray-400">(média ≥ {{ number_format($resultado['media_aprovacao'],1,',','.') }} e frequência ≥ {{ number_format($resultado['frequencia_minima'],0) }}% — config. da matriz)</span></h2>
+                @if(($resultado['modelo'] ?? 'direto') !== 'direto')
+                <p class="text-xs text-gray-400 mt-0.5">
+                    Recuperação: liberada com M1 entre {{ number_format($resultado['rec_min'],2,',','.') }} e {{ number_format($resultado['rec_max'],2,',','.') }} —
+                    {{ $resultado['modelo'] === 'recuperacao_substitui' ? 'Média Final = REC' : 'Média Final = (M1 + REC) / 2' }},
+                    aprovação pós-REC ≥ {{ number_format($resultado['media_aprovacao_final'],2,',','.') }}.
+                </p>
+                @endif
             </div>
             <table class="w-full text-sm text-left">
                 <thead class="bg-gray-50 border-b">
                     <tr>
                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Aluno</th>
+                        @if(($resultado['modelo'] ?? 'direto') !== 'direto')
+                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase text-center">M1</th>
+                        <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase text-center">REC</th>
+                        @endif
                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase text-center">Média Final</th>
                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase text-center">Frequência</th>
                         <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase text-center">Situação</th>
@@ -73,7 +85,19 @@ $badges = [
                     @foreach($resultado['linhas'] as $linha)
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-2 font-medium text-gray-800">{{ $linha['matricula']->aluno?->pessoa?->nome ?? 'Matrícula '.$linha['matricula']->id }}</td>
-                        <td class="px-4 py-2 text-center font-semibold {{ $linha['media'] !== null && $linha['media'] >= $resultado['media_aprovacao'] ? 'text-green-600' : ($linha['media'] !== null ? 'text-red-600' : 'text-gray-400') }}">
+                        @if(($resultado['modelo'] ?? 'direto') !== 'direto')
+                        <td class="px-4 py-2 text-center text-gray-600">{{ $linha['m1'] !== null ? number_format($linha['m1'], 2, ',', '.') : '—' }}</td>
+                        <td class="px-4 py-2 text-center text-gray-600">
+                            @if($linha['rec'] !== null)
+                                {{ number_format($linha['rec'], 2, ',', '.') }}
+                            @elseif($linha['rec_liberada'])
+                                <span class="text-xs text-yellow-600 font-medium">liberada</span>
+                            @else
+                                —
+                            @endif
+                        </td>
+                        @endif
+                        <td class="px-4 py-2 text-center font-semibold {{ $linha['media'] !== null && $linha['media'] >= ($linha['usou_rec'] ? $resultado['media_aprovacao_final'] : $resultado['media_aprovacao']) ? 'text-green-600' : ($linha['media'] !== null ? 'text-red-600' : 'text-gray-400') }}">
                             {{ $linha['media'] !== null ? number_format($linha['media'], 2, ',', '.') : '—' }}
                         </td>
                         <td class="px-4 py-2 text-center text-gray-600">

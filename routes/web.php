@@ -146,6 +146,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('matrizes', MatrizCurricularController::class);
         Route::resource('turmas', TurmaController::class);
         Route::resource('matriculas', MatriculaController::class);
+        Route::get('matriculas/{matricula}/historico', [\App\Http\Controllers\Academico\HistoricoEscolarController::class, 'editar'])->name('matriculas.historico');
+        Route::put('matriculas/{matricula}/historico', [\App\Http\Controllers\Academico\HistoricoEscolarController::class, 'salvar'])->name('matriculas.historico.salvar');
         Route::resource('periodos-letivos', PeriodoLetivoController::class);
         Route::resource('turnos', TurnoController::class);
         Route::resource('salas', SalaController::class);
@@ -225,6 +227,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('metas', MetaCrmController::class)->parameters(['metas' => 'meta'])->except('show');
         Route::get('configuracoes', [ConfiguracaoCrmController::class, 'index'])->name('configuracoes.index');
         Route::put('configuracoes', [ConfiguracaoCrmController::class, 'update'])->name('configuracoes.update');
+        Route::post('configuracoes/redistribuir', [ConfiguracaoCrmController::class, 'redistribuir'])->name('configuracoes.redistribuir');
 
         // Propostas (201) e Exportação (159)
         Route::get('propostas', [\App\Http\Controllers\Crm\PropostaCrmController::class, 'index'])->name('propostas.index');
@@ -251,6 +254,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('descontos-condicionais', \App\Http\Controllers\Financeiro\DescontoCondicionalController::class)->parameters(['descontos-condicionais' => 'desconto'])->except('show');
         Route::get('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'index'])->name('configuracao.index');
         Route::put('configuracao', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'update']);
+        Route::post('configuracao/processar-reguas', [\App\Http\Controllers\Financeiro\ConfiguracaoFinanceiroController::class, 'processarReguas'])->name('configuracao.processar-reguas');
         Route::get('nfse', [\App\Http\Controllers\Financeiro\ConfiguracaoNfseController::class, 'index'])->name('nfse.index');
         Route::put('nfse', [\App\Http\Controllers\Financeiro\ConfiguracaoNfseController::class, 'update'])->name('nfse.update');
 

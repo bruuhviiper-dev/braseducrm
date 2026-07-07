@@ -6,8 +6,8 @@
      x-data="{
         visOp: {{ old('visibilidade_operador', $tabela->visibilidade_operador ?? false) ? 'true' : 'false' }},
         formula: {{ json_encode(old('formula', $tabela->formula ?? '')) }},
-        itens: {{ isset($tabela) ? $tabela->itens->map(fn($i) => ['id' => $i->id, 'nome' => $i->nome, 'peso' => (float)$i->peso])->values()->toJson() : '[]' }},
-        add() { this.itens.push({ id: '', nome: '', peso: 1 }); },
+        itens: {{ isset($tabela) ? $tabela->itens->map(fn($i) => ['id' => $i->id, 'nome' => $i->nome, 'peso' => (float)$i->peso, 'recuperacao' => (bool)$i->recuperacao])->values()->toJson() : '[]' }},
+        add() { this.itens.push({ id: '', nome: '', peso: 1, recuperacao: false }); },
         remove(idx) { this.itens.splice(idx, 1); }
      }">
     <div class="bg-white">
@@ -70,6 +70,11 @@
                             <input type="hidden" :name="`itens[${idx}][id]`" :value="item.id">
                             <input type="text" :name="`itens[${idx}][nome]`" x-model="item.nome" placeholder="Descrição da avaliação" class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
                             <input type="number" step="0.01" min="0" :name="`itens[${idx}][peso]`" x-model="item.peso" placeholder="Peso" class="w-24 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
+                            <input type="hidden" :name="`itens[${idx}][recuperacao]`" :value="item.recuperacao ? 1 : 0">
+                            <label class="flex items-center gap-1.5 cursor-pointer shrink-0" title="Marque para este item ser a nota de RECUPERAÇÃO (fica fora da Média Parcial e entra na Média Final conforme a Configuração do Boletim)">
+                                <input type="checkbox" x-model="item.recuperacao" class="rounded border-gray-300 text-cyan-500 focus:ring-cyan-400">
+                                <span class="text-xs font-semibold text-gray-500">REC</span>
+                            </label>
                             <button type="button" @click="remove(idx)" class="p-2 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </template>

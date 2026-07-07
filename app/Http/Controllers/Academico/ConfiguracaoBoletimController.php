@@ -45,11 +45,28 @@ class ConfiguracaoBoletimController extends Controller
 
     private function validateData(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'nome' => 'required|string|max:255',
             'formula' => 'nullable|string',
             'media_aprovacao' => 'required|numeric|min:0',
             'frequencia_minima' => 'required|numeric|min:0|max:100',
+            // Modelos de recuperação dos docs do EDUQ (Graduação / Pós / Cursos Livres)
+            'modelo' => 'required|in:direto,recuperacao_media,recuperacao_substitui',
+            'rec_min' => 'nullable|numeric|min:0',
+            'rec_max' => 'nullable|numeric|min:0',
+            'media_aprovacao_final' => 'nullable|numeric|min:0',
         ]);
+
+        if ($data['modelo'] === 'direto') {
+            $data['rec_min'] = 0;
+            $data['rec_max'] = 5.99;
+            $data['media_aprovacao_final'] = null;
+        } else {
+            $data['rec_min'] = $data['rec_min'] ?? 0;
+            $data['rec_max'] = $data['rec_max'] ?? 5.99;
+            $data['media_aprovacao_final'] = $data['media_aprovacao_final'] ?? 5;
+        }
+
+        return $data;
     }
 }

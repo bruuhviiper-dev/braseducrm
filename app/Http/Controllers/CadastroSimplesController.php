@@ -172,6 +172,8 @@ class CadastroSimplesController extends Controller
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'gatilho', 'label' => 'Quando (gatilho)', 'type' => 'select', 'required' => true, 'options' => \App\Models\AcaoAutomaticaCrm::GATILHOS],
                 ['name' => 'acao', 'label' => 'Fazer (ação)', 'type' => 'select', 'required' => true, 'options' => \App\Models\AcaoAutomaticaCrm::ACOES],
+                ['name' => 'funil_destino_id', 'label' => 'Funil de destino (p/ duplicar — ex.: Pós-Vendas)', 'type' => 'select', 'required' => false, 'options' => \App\Models\Funil::orderBy('nome')->pluck('nome', 'id')->all()],
+                ['name' => 'responsavel_destino_id', 'label' => 'Novo responsável (ex.: operador da secretaria)', 'type' => 'select', 'required' => false, 'options' => \App\Models\User::orderBy('nome')->pluck('nome', 'id')->all()],
                 ['name' => 'detalhes', 'label' => 'Detalhes', 'type' => 'textarea', 'required' => false],
             ]],
             'motivos-perda' => ['model' => \App\Models\MotivoPerda::class, 'titulo' => 'Motivo de Perda', 'codigo' => 107, 'fields' => $nome],

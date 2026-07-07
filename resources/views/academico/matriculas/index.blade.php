@@ -42,7 +42,9 @@
                         @endif
                     </td>
                     <td class="px-4 py-3">
-                        <x-kebab :edit="route('academico.matriculas.edit', $matricula)" :delete="route('academico.matriculas.destroy', $matricula)" />
+                        <x-kebab :edit="route('academico.matriculas.edit', $matricula)" :delete="route('academico.matriculas.destroy', $matricula)">
+                            <a href="{{ route('academico.matriculas.historico', $matricula) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-clock-rotate-left mr-2 text-gray-400"></i>Histórico Escolar</a>
+                        </x-kebab>
                     </td>
                 </tr>
                 @empty

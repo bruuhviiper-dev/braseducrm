@@ -36,6 +36,13 @@ class BoletimController extends Controller
         $mediaAprovacao = $config?->media_aprovacao ?? 7.0;
         $frequenciaMinima = $config?->frequencia_minima ?? 75.0;
 
+        // Modelo de recuperação dos docs do EDUQ: direto (Cursos Livres, MF = M1),
+        // recuperacao_media (Graduação, MF = (M1 + REC) / 2) ou recuperacao_substitui (Pós, MF = REC)
+        $modelo = $config?->modelo ?? 'direto';
+        $recMin = (float) ($config?->rec_min ?? 0);
+        $recMax = (float) ($config?->rec_max ?? 5.99);
+        $mediaAprovacaoFinal = (float) ($config?->media_aprovacao_final ?? $mediaAprovacao);
+
         $matriculas = Matricula::with('aluno.pessoa')
             ->where('turma_montada_id', $request->turma_montada_id)
             ->whereIn('situacao', ['ativa', 'confirmada', 'nao_confirmada', 'concluida'])
@@ -50,14 +57,33 @@ class BoletimController extends Controller
                 ->whereNotNull('nota')
                 ->get();
 
+            // M1 = média ponderada dos itens comuns; a nota do item marcado como REC fica de fora
             $somaPonderada = 0;
             $somaPesos = 0;
+            $rec = null;
             foreach ($notas as $nota) {
+                if ($nota->item?->recuperacao) {
+                    $rec = (float) $nota->nota;
+                    continue;
+                }
                 $peso = $nota->item?->peso ?? 1;
                 $somaPonderada += $nota->nota * $peso;
                 $somaPesos += $peso;
             }
-            $media = $somaPesos > 0 ? round($somaPonderada / $somaPesos, 2) : null;
+            $m1 = $somaPesos > 0 ? round($somaPonderada / $somaPesos, 2) : null;
+
+            // REC só é liberada se a M1 cair na faixa configurada (ex.: 0 a 5,99)
+            $recLiberada = $modelo !== 'direto' && $m1 !== null && $m1 >= $recMin && $m1 <= $recMax;
+
+            // Média Final conforme o modelo; REC nula (aluno passou direto) mantém a M1
+            $media = $m1;
+            $usouRec = false;
+            if ($recLiberada && $rec !== null) {
+                $media = $modelo === 'recuperacao_substitui'
+                    ? round($rec, 2)
+                    : round(($m1 + $rec) / 2, 2); // recuperacao_media
+                $usouRec = true;
+            }
 
             // Frequência %
             $totalAulas = Frequencia::where('matricula_id', $matricula->id)
@@ -67,12 +93,15 @@ class BoletimController extends Controller
                 ->whereIn('status', ['presente', 'justificada'])->count();
             $frequencia = $totalAulas > 0 ? round(($presencas / $totalAulas) * 100, 1) : null;
 
-            // Situação
+            // Situação: quem foi para a REC é aprovado pela média pós-REC (ex.: 5), os demais pela média normal
             $situacao = 'cursando';
             if ($media !== null) {
-                $aprovadoNota = $media >= $mediaAprovacao;
+                $corte = $usouRec ? $mediaAprovacaoFinal : $mediaAprovacao;
+                $aprovadoNota = $media >= $corte;
                 $aprovadoFreq = $frequencia === null || $frequencia >= $frequenciaMinima;
-                if ($aprovadoNota && $aprovadoFreq) {
+                if ($recLiberada && $rec === null && !($m1 >= $mediaAprovacao)) {
+                    $situacao = 'em_recuperacao'; // aguardando a nota da REC
+                } elseif ($aprovadoNota && $aprovadoFreq) {
                     $situacao = 'aprovado';
                 } elseif (!$aprovadoFreq) {
                     $situacao = 'reprovado_falta';
@@ -84,6 +113,10 @@ class BoletimController extends Controller
             $linhas[] = [
                 'matricula' => $matricula,
                 'media' => $media,
+                'm1' => $m1,
+                'rec' => $rec,
+                'rec_liberada' => $recLiberada,
+                'usou_rec' => $usouRec,
                 'frequencia' => $frequencia,
                 'total_aulas' => $totalAulas,
                 'presencas' => $presencas,
@@ -95,6 +128,10 @@ class BoletimController extends Controller
             'linhas' => $linhas,
             'media_aprovacao' => $mediaAprovacao,
             'frequencia_minima' => $frequenciaMinima,
+            'modelo' => $modelo,
+            'rec_min' => $recMin,
+            'rec_max' => $recMax,
+            'media_aprovacao_final' => $mediaAprovacaoFinal,
         ];
     }
 
@@ -116,7 +153,7 @@ class BoletimController extends Controller
         }
 
         $resultado = $this->calcular($request);
-        $mapa = ['aprovado' => 'aprovado', 'reprovado' => 'reprovado', 'reprovado_falta' => 'reprovado', 'cursando' => 'cursando'];
+        $mapa = ['aprovado' => 'aprovado', 'reprovado' => 'reprovado', 'reprovado_falta' => 'reprovado', 'cursando' => 'cursando', 'em_recuperacao' => 'cursando'];
 
         foreach ($resultado['linhas'] as $linha) {
             if ($linha['media'] === null) {

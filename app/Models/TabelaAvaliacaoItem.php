@@ -8,7 +8,7 @@ class TabelaAvaliacaoItem extends Model
 {
     protected $table = 'tabela_avaliacao_itens';
 
-    protected $fillable = ['tabela_avaliacao_id', 'nome', 'peso', 'ordem'];
+    protected $fillable = ['tabela_avaliacao_id', 'nome', 'peso', 'ordem', 'recuperacao'];
 
     protected $casts = [
         'peso' => 'decimal:2',
