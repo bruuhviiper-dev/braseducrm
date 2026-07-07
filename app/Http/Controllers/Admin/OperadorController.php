@@ -36,6 +36,7 @@ class OperadorController extends Controller
             'grupo_operador_id' => 'nullable|exists:grupo_operadores,id',
             'departamento_id' => 'nullable|exists:departamentos,id',
             'profissional_id' => 'nullable|exists:profissionais,id',
+            'limite_desconto' => 'nullable|numeric|min:0|max:100',
         ]);
         $data['password'] = Hash::make($data['password']);
         $data['ativo'] = $request->boolean('ativo', true);
@@ -63,6 +64,7 @@ class OperadorController extends Controller
             'grupo_operador_id' => 'nullable|exists:grupo_operadores,id',
             'departamento_id' => 'nullable|exists:departamentos,id',
             'profissional_id' => 'nullable|exists:profissionais,id',
+            'limite_desconto' => 'nullable|numeric|min:0|max:100',
         ]);
         if (!empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);

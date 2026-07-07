@@ -35,6 +35,7 @@ class AtendimentoController extends Controller
 
     public function edit(Atendimento $atendimento)
     {
+        $atendimento->load('interacoes.user');
         $pessoas = Pessoa::orderBy('nome')->get();
         $categorias = CategoriaAtendimento::orderBy('nome')->get();
         $responsaveis = \App\Models\User::where('ativo', true)->orderBy('nome')->get();
@@ -53,6 +54,33 @@ class AtendimentoController extends Controller
         $data = $this->validateData($request);
         $atendimento->update($data);
         return redirect()->route('atendimentos.index')->with('success', 'Atendimento atualizado com sucesso.');
+    }
+
+    /**
+     * Chat do protocolo (ecrã 55 do EDUQ): interações registradas sem encerrar o atendimento;
+     * mensagens marcadas como internas ficam ocultas ao aluno no portal. Atendimento
+     * finalizado não recebe novas interações (nova dúvida = novo protocolo).
+     */
+    public function interagir(Request $request, Atendimento $atendimento)
+    {
+        if (in_array($atendimento->situacao, ['concluido', 'falha'], true)) {
+            return back()->with('error', 'Atendimento finalizado não recebe novas interações. Abra um novo protocolo.');
+        }
+
+        $v = $request->validate(['mensagem' => 'required|string|max:2000']);
+
+        $atendimento->interacoes()->create([
+            'user_id' => auth()->id(),
+            'mensagem' => $v['mensagem'],
+            'interna' => $request->boolean('interna'),
+        ]);
+        if ($atendimento->situacao === 'aberto') {
+            $atendimento->update(['situacao' => 'em_andamento']);
+        }
+
+        return back()->with('success', $request->boolean('interna')
+            ? 'Mensagem interna registrada (oculta ao aluno no portal).'
+            : 'Interação registrada no protocolo.');
     }
 
     public function destroy(Atendimento $atendimento)

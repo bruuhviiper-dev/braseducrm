@@ -78,7 +78,7 @@
 
                         <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Diploma Digital</p>
                         <a href="{{ Route::has('ged.diplomas.index') ? route('ged.diplomas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">215</span> Cadastro de Diploma Digital</a>
-                        <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">226</span> Histórico Escolar Digital</a>
+                        <a href="{{ Route::has('academico.historico-digital.index') ? route('academico.historico-digital.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">226</span> Histórico Escolar Digital</a>
 
                         <p class="px-4 py-2.5 text-[13px] text-gray-300 font-medium mt-1">Documentos</p>
                         <a href="{{ Route::has('documentos.index') ? route('documentos.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">18</span> Cadastro de Documento</a>
@@ -124,7 +124,7 @@
                         <a href="{{ Route::has('academico.emissoes.index') ? route('academico.emissoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">60</span> Emissão de Notas e Faltas</a>
                         <a href="{{ Route::has('academico.emissoes.index') ? route('academico.emissoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">91</span> Emissão do Diário de Classe</a>
                         <a href="{{ Route::has('academico.emissoes.index') ? route('academico.emissoes.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">249</span> Emissão de Pendencias Notas e Faltas</a>
-                        <a href="#" class="submenu-item block text-gray-500 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">137</span> Exclusão de Notas e Faltas</a>
+                        <a href="{{ Route::has('academico.exclusao-notas.index') ? route('academico.exclusao-notas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">137</span> Exclusão de Notas e Faltas</a>
                         <a href="{{ Route::has('academico.frequencia.index') ? route('academico.frequencia.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10"><span class="text-gray-500 mr-1">16</span> Frequência e Conteudo Ministrado</a>
                         <a href="{{ Route::has('academico.lancamento-notas.index') ? route('academico.lancamento-notas.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.lancamento-notas.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">1</span> Lançamento de Avaliação</a>
                         <a href="{{ Route::has('academico.liberacoes-frequencia.index') ? route('academico.liberacoes-frequencia.index') : '#' }}" class="submenu-item block text-gray-300 hover:text-white hover:bg-white/10 {{ request()->routeIs('academico.liberacoes-frequencia.*') ? 'text-primary-600' : '' }}"><span class="text-gray-500 mr-1">262</span> Liberar Lançamento de Frequência</a>

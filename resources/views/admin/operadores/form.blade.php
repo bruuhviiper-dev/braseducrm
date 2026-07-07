@@ -86,6 +86,12 @@
                     </select>
                 </div>
 
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Limite de desconto em propostas (%)</label>
+                    <input type="number" step="0.01" min="0" max="100" name="limite_desconto" value="{{ old('limite_desconto', $operador->limite_desconto ?? '') }}" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <p class="text-xs text-gray-400 mt-1">Alçada de aprovação: proposta com desconto acima deste limite fica pendente até um gestor aprovar. Deixe vazio para operador SEM limite (gestor, pode aprovar propostas).</p>
+                </div>
+
                 <input type="hidden" name="ativo" value="1">
             </div>
 

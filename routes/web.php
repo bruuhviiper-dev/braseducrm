@@ -120,6 +120,7 @@ Route::middleware('auth')->group(function () {
     Route::get('emissoes/recibo/{titulo}', [EmissaoController::class, 'recibo'])->name('emissoes.recibo');
     Route::resource('requerimentos', RequerimentoController::class)->parameters(['requerimentos' => 'requerimento'])->except('show');
     Route::resource('atendimentos', AtendimentoController::class)->parameters(['atendimentos' => 'atendimento'])->except('show');
+    Route::post('atendimentos/{atendimento}/interagir', [AtendimentoController::class, 'interagir'])->name('atendimentos.interagir');
     Route::resource('profissionais', \App\Http\Controllers\ProfissionalController::class)->parameters(['profissionais' => 'profissional'])->except('show');
 
     // Cadastros-base genéricos (tabelas de apoio)
@@ -202,6 +203,10 @@ Route::middleware('auth')->group(function () {
         Route::post('frequencia', [FrequenciaController::class, 'salvar'])->name('frequencia.salvar');
         Route::get('boletim', [BoletimController::class, 'index'])->name('boletim.index');
         Route::post('boletim/consolidar', [BoletimController::class, 'consolidar'])->name('boletim.consolidar');
+        Route::get('exclusao-notas', [\App\Http\Controllers\Academico\ExclusaoNotasController::class, 'index'])->name('exclusao-notas.index');
+        Route::post('exclusao-notas', [\App\Http\Controllers\Academico\ExclusaoNotasController::class, 'excluir'])->name('exclusao-notas.excluir');
+        Route::get('historico-digital', [\App\Http\Controllers\Academico\HistoricoDigitalController::class, 'index'])->name('historico-digital.index');
+        Route::get('historico-digital/{aluno}/pdf', [\App\Http\Controllers\Academico\HistoricoDigitalController::class, 'gerar'])->name('historico-digital.gerar');
         Route::get('configuracao', [\App\Http\Controllers\Academico\ConfiguracaoAcademicoController::class, 'index'])->name('configuracao.index');
         Route::put('configuracao', [\App\Http\Controllers\Academico\ConfiguracaoAcademicoController::class, 'update']);
         Route::resource('montagem-turma', MontagemTurmaController::class)->parameters(['montagem-turma' => 'montagem_turma'])->except('show');
@@ -232,6 +237,8 @@ Route::middleware('auth')->group(function () {
         // Propostas (201) e Exportação (159)
         Route::get('propostas', [\App\Http\Controllers\Crm\PropostaCrmController::class, 'index'])->name('propostas.index');
         Route::get('propostas/{oportunidade}/pdf', [\App\Http\Controllers\Crm\PropostaCrmController::class, 'gerar'])->name('propostas.gerar');
+        Route::post('propostas/{oportunidade}', [\App\Http\Controllers\Crm\PropostaCrmController::class, 'store'])->name('propostas.store');
+        Route::post('propostas/{proposta}/aprovar', [\App\Http\Controllers\Crm\PropostaCrmController::class, 'aprovar'])->name('propostas.aprovar');
         Route::get('exportacao', [\App\Http\Controllers\Crm\ExportacaoCrmController::class, 'index'])->name('exportacao.index');
         Route::get('exportacao/csv', [\App\Http\Controllers\Crm\ExportacaoCrmController::class, 'exportar'])->name('exportacao.csv');
     });

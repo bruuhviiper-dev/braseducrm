@@ -63,6 +63,15 @@ class ConfiguracaoFinanceiroController extends Controller
      */
     public function processarReguas()
     {
+        $r = self::executarReguas();
+
+        return back()->with('success', "Régua de cobrança processada: {$r['enviadas']} mensagem(ns) enviada(s)"
+            . ($r['puladas'] ? ", {$r['puladas']} título(s) ignorado(s) (já notificado, sem contato ou opt-out)." : '.'));
+    }
+
+    /** Núcleo da régua — usado pelo botão da tela e pelo agendador (schedule:run). */
+    public static function executarReguas(): array
+    {
         $hoje = now()->startOfDay();
         $enviadas = 0;
         $puladas = 0;
@@ -104,7 +113,7 @@ class ConfiguracaoFinanceiroController extends Controller
                     'canal' => $regua->canal,
                     'destinatario' => $destinatario,
                     'assunto' => ReguaCobranca::TIPOS[$regua->tipo] ?? 'Régua de cobrança',
-                    'conteudo' => $this->montarMensagem($regua->mensagem, $titulo),
+                    'conteudo' => self::montarMensagem($regua->mensagem, $titulo),
                     'situacao' => 'enviada',
                     'enviado_por' => auth()->id(),
                 ]);
@@ -113,12 +122,11 @@ class ConfiguracaoFinanceiroController extends Controller
             }
         }
 
-        return back()->with('success', "Régua de cobrança processada: {$enviadas} mensagem(ns) enviada(s)"
-            . ($puladas ? ", {$puladas} título(s) ignorado(s) (já notificado, sem contato ou opt-out)." : '.'));
+        return ['enviadas' => $enviadas, 'puladas' => $puladas];
     }
 
     /** Variáveis da mensagem: {nome}, {valor}, {vencimento}, {documento}. */
-    private function montarMensagem(string $template, TituloReceber $titulo): string
+    private static function montarMensagem(string $template, TituloReceber $titulo): string
     {
         return strtr($template, [
             '{nome}' => $titulo->pessoa?->nome ?? '',

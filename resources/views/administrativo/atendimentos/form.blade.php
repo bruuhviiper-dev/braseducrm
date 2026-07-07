@@ -145,6 +145,42 @@
                 <button type="submit" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white rounded-full text-sm font-bold shadow-lg shadow-cyan-500/30"><i class="fa-solid fa-check mr-1"></i>Salvar</button>
             </div>
         </form>
+
+        {{-- Chat do protocolo (EDUQ 55): interações sem encerrar; internas ficam ocultas ao aluno --}}
+        @if(isset($atendimento))
+        <div class="border-t px-5 py-4">
+            <h3 class="text-sm font-bold text-gray-700 mb-3">Interações do protocolo <span class="text-xs font-normal text-gray-400">({{ $atendimento->interacoes->count() }})</span></h3>
+            <div class="space-y-2 mb-3 max-h-80 overflow-y-auto">
+                @forelse($atendimento->interacoes as $msg)
+                <div class="rounded-lg px-3 py-2 text-sm {{ $msg->interna ? 'bg-yellow-50 border border-yellow-200' : 'bg-gray-50 border' }}">
+                    <div class="flex items-center gap-2 text-xs text-gray-400 mb-0.5">
+                        <span class="font-semibold text-gray-600">{{ $msg->user?->nome ?? 'Sistema' }}</span>
+                        <span>{{ $msg->created_at->format('d/m/Y H:i') }}</span>
+                        @if($msg->interna)<span class="text-yellow-700 font-semibold"><i class="fa-solid fa-eye-slash mr-0.5"></i>Interna (oculta ao aluno)</span>@endif
+                    </div>
+                    <p class="text-gray-700 whitespace-pre-line">{{ $msg->mensagem }}</p>
+                </div>
+                @empty
+                <p class="text-xs text-gray-400 text-center py-2">Nenhuma interação registrada.</p>
+                @endforelse
+            </div>
+            @if(!in_array($atendimento->situacao, ['concluido', 'falha']))
+            <form method="POST" action="{{ route('atendimentos.interagir', $atendimento) }}" class="space-y-2">
+                @csrf
+                <textarea name="mensagem" rows="2" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" placeholder="Escreva a interação... (responder não encerra o protocolo)" required></textarea>
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center gap-2 text-xs text-gray-600">
+                        <input type="checkbox" name="interna" value="1" class="rounded border-gray-300 text-yellow-500">
+                        Mensagem interna (não aparece para o aluno no portal)
+                    </label>
+                    <button class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700"><i class="fa-solid fa-paper-plane mr-1"></i>Enviar</button>
+                </div>
+            </form>
+            @else
+            <p class="text-xs text-red-500">Atendimento finalizado não recebe novas interações — nova dúvida exige novo protocolo.</p>
+            @endif
+        </div>
+        @endif
     </div>
 </div>
 @endsection

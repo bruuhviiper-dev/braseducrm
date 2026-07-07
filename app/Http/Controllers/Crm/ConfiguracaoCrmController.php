@@ -67,11 +67,28 @@ class ConfiguracaoCrmController extends Controller
      */
     public function redistribuir()
     {
+        $movidas = self::executarRedistribuicao();
+        if ($movidas === null) {
+            return back()->with('success', 'Roleta não executada: fim de semana (configurada para considerar apenas dias úteis).');
+        }
+        $minutos = (int) (ConfiguracaoCrm::current()->minutos_estagnacao ?: 20);
+
+        return back()->with('success', $movidas
+            ? "Roleta executada: {$movidas} lead(s) estagnado(s) há mais de {$minutos} min redistribuído(s) e devolvido(s) ao primeiro contato."
+            : 'Roleta executada: nenhum lead estagnado no momento.');
+    }
+
+    /** Núcleo da redistribuição — usado pelo botão e pelo agendador. Null = pulado (fim de semana). */
+    public static function executarRedistribuicao(): ?int
+    {
         $config = ConfiguracaoCrm::current();
         $minutos = (int) ($config->minutos_estagnacao ?: 20);
 
+        if (!$config->roleta_ativa) {
+            return 0;
+        }
         if ($config->considerar_dias_uteis && now()->isWeekend()) {
-            return back()->with('success', 'Roleta não executada: fim de semana (configurada para considerar apenas dias úteis).');
+            return null;
         }
 
         $estagnadas = Oportunidade::where('situacao', 'aberta')
@@ -92,9 +109,29 @@ class ConfiguracaoCrmController extends Controller
             $movidas++;
         }
 
-        return back()->with('success', $movidas
-            ? "Roleta executada: {$movidas} lead(s) estagnado(s) há mais de {$minutos} min redistribuído(s) e devolvido(s) ao primeiro contato."
-            : 'Roleta executada: nenhum lead estagnado no momento.');
+        return $movidas;
+    }
+
+    /**
+     * Perda automática (docs do EDUQ): oportunidade aberta sem movimentação além do
+     * prazo configurado é marcada como perdida com motivo padrão de inatividade.
+     */
+    public static function executarPerdaAutomatica(): int
+    {
+        $dias = (int) (ConfiguracaoCrm::current()->dias_perda_automatica ?? 0);
+        if ($dias <= 0) {
+            return 0;
+        }
+
+        $motivo = \App\Models\MotivoPerda::firstOrCreate(['nome' => 'Perda automática por inatividade']);
+
+        return Oportunidade::where('situacao', 'aberta')
+            ->where('updated_at', '<', now()->subDays($dias))
+            ->update([
+                'situacao' => 'perdida',
+                'motivo_perda_id' => $motivo->id,
+                'data_fechamento' => now(),
+            ]);
     }
 
     /** Próximo operador pela proporção (round-robin ponderado, priorizando o topo da lista). */

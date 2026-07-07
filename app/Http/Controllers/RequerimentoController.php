@@ -52,8 +52,11 @@ class RequerimentoController extends Controller
 
         // Cobrança automática: fora da cota de isenção, gera o título com vencimento dinâmico em dias
         if ($tipo && $pessoaId && !$tipo->isento && (float) $tipo->valor > 0) {
+            // EDUQ: a cota de isenção zera a cada SEMESTRE (só conta pedidos do semestre corrente)
+            $inicioSemestre = now()->month <= 6 ? now()->startOfYear() : now()->startOfYear()->addMonths(6);
             $usoAnterior = Requerimento::where('tipo_requerimento_id', $tipo->id)
                 ->where('id', '!=', $requerimento->id)
+                ->where('created_at', '>=', $inicioSemestre)
                 ->when($data['aluno_id'], fn ($q) => $q->where('aluno_id', $data['aluno_id']), fn ($q) => $q->where('pessoa_id', $pessoaId))
                 ->count();
 

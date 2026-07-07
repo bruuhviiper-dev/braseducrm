@@ -30,4 +30,9 @@ class Atendimento extends Model
     {
         return $this->belongsTo(User::class, 'operador_id');
     }
+
+    public function interacoes()
+    {
+        return $this->hasMany(InteracaoAtendimento::class)->orderBy('id');
+    }
 }

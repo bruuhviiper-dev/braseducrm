@@ -83,6 +83,16 @@ class Integracao extends Model
                     'ambiente' => 'Ambiente (homologacao/producao)',
                 ],
             ],
+            'assinatura_digital' => [
+                'nome' => 'Assinatura Digital A1 (Eduqsign)',
+                'icone' => 'fa-file-signature',
+                'descricao' => 'Certificado digital A1 para assinar o Histórico Escolar Digital e contratos.',
+                'campos' => [
+                    'certificado' => 'Certificado A1 (caminho/identificador)',
+                    'senha' => 'Senha do certificado',
+                    'signatario' => 'Nome do signatário (responsável institucional)',
+                ],
+            ],
         ];
     }
 }
