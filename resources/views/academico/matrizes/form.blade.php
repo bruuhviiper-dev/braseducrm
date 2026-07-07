@@ -159,12 +159,17 @@
                                     <option value="">Disciplina...</option>
                                     @foreach($disciplinas as $di)<option value="{{ $di->id }}">{{ $di->nome }}</option>@endforeach
                                 </select>
-                                <select :name="`disciplinas[${i}][obrigatoria]`" x-model="d.obrigatoria" class="col-span-2 border rounded px-2 py-1.5 text-sm">
-                                    <option value="1">Obrigatória</option>
-                                    <option value="0">Optativa</option>
+                                <select :name="`disciplinas[${i}][tipo_vinculo]`" x-model="d.tipo_vinculo" class="col-span-2 border rounded px-2 py-1.5 text-sm">
+                                    <option value="obrigatoria">Obrigatória</option>
+                                    <option value="optativa">Optativa</option>
+                                    <option value="nao_obrigatoria">Não Obrigatória</option>
                                 </select>
                                 <input type="number" :name="`disciplinas[${i}][carga_horaria]`" x-model="d.carga_horaria" placeholder="C.H." min="0" class="col-span-1 border rounded px-2 py-1.5 text-sm">
-                                <input type="number" :name="`disciplinas[${i}][creditos]`" x-model="d.creditos" placeholder="Créd." min="0" class="col-span-2 border rounded px-2 py-1.5 text-sm">
+                                <input type="number" :name="`disciplinas[${i}][creditos]`" x-model="d.creditos" placeholder="Créd." min="0" class="col-span-1 border rounded px-2 py-1.5 text-sm">
+                                <label class="col-span-1 flex items-center gap-1 text-xs text-gray-600 cursor-pointer" title="Disciplina 100% EAD: não consta no calendário regular de aulas. Desmarque se houver momentos síncronos (aulas ao vivo ou provas com data fixa).">
+                                    <template x-if="d.ead"><input type="hidden" :name="`disciplinas[${i}][ead]`" value="1"></template>
+                                    <input type="checkbox" x-model="d.ead" class="rounded text-primary-600"> EAD
+                                </label>
                                 <button type="button" @click="discs.splice(i,1)" class="col-span-1 p-1.5 text-red-600 hover:bg-red-50 rounded justify-self-center"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>
                         </template>
@@ -199,6 +204,14 @@
                 <textarea name="anotacoes" rows="8" class="w-full border rounded-lg px-3 py-2 text-sm">{{ old('anotacoes', $matriz->anotacoes ?? '') }}</textarea>
             </div>
 
+            @if(($matriz ?? null) && ($temAlunos ?? false))
+            <div class="mt-4 bg-amber-50 border border-amber-300 rounded-lg p-4">
+                <p class="text-sm font-semibold text-amber-800 mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Matriz com alunos vinculados</p>
+                <p class="text-xs text-amber-700 mb-2">Esta matriz já possui alunos vinculados através de turmas. Para confirmar alterações na grade, digite a palavra-chave <strong>ALTERAR</strong> abaixo.</p>
+                <input type="text" name="palavra_chave" value="" placeholder="Digite ALTERAR para confirmar" class="w-full md:w-72 border border-amber-300 rounded-lg px-3 py-2 text-sm">
+            </div>
+            @endif
+
             <div class="flex justify-end gap-3 pt-4 mt-4 border-t">
                 <a href="{{ route('academico.matrizes.index') }}" class="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</a>
                 <button type="submit" class="px-6 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700"><i class="fa-solid fa-check mr-1"></i> Salvar</button>
@@ -211,8 +224,8 @@
 function matrizForm(discIni) {
     return {
         tab: 'basicos',
-        discs: (discIni||[]).map(d=>({modulo_id:d.modulo_id??'',disciplina_id:d.disciplina_id??'',obrigatoria:(d.obrigatoria?'1':'0'),carga_horaria:d.carga_horaria??'',creditos:d.creditos??''})),
-        addDisc() { this.discs.push({modulo_id:'',disciplina_id:'',obrigatoria:'1',carga_horaria:'',creditos:''}); },
+        discs: (discIni||[]).map(d=>({modulo_id:d.modulo_id??'',disciplina_id:d.disciplina_id??'',tipo_vinculo:d.tipo_vinculo??'obrigatoria',ead:!!d.ead,carga_horaria:d.carga_horaria??'',creditos:d.creditos??''})),
+        addDisc() { this.discs.push({modulo_id:'',disciplina_id:'',tipo_vinculo:'obrigatoria',ead:false,carga_horaria:'',creditos:''}); },
     };
 }
 </script>

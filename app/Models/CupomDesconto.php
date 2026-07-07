@@ -11,6 +11,7 @@ class CupomDesconto extends Model
     protected $fillable = [
         'codigo', 'tipo', 'valor', 'quantidade_total',
         'quantidade_usada', 'validade', 'abertura_matricula_id', 'ativo',
+        'incidencia', 'consultor_id',
     ];
 
     protected $casts = [
@@ -24,5 +25,10 @@ class CupomDesconto extends Model
     public function abertura()
     {
         return $this->belongsTo(AberturaMatriculaOnline::class, 'abertura_matricula_id');
+    }
+
+    public function consultor()
+    {
+        return $this->belongsTo(User::class, 'consultor_id');
     }
 }

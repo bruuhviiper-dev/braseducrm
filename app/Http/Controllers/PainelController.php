@@ -101,8 +101,8 @@ class PainelController extends Controller
         $totais = [
             'total' => Matricula::count(),
             'concluidas' => Matricula::where('situacao', 'concluida')->count(),
-            'ativas' => Matricula::where('situacao', 'ativa')->count(),
-            'canceladas' => Matricula::whereIn('situacao', ['cancelada', 'evadida'])->count(),
+            'ativas' => Matricula::whereIn('situacao', ['ativa', 'confirmada'])->count(),
+            'canceladas' => Matricula::whereIn('situacao', ['cancelada', 'evadida', 'desistente'])->count(),
             'pausadas' => Matricula::where('situacao', 'trancada')->count(),
         ];
 

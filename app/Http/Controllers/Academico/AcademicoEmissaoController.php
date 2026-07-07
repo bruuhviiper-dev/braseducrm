@@ -71,6 +71,11 @@ class AcademicoEmissaoController extends Controller
         $horarios = Horario::with(['profissional.pessoa', 'disciplina', 'turmaMontada', 'sala'])
             ->orderBy('dia_semana')->orderBy('hora_inicio')->get();
 
+        // EDUQ: o volume de estudantes contabiliza estritamente os alunos com "Matrícula Confirmada"
+        $confirmadosPorTurma = Matricula::whereIn('situacao', ['confirmada', 'ativa'])
+            ->selectRaw('turma_montada_id, count(*) as total')
+            ->groupBy('turma_montada_id')->pluck('total', 'turma_montada_id');
+
         $linhas = $horarios->map(fn ($h) => [
             $h->profissional?->pessoa?->nome ?? '— (sem professor)',
             $h->disciplina?->nome ?? '—',
@@ -78,10 +83,11 @@ class AcademicoEmissaoController extends Controller
             self::DIAS[$h->dia_semana] ?? $h->dia_semana,
             substr($h->hora_inicio, 0, 5),
             substr($h->hora_fim, 0, 5),
+            (string) ($confirmadosPorTurma[$h->turma_montada_id] ?? 0),
         ]);
 
         return $this->pdf('Emissão de Horários dos Professores', null,
-            ['Professor', 'Disciplina', 'Turma Montada', 'Dia', 'Início', 'Fim'], $linhas, 'horarios_professores');
+            ['Professor', 'Disciplina', 'Turma Montada', 'Dia', 'Início', 'Fim', 'Alunos Confirmados'], $linhas, 'horarios_professores');
     }
 
     /** Emissão de Notas e Faltas (60) — por turma montada. */

@@ -7,7 +7,8 @@
         portal: {{ old('portal_aluno', $atendimento->portal_aluno ?? false) ? 'true' : 'false' }},
         finalizado: {{ old('situacao', $atendimento->situacao ?? 'aberto') === 'concluido' ? 'true' : 'false' }},
         retorno: {{ old('precisa_retorno', $atendimento->precisa_retorno ?? false) ? 'true' : 'false' }},
-        deptos: {{ old('departamentos_responsavel', $atendimento->departamentos_responsavel ?? false) ? 'true' : 'false' }}
+        deptos: {{ old('departamentos_responsavel', $atendimento->departamentos_responsavel ?? false) ? 'true' : 'false' }},
+        objetivo: {{ old('objetivo_alcancado', $atendimento->objetivo_alcancado ?? true) ? 'true' : 'false' }}
      }">
     <div class="bg-white rounded-xl border">
         <div class="px-5 py-3 border-b flex items-center gap-3">
@@ -87,6 +88,26 @@
                 <span class="text-sm font-medium text-gray-700">Atendimento foi finalizado?</span>
             </label>
 
+            <div x-show="finalizado" x-cloak class="ml-6 pl-4 border-l-2 border-cyan-200 space-y-3">
+                <p class="text-xs text-amber-600"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Um atendimento finalizado nunca poderá ser reaberto. Nova dúvida exigirá um novo protocolo.</p>
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="hidden" name="objetivo_alcancado" :value="objetivo ? 1 : 0">
+                    <button type="button" @click="objetivo = !objetivo" :class="objetivo ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
+                        <span :class="objetivo ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+                    </button>
+                    <span class="text-sm font-medium text-gray-700">O objetivo do atendimento foi alcançado com sucesso?</span>
+                </label>
+                <div x-show="!objetivo" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Motivo <span class="text-red-500">*</span> <span class="text-xs text-gray-400">(alimenta os relatórios de auditoria e o painel de eficiência)</span></label>
+                    <select name="motivo_falha_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                        <option value="">Selecione...</option>
+                        @foreach($motivosFalha ?? [] as $mf)
+                        <option value="{{ $mf->id }}" @selected(old('motivo_falha_id', $atendimento->motivo_falha_id ?? '') == $mf->id)>{{ $mf->nome }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
             <label class="flex items-center gap-3 cursor-pointer">
                 <input type="hidden" name="precisa_retorno" :value="retorno ? 1 : 0">
                 <button type="button" @click="retorno = !retorno" :class="retorno ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
@@ -94,6 +115,11 @@
                 </button>
                 <span class="text-sm font-medium text-gray-700">Será preciso dar algum retorno para este atendimento?</span>
             </label>
+
+            <div x-show="retorno" x-cloak class="ml-6 pl-4 border-l-2 border-cyan-200">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Data do retorno <span class="text-xs text-gray-400">(gera atividade pendente no painel do operador)</span></label>
+                <input type="date" name="data_retorno" value="{{ old('data_retorno', isset($atendimento) && $atendimento->data_retorno ? $atendimento->data_retorno->format('Y-m-d') : '') }}" class="w-full md:w-60 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            </div>
 
             <label class="flex items-center gap-3 cursor-pointer">
                 <input type="hidden" name="departamentos_responsavel" :value="deptos ? 1 : 0">

@@ -49,6 +49,13 @@ class MatrizCurricularController extends Controller
 
     public function update(Request $request, MatrizCurricular $matrize)
     {
+        // EDUQ: alterar uma matriz com alunos vinculados exige a digitação de palavra-chave de confirmação
+        if ($this->temAlunosVinculados($matrize) && strtoupper((string) $request->input('palavra_chave')) !== 'ALTERAR') {
+            return back()->withInput()->withErrors([
+                'palavra_chave' => 'Esta matriz possui alunos vinculados. Digite a palavra-chave ALTERAR para confirmar a modificação da grade.',
+            ]);
+        }
+
         $data = $this->validar($request);
         DB::transaction(function () use ($matrize, $data) {
             $matrize->update($data['matriz']);
@@ -61,6 +68,11 @@ class MatrizCurricularController extends Controller
 
     public function destroy(MatrizCurricular $matrize)
     {
+        if ($this->temAlunosVinculados($matrize)) {
+            return redirect()->route('academico.matrizes.index')
+                ->with('error', 'Esta matriz curricular possui alunos vinculados através de turmas e não pode ser removida.');
+        }
+
         $matrize->delete();
 
         return redirect()->route('academico.matrizes.index')
@@ -98,7 +110,8 @@ class MatrizCurricularController extends Controller
             'disciplinas.*.modulo_id' => 'nullable|exists:modulos,id',
             'disciplinas.*.carga_horaria' => 'nullable|integer|min:0',
             'disciplinas.*.creditos' => 'nullable|integer|min:0',
-            'disciplinas.*.obrigatoria' => 'nullable',
+            'disciplinas.*.tipo_vinculo' => 'nullable|in:obrigatoria,optativa,nao_obrigatoria',
+            'disciplinas.*.ead' => 'nullable',
         ]);
 
         return [
@@ -137,19 +150,30 @@ class MatrizCurricularController extends Controller
         ];
     }
 
+    /** EDUQ: matriz vinculada a turma com alunos não pode ser alterada livremente. */
+    private function temAlunosVinculados(MatrizCurricular $matriz): bool
+    {
+        return DB::table('matriculas')
+            ->whereIn('turma_id', DB::table('turmas')->where('matriz_curricular_id', $matriz->id)->pluck('id'))
+            ->exists();
+    }
+
     private function salvarDisciplinas(MatrizCurricular $matriz, array $disciplinas): void
     {
         $sync = [];
         foreach ($disciplinas as $i => $d) {
             // belongsToMany sync com pivô por chave disciplina_id; usar syncWithoutDetaching não serve
             // pois pode haver a mesma disciplina em módulos diferentes -> montamos array numérico
+            $tipo = $d['tipo_vinculo'] ?? 'obrigatoria';
             $sync[] = [
                 'disciplina_id' => $d['disciplina_id'],
                 'modulo_id' => !empty($d['modulo_id']) ? $d['modulo_id'] : null,
                 'carga_horaria' => $d['carga_horaria'] !== '' ? ($d['carga_horaria'] ?? null) : null,
                 'creditos' => $d['creditos'] !== '' ? ($d['creditos'] ?? null) : null,
                 'ordem' => $i,
-                'obrigatoria' => !empty($d['obrigatoria']),
+                'tipo_vinculo' => $tipo,
+                'obrigatoria' => $tipo === 'obrigatoria',
+                'ead' => !empty($d['ead']),
             ];
         }
         // rebuild pivô manualmente (permite disciplina repetida em módulos diferentes)
@@ -169,18 +193,20 @@ class MatrizCurricularController extends Controller
             $disciplinasSel = DB::table('matriz_disciplinas')
                 ->where('matriz_curricular_id', $matriz->id)
                 ->orderBy('ordem')
-                ->get(['disciplina_id', 'modulo_id', 'carga_horaria', 'creditos', 'obrigatoria'])
+                ->get(['disciplina_id', 'modulo_id', 'carga_horaria', 'creditos', 'tipo_vinculo', 'ead'])
                 ->map(fn ($d) => [
                     'disciplina_id' => $d->disciplina_id,
                     'modulo_id' => $d->modulo_id,
                     'carga_horaria' => $d->carga_horaria,
                     'creditos' => $d->creditos,
-                    'obrigatoria' => (bool) $d->obrigatoria,
+                    'tipo_vinculo' => $d->tipo_vinculo ?: 'obrigatoria',
+                    'ead' => (bool) $d->ead,
                 ])->all();
         }
 
         return [
             'matriz' => $matriz,
+            'temAlunos' => $matriz ? $this->temAlunosVinculados($matriz) : false,
             'disciplinasSel' => $disciplinasSel,
             'cursos' => Curso::orderBy('nome')->get(),
             'areas' => AreaConhecimento::orderBy('nome')->get(),

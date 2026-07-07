@@ -21,8 +21,40 @@ class OportunidadeController extends Controller
     {
         $oportunidades = Oportunidade::with(['interessado', 'funil', 'etapaFunil', 'consultor', 'curso'])
             ->orderBy('id', 'desc')->paginate(15);
+        $motivosPerda = \App\Models\MotivoPerda::orderBy('nome')->get();
 
-        return view('crm.oportunidades.index', compact('oportunidades'));
+        return view('crm.oportunidades.index', compact('oportunidades', 'motivosPerda'));
+    }
+
+    /** EDUQ: "Ganho" significa efetivação de matrícula. */
+    public function ganhar(Request $request, Oportunidade $oportunidade)
+    {
+        $v = $request->validate(['motivo_ganho_id' => 'nullable|exists:motivos_ganho,id']);
+        $oportunidade->update([
+            'situacao' => 'ganha',
+            'motivo_ganho_id' => $v['motivo_ganho_id'] ?? null,
+            'data_fechamento' => now(),
+        ]);
+
+        return back()->with('success', 'Oportunidade marcada como Ganha (efetivação de matrícula).');
+    }
+
+    /** EDUQ: a justificativa é obrigatória ao dar o card como perdido. */
+    public function perder(Request $request, Oportunidade $oportunidade)
+    {
+        $v = $request->validate([
+            'motivo_perda_id' => 'required|exists:motivos_perda,id',
+        ], [
+            'motivo_perda_id.required' => 'O motivo da perda é obrigatório (alimenta o gráfico de motivos de perda do painel comercial).',
+        ]);
+
+        $oportunidade->update([
+            'situacao' => 'perdida',
+            'motivo_perda_id' => $v['motivo_perda_id'],
+            'data_fechamento' => now(),
+        ]);
+
+        return back()->with('success', 'Oportunidade marcada como Perdida.');
     }
 
     public function create()
@@ -93,6 +125,11 @@ class OportunidadeController extends Controller
             'observacoes' => 'nullable|string',
             'tags' => 'nullable|array',
             'tags.*' => 'integer|exists:tags_crm,id',
+            // EDUQ: a justificativa é obrigatória ao dar um card como perdido (alimenta o gráfico de motivos de perda)
+            'motivo_perda_id' => 'required_if:situacao,perdida|nullable|exists:motivos_perda,id',
+            'motivo_ganho_id' => 'nullable|exists:motivos_ganho,id',
+        ], [
+            'motivo_perda_id.required_if' => 'Ao marcar a oportunidade como Perdida, o motivo da perda é obrigatório (alimenta o painel comercial).',
         ]);
 
         return [
@@ -106,7 +143,10 @@ class OportunidadeController extends Controller
                 'curso_id' => $v['curso_id'] ?? null,
                 'titulo' => $v['titulo'] ?? null,
                 'valor' => $v['valor'] ?? null,
-                'situacao' => $v['situacao'] ?? 'aberta' ?? 'aberta',
+                'situacao' => $v['situacao'] ?? 'aberta',
+                'motivo_perda_id' => ($v['situacao'] ?? null) === 'perdida' ? ($v['motivo_perda_id'] ?? null) : null,
+                'motivo_ganho_id' => ($v['situacao'] ?? null) === 'ganha' ? ($v['motivo_ganho_id'] ?? null) : null,
+                'data_fechamento' => in_array($v['situacao'] ?? '', ['ganha', 'perdida']) ? now() : null,
                 'qualificacao' => $v['qualificacao'] ?? null,
                 'data_previsao_fechamento' => $v['data_previsao_fechamento'] ?? null,
                 'motivacao_interesse' => $v['motivacao_interesse'] ?? null,

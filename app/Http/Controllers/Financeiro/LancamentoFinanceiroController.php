@@ -59,7 +59,8 @@ class LancamentoFinanceiroController extends Controller
     {
         return [
             'contas' => ContaBancaria::where('ativo', true)->orderBy('nome')->get(),
-            'planos' => PlanoContas::orderBy('codigo')->get(),
+            // Regra de ouro do EDUQ: nunca há movimentação direta sobre conta sintética (S) — só analíticas (A)
+            'planos' => PlanoContas::where('tipo', 'analitica')->orderBy('codigo')->get(),
         ];
     }
 
@@ -67,7 +68,7 @@ class LancamentoFinanceiroController extends Controller
     {
         return $request->validate([
             'conta_bancaria_id' => 'required|exists:contas_bancarias,id',
-            'plano_conta_id' => 'nullable|exists:plano_contas,id',
+            'plano_conta_id' => 'nullable|exists:plano_contas,id,tipo,analitica',
             'tipo' => 'required|in:entrada,saida,transferencia',
             'valor' => 'required|numeric|min:0',
             'data_lancamento' => 'required|date',

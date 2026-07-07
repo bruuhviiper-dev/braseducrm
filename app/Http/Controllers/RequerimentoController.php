@@ -28,7 +28,52 @@ class RequerimentoController extends Controller
     {
         $data = $this->validar($request);
         $data['operador_id'] = auth()->id();
-        Requerimento::create($data);
+
+        $tipo = TipoRequerimento::find($data['tipo_requerimento_id']);
+        $pessoaId = $this->pessoaDoVinculo($data);
+
+        // Regras de bloqueio do EDUQ (Ecrã 94)
+        if ($tipo && $pessoaId) {
+            if ($tipo->bloquear_inadimplente && \App\Models\TituloReceber::where('pessoa_id', $pessoaId)
+                    ->where('situacao', 'aberto')->where('data_vencimento', '<', now())->exists()) {
+                return back()->withInput()->withErrors([
+                    'tipo_requerimento_id' => 'Bloqueio de inadimplência: este aluno possui parcelas vencidas em aberto e não pode abrir este requerimento.',
+                ]);
+            }
+            if ($tipo->bloquear_parcelas_abertas && \App\Models\TituloReceber::where('pessoa_id', $pessoaId)
+                    ->where('situacao', 'aberto')->exists()) {
+                return back()->withInput()->withErrors([
+                    'tipo_requerimento_id' => 'Este requerimento exige a quitação de todo o plano financeiro: há parcelas em aberto (mesmo a vencer).',
+                ]);
+            }
+        }
+
+        $requerimento = Requerimento::create($data);
+
+        // Cobrança automática: fora da cota de isenção, gera o título com vencimento dinâmico em dias
+        if ($tipo && $pessoaId && !$tipo->isento && (float) $tipo->valor > 0) {
+            $usoAnterior = Requerimento::where('tipo_requerimento_id', $tipo->id)
+                ->where('id', '!=', $requerimento->id)
+                ->when($data['aluno_id'], fn ($q) => $q->where('aluno_id', $data['aluno_id']), fn ($q) => $q->where('pessoa_id', $pessoaId))
+                ->count();
+
+            if ($tipo->cota_isencao === null || $usoAnterior >= (int) $tipo->cota_isencao) {
+                \App\Models\TituloReceber::create([
+                    'pessoa_id' => $pessoaId,
+                    'matricula_id' => $data['matricula_id'],
+                    'categoria_receber_id' => $tipo->categoria_receber_id,
+                    'conta_bancaria_id' => $tipo->conta_bancaria_id,
+                    'valor_original' => $tipo->valor,
+                    'data_emissao' => now(),
+                    'data_vencimento' => now()->addWeekdays($tipo->vencimento_dias ?: 10),
+                    'situacao' => 'aberto',
+                    'observacoes' => 'Taxa de requerimento: ' . $tipo->nome,
+                ]);
+
+                return redirect()->route('requerimentos.index')
+                    ->with('success', 'Requerimento criado. Taxa de R$ ' . number_format((float) $tipo->valor, 2, ',', '.') . ' gerada no Contas a Receber (vencimento em ' . ($tipo->vencimento_dias ?: 10) . ' dias úteis).');
+            }
+        }
 
         return redirect()->route('requerimentos.index')->with('success', 'Requerimento criado com sucesso.');
     }
@@ -40,9 +85,31 @@ class RequerimentoController extends Controller
 
     public function update(Request $request, Requerimento $requerimento)
     {
-        $requerimento->update($this->validar($request));
+        $data = $this->validar($request);
+        $requerimento->update($data);
+
+        // EDUQ: requerimento aprovado pode alterar automaticamente o estado da matrícula (Trancado/Desistente/Cancelado)
+        $tipo = TipoRequerimento::find($data['tipo_requerimento_id']);
+        if ($tipo && $tipo->novo_status_matricula && $data['situacao'] === 'aprovado' && $data['matricula_id']) {
+            Matricula::where('id', $data['matricula_id'])->update(['situacao' => $tipo->novo_status_matricula]);
+
+            return redirect()->route('requerimentos.index')
+                ->with('success', 'Requerimento aprovado. A matrícula do aluno foi alterada automaticamente para "' . ucfirst($tipo->novo_status_matricula) . '".');
+        }
 
         return redirect()->route('requerimentos.index')->with('success', 'Requerimento atualizado com sucesso.');
+    }
+
+    /** Resolve a pessoa (pagadora) a partir do vínculo do requerimento. */
+    private function pessoaDoVinculo(array $data): ?int
+    {
+        if (!empty($data['pessoa_id'])) {
+            return $data['pessoa_id'];
+        }
+        if (!empty($data['aluno_id'])) {
+            return optional(\App\Models\Aluno::find($data['aluno_id']))->pessoa_id;
+        }
+        return null;
     }
 
     public function destroy(Requerimento $requerimento)

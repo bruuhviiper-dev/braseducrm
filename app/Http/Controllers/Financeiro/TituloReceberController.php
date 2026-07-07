@@ -238,20 +238,63 @@ class TituloReceberController extends Controller
             ->with('success', 'Titulo a receber removido com sucesso.');
     }
 
+    /** Baixa manual (EDUQ): data real, juros/multa calculados na hora, desconto e nome do pagador real. */
     public function baixar(Request $request, TituloReceber $titulo)
     {
-        $request->validate([
+        $v = $request->validate([
             'valor_pago' => 'nullable|numeric|min:0',
             'data_pagamento' => 'nullable|date',
+            'pagador' => 'nullable|string|max:255',
+            'valor_juros' => 'nullable|numeric|min:0',
+            'valor_multa' => 'nullable|numeric|min:0',
+            'valor_desconto' => 'nullable|numeric|min:0',
         ]);
+
+        $dataPagamento = $v['data_pagamento'] ?? now()->format('Y-m-d');
+
+        // Juros/multa sugeridos pela configuração (padrão legal: juros 1% a.m. pro rata + multa de até 2%)
+        $juros = $v['valor_juros'] ?? null;
+        $multa = $v['valor_multa'] ?? null;
+        if ($juros === null && $multa === null && Carbon::parse($dataPagamento)->gt($titulo->data_vencimento)) {
+            $config = \App\Models\ConfiguracaoFinanceiro::current();
+            $diasAtraso = Carbon::parse($titulo->data_vencimento)->diffInDays(Carbon::parse($dataPagamento));
+            $juros = round($titulo->valor_original * ((float) ($config->juros_dia ?? 0.033) / 100) * $diasAtraso, 2);
+            $multa = round($titulo->valor_original * ((float) ($config->multa_atraso ?? 2) / 100), 2);
+        }
+
+        $valorPago = $v['valor_pago']
+            ?? ($titulo->valor_original - ($v['valor_desconto'] ?? $titulo->valor_desconto ?? 0) + ($juros ?? 0) + ($multa ?? 0));
 
         $titulo->update([
             'situacao' => 'pago',
-            'valor_pago' => $request->get('valor_pago', $titulo->valor_original - ($titulo->valor_desconto ?? 0)),
-            'data_pagamento' => $request->get('data_pagamento', now()),
+            'valor_pago' => round($valorPago, 2),
+            'valor_desconto' => $v['valor_desconto'] ?? $titulo->valor_desconto,
+            'valor_juros' => $juros,
+            'valor_multa' => $multa,
+            'data_pagamento' => $dataPagamento,
+            'pagador' => $v['pagador'] ?? null,
         ]);
 
         return redirect()->route('financeiro.titulos-receber.index')
-            ->with('success', 'Titulo baixado com sucesso.');
+            ->with('success', 'Título baixado com sucesso.');
+    }
+
+    /** Estornar pagamento ("mãozinha" do EDUQ): reabre o título imediatamente em caso de baixa por engano. */
+    public function estornar(TituloReceber $titulo)
+    {
+        if ($titulo->situacao !== 'pago') {
+            return back()->with('error', 'Apenas títulos pagos podem ser estornados.');
+        }
+
+        $titulo->update([
+            'situacao' => 'aberto',
+            'valor_pago' => null,
+            'valor_juros' => null,
+            'valor_multa' => null,
+            'data_pagamento' => null,
+            'pagador' => null,
+        ]);
+
+        return back()->with('success', 'Pagamento estornado: o título foi reaberto.');
     }
 }

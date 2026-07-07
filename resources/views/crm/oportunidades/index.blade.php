@@ -2,6 +2,7 @@
 @section('title', 'Oportunidades')
 
 @section('content')
+<div x-data="{ perda: null }">
 <x-data-table title="Oportunidades" codigo="109" :createRoute="route('crm.oportunidades.create')" createLabel="Nova Oportunidade">
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
@@ -59,7 +60,15 @@
                         </span>
                     </td>
                     <td class="px-4 py-3 text-center">
-                        <x-kebab :edit="route('crm.oportunidades.edit', $op)" :delete="route('crm.oportunidades.destroy', $op)" />
+                        <x-kebab :edit="route('crm.oportunidades.edit', $op)" :delete="route('crm.oportunidades.destroy', $op)">
+                            @if($op->situacao === 'aberta' || $op->situacao === 'pausada')
+                            <form method="POST" action="{{ route('crm.oportunidades.ganhar', $op) }}" onsubmit="return confirm('Marcar como Ganha? No EDUQ, Ganho significa efetivação de matrícula.')">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-green-700 hover:bg-green-50"><i class="fa-solid fa-trophy mr-2"></i>Marcar como Ganha</button>
+                            </form>
+                            <button type="button" @click="perda = '{{ route('crm.oportunidades.perder', $op) }}'" class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50"><i class="fa-solid fa-thumbs-down mr-2"></i>Marcar como Perdida</button>
+                            @endif
+                        </x-kebab>
                     </td>
                 </tr>
                 @empty
@@ -80,4 +89,29 @@
     </div>
     @endif
 </x-data-table>
+
+{{-- Modal de perda: justificativa obrigatória (EDUQ) --}}
+<div x-show="perda" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/40" @click.self="perda = null">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+        <h3 class="text-base font-semibold text-gray-800 mb-1">Marcar como Perdida</h3>
+        <p class="text-xs text-gray-400 mb-4">A justificativa é obrigatória e alimenta o gráfico de motivos de perda do painel comercial.</p>
+        <form method="POST" :action="perda || '#'" class="space-y-3">
+            @csrf
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Motivo da perda <span class="text-red-500">*</span></label>
+                <select name="motivo_perda_id" required class="w-full border rounded-lg px-3 py-2 text-sm">
+                    <option value="">Selecione...</option>
+                    @foreach($motivosPerda ?? [] as $mp)
+                    <option value="{{ $mp->id }}">{{ $mp->nome }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" @click="perda = null" class="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</button>
+                <button type="submit" class="px-5 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-sm font-semibold">Confirmar Perda</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
 @endsection

@@ -38,7 +38,7 @@ class BoletimController extends Controller
 
         $matriculas = Matricula::with('aluno.pessoa')
             ->where('turma_montada_id', $request->turma_montada_id)
-            ->whereIn('situacao', ['ativa', 'concluida'])
+            ->whereIn('situacao', ['ativa', 'confirmada', 'nao_confirmada', 'concluida'])
             ->get();
 
         $linhas = [];

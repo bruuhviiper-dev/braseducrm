@@ -68,6 +68,33 @@ class CadastroSimplesController extends Controller
             'formas-ingresso' => ['model' => \App\Models\FormaIngresso::class, 'titulo' => 'Forma de Ingresso', 'codigo' => 21, 'fields' => [
                 ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
             ]],
+            'tipos-requerimento' => ['model' => \App\Models\TipoRequerimento::class, 'titulo' => 'Cadastro de Requerimentos', 'codigo' => 94, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+                ['name' => 'descricao', 'label' => 'Orientações para o aluno', 'type' => 'textarea', 'required' => false],
+                ['name' => 'ativo', 'label' => 'Ativo', 'type' => 'boolean', 'required' => false],
+                ['name' => 'ocultar_portal', 'label' => 'Ocultar no Portal do Aluno? (uso interno da secretaria)', 'type' => 'boolean', 'required' => false],
+                ['name' => 'exigir_anexo', 'label' => 'Exigir anexo na abertura? (ex.: atestado na Justificativa de Falta)', 'type' => 'boolean', 'required' => false],
+                ['name' => 'bloquear_inadimplente', 'label' => 'Bloquear abertura se houver parcela vencida (inadimplência)?', 'type' => 'boolean', 'required' => false],
+                ['name' => 'bloquear_parcelas_abertas', 'label' => 'Bloquear se houver parcelas em aberto (mesmo a vencer)?', 'type' => 'boolean', 'required' => false],
+                ['name' => 'exigir_aprovacao', 'label' => 'Exigir aprovação (direciona para a fila do departamento)?', 'type' => 'boolean', 'required' => false],
+                ['name' => 'departamento_id', 'label' => 'Departamento responsável', 'type' => 'select', 'required' => false, 'options' => \App\Models\Departamento::orderBy('nome')->pluck('nome', 'id')->all()],
+                ['name' => 'novo_status_matricula', 'label' => 'Ao aprovar, alterar matrícula para', 'type' => 'select', 'required' => false, 'options' => ['trancada' => 'Trancado', 'desistente' => 'Desistente', 'cancelada' => 'Cancelado']],
+                ['name' => 'isento', 'label' => 'Isento de taxa?', 'type' => 'boolean', 'required' => false],
+                ['name' => 'valor', 'label' => 'Valor da taxa (R$)', 'type' => 'number', 'required' => false],
+                ['name' => 'vencimento_dias', 'label' => 'Vencimento do boleto (dias úteis após a abertura)', 'type' => 'number', 'required' => false],
+                ['name' => 'cota_isencao', 'label' => 'Cota de isenção (nº de pedidos gratuitos antes de cobrar)', 'type' => 'number', 'required' => false],
+                ['name' => 'categoria_receber_id', 'label' => 'Categoria da receita', 'type' => 'select', 'required' => false, 'options' => \App\Models\CategoriaReceber::orderBy('nome')->pluck('nome', 'id')->all()],
+                ['name' => 'conta_bancaria_id', 'label' => 'Conta de recebimento', 'type' => 'select', 'required' => false, 'options' => \App\Models\ContaBancaria::orderBy('nome')->pluck('nome', 'id')->all()],
+                ['name' => 'finalizar_apos_pagamento', 'label' => 'Finalizar automaticamente após o pagamento?', 'type' => 'boolean', 'required' => false],
+                ['name' => 'cancelar_sem_pagamento', 'label' => 'Cancelar automaticamente por falta de pagamento?', 'type' => 'boolean', 'required' => false],
+            ]],
+            'categorias-atendimento' => ['model' => \App\Models\CategoriaAtendimento::class, 'titulo' => 'Cadastro de Categorias (Atendimento)', 'codigo' => 54, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+                ['name' => 'departamento_id', 'label' => 'Departamento responsável (todos os operadores do departamento recebem o alerta)', 'type' => 'select', 'required' => false, 'options' => \App\Models\Departamento::orderBy('nome')->pluck('nome', 'id')->all()],
+            ]],
+            'motivos-falha-atendimento' => ['model' => \App\Models\MotivoFalhaAtendimento::class, 'titulo' => 'Cadastro Motivos de Falha (Atendimentos)', 'codigo' => 178, 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+            ]],
             'escolas' => ['model' => \App\Models\Escola::class, 'titulo' => 'Escola', 'codigo' => 8, 'fields' => [
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'telefone', 'label' => 'Telefone (Fixo)', 'type' => 'text', 'required' => false],

@@ -33,7 +33,7 @@ class LancamentoNotaController extends Controller
     {
         $tabela = TabelaAvaliacao::with('itens')->findOrFail($request->tabela_avaliacao_id);
         // "Carregar somente alunos ativos?" (EDUQ): ligado = só ativa; desligado = ativa + concluída
-        $situacoes = $request->boolean('somente_ativos') ? ['ativa'] : ['ativa', 'concluida'];
+        $situacoes = $request->boolean('somente_ativos') ? ['ativa', 'confirmada'] : ['ativa', 'confirmada', 'nao_confirmada', 'concluida'];
         $matriculas = Matricula::with('aluno.pessoa')
             ->where('turma_montada_id', $request->turma_montada_id)
             ->whereIn('situacao', $situacoes)

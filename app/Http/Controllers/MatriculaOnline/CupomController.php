@@ -18,7 +18,8 @@ class CupomController extends Controller
     public function create()
     {
         $aberturas = AberturaMatriculaOnline::orderBy('nome')->get();
-        return view('matricula-online.cupons.form', compact('aberturas'));
+        $consultores = \App\Models\User::where('ativo', true)->orderBy('nome')->get();
+        return view('matricula-online.cupons.form', compact('aberturas', 'consultores'));
     }
 
     public function store(Request $request)
@@ -32,7 +33,8 @@ class CupomController extends Controller
     public function edit(CupomDesconto $cupom)
     {
         $aberturas = AberturaMatriculaOnline::orderBy('nome')->get();
-        return view('matricula-online.cupons.form', compact('cupom', 'aberturas'));
+        $consultores = \App\Models\User::where('ativo', true)->orderBy('nome')->get();
+        return view('matricula-online.cupons.form', compact('cupom', 'aberturas', 'consultores'));
     }
 
     public function update(Request $request, CupomDesconto $cupom)
@@ -58,6 +60,10 @@ class CupomController extends Controller
             'quantidade_total' => 'nullable|integer|min:0',
             'validade' => 'nullable|date',
             'abertura_matricula_id' => 'nullable|exists:aberturas_matricula_online,id',
+            // EDUQ: o cupom pode incidir só na taxa de matrícula, só nas mensalidades ou em ambas
+            'incidencia' => 'required|in:matricula,mensalidades,ambas',
+            // e pode ser exclusivo de um consultor comercial
+            'consultor_id' => 'nullable|exists:users,id',
         ]);
     }
 }

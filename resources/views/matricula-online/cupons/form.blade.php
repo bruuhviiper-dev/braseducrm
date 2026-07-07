@@ -49,11 +49,31 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Aplicar o desconto sobre <span class="text-red-500">*</span></label>
+                <select name="incidencia" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    @foreach(['ambas'=>'Matrícula e mensalidades','matricula'=>'Apenas a taxa de matrícula','mensalidades'=>'Apenas as mensalidades'] as $val=>$lbl)
+                    <option value="{{ $val }}" {{ old('incidencia', $cupom->incidencia ?? 'ambas') == $val ? 'selected' : '' }}>{{ $lbl }}</option>
+                    @endforeach
+                </select>
+                <p class="text-[11px] text-gray-400 mt-1">Aplicar apenas nas mensalidades preserva o valor cheio da inscrição (base do comissionamento).</p>
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Abertura vinculada</label>
                 <select name="abertura_matricula_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Todas as aberturas</option>
                     @foreach($aberturas as $a)
                     <option value="{{ $a->id }}" {{ old('abertura_matricula_id', $cupom->abertura_matricula_id ?? '') == $a->id ? 'selected' : '' }}>{{ $a->nome }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Exclusivo do consultor</label>
+                <select name="consultor_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Qualquer consultor</option>
+                    @foreach($consultores as $c)
+                    <option value="{{ $c->id }}" {{ old('consultor_id', $cupom->consultor_id ?? '') == $c->id ? 'selected' : '' }}>{{ $c->nome }}</option>
                     @endforeach
                 </select>
             </div>

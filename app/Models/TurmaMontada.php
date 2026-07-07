@@ -8,9 +8,9 @@ class TurmaMontada extends Model
 {
     protected $table = 'turmas_montadas';
 
-    protected $fillable = ['turma_id', 'modulo_id', 'periodo_letivo_id', 'sigla', 'nome', 'situacao', 'ativo'];
+    protected $fillable = ['turma_id', 'modulo_id', 'periodo_letivo_id', 'sigla', 'nome', 'situacao', 'ativo', 'data_inicio', 'data_fim'];
 
-    protected $casts = ['ativo' => 'boolean'];
+    protected $casts = ['ativo' => 'boolean', 'data_inicio' => 'date', 'data_fim' => 'date'];
 
     public function matriculas()
     {
@@ -22,9 +22,9 @@ class TurmaMontada extends Model
     {
         $m = $this->matriculas()->get();
         $total = $m->count();
-        $matriculados = $m->where('situacao', 'ativa')->count();
-        $concluidos = $m->where('situacao', 'concluida')->count();
-        $cancelados = $m->whereIn('situacao', ['cancelada', 'evadida'])->count();
+        $matriculados = $m->whereIn('situacao', ['ativa', 'confirmada'])->count();
+        $concluidos = $m->whereIn('situacao', ['concluida', 'aprovada'])->count();
+        $cancelados = $m->whereIn('situacao', ['cancelada', 'evadida', 'desistente'])->count();
         return [
             'matriculados' => $matriculados,
             'nao_confirmados' => max(0, $total - $matriculados - $concluidos - $cancelados),

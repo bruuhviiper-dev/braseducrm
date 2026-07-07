@@ -90,6 +90,14 @@
                             @foreach($modulos as $m)<option value="{{ $m->id }}" @selected(old('modulo_id', $turmaMontada->modulo_id ?? '')==$m->id)>{{ $m->nome }}</option>@endforeach
                         </select>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Início do período letivo</label>
+                        <input type="date" name="data_inicio" value="{{ old('data_inicio', isset($turmaMontada) && $turmaMontada->data_inicio ? $turmaMontada->data_inicio->format('Y-m-d') : '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Fim do período letivo</label>
+                        <input type="date" name="data_fim" value="{{ old('data_fim', isset($turmaMontada) && $turmaMontada->data_fim ? $turmaMontada->data_fim->format('Y-m-d') : '') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+                    </div>
                 </div>
             </div>
 
@@ -169,8 +177,11 @@
     {{-- Matrícula de alunos (apenas ao editar) --}}
     @isset($turmaMontada)
     <div class="bg-white rounded-xl border mt-6">
-        <div class="px-6 py-4 border-b">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
             <h2 class="text-base font-semibold text-gray-800">Alunos Matriculados ({{ $matriculados->count() }})</h2>
+            @if($turmaMontada->situacao !== 'finalizada')
+            <a href="{{ route('academico.montagem-turma.finalizar', $turmaMontada) }}" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-flag-checkered mr-1"></i> Finalizar Turma</a>
+            @endif
         </div>
         <div class="p-6 space-y-4">
             <form method="POST" action="{{ route('academico.montagem-turma.matricular', $turmaMontada) }}" class="flex gap-2">
@@ -196,12 +207,31 @@
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-2 font-medium text-gray-800">{{ $m->aluno?->pessoa?->nome ?? '—' }}</td>
                         <td class="px-4 py-2 text-gray-600">{{ $m->aluno?->ra ?? '—' }}</td>
-                        <td class="px-4 py-2"><span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full capitalize">{{ $m->situacao }}</span></td>
+                        @php
+                            $badge = match($m->situacao) {
+                                'nao_confirmada' => ['bg-amber-100 text-amber-700', 'Não Confirmada'],
+                                'confirmada', 'ativa' => ['bg-green-100 text-green-700', $m->situacao === 'ativa' ? 'Ativa' : 'Confirmada'],
+                                'concluida' => ['bg-primary-100 text-primary-700', 'Concluída'],
+                                'dependencia' => ['bg-orange-100 text-orange-700', 'Dependência'],
+                                'trancada' => ['bg-gray-200 text-gray-700', 'Trancada'],
+                                'desistente' => ['bg-red-100 text-red-700', 'Desistente'],
+                                default => ['bg-gray-100 text-gray-600', ucfirst($m->situacao)],
+                            };
+                        @endphp
+                        <td class="px-4 py-2"><span class="text-xs {{ $badge[0] }} px-2 py-0.5 rounded-full">{{ $badge[1] }}</span></td>
                         <td class="px-4 py-2 text-right">
-                            <form method="POST" action="{{ route('academico.montagem-turma.desmatricular', [$turmaMontada, $m]) }}" onsubmit="return confirm('Remover aluno da turma?')">
-                                @csrf @method('DELETE')
-                                <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-user-minus"></i></button>
-                            </form>
+                            <div class="flex items-center justify-end gap-1">
+                                @if($m->situacao === 'nao_confirmada')
+                                <form method="POST" action="{{ route('academico.montagem-turma.confirmar', [$turmaMontada, $m]) }}">
+                                    @csrf
+                                    <button class="p-1.5 text-green-600 hover:bg-green-50 rounded" title="Confirmar matrícula (após validar o pagamento da taxa)"><i class="fa-solid fa-circle-check"></i></button>
+                                </form>
+                                @endif
+                                <form method="POST" action="{{ route('academico.montagem-turma.desmatricular', [$turmaMontada, $m]) }}" onsubmit="return confirm('Remover aluno da turma?')">
+                                    @csrf @method('DELETE')
+                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-user-minus"></i></button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty

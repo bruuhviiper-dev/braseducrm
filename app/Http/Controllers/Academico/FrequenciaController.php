@@ -85,7 +85,7 @@ class FrequenciaController extends Controller
 
     private function montarRoster(Request $request): array
     {
-        $situacoes = $request->boolean('somente_ativos') ? ['ativa'] : ['ativa', 'concluida'];
+        $situacoes = $request->boolean('somente_ativos') ? ['ativa', 'confirmada'] : ['ativa', 'confirmada', 'nao_confirmada', 'concluida'];
         $matriculas = Matricula::with('aluno.pessoa')
             ->where('turma_montada_id', $request->turma_montada_id)
             ->whereIn('situacao', $situacoes)

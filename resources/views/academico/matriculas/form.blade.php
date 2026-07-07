@@ -60,8 +60,8 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Situação <span class="text-red-500">*</span></label>
                         <select name="situacao" required class="w-full border rounded-lg px-3 py-2 text-sm">
-                            @foreach(['ativa'=>'Ativa','trancada'=>'Trancada','cancelada'=>'Cancelada','concluida'=>'Concluída','transferida'=>'Transferida','evadida'=>'Evadida'] as $val=>$lbl)
-                            <option value="{{ $val }}" @selected(old('situacao', $matricula->situacao ?? 'ativa')===$val)>{{ $lbl }}</option>
+                            @foreach(['nao_confirmada'=>'Não Confirmada','confirmada'=>'Confirmada','ativa'=>'Ativa','trancada'=>'Trancada','desistente'=>'Desistente','cancelada'=>'Cancelada','dependencia'=>'Dependência (DP)','concluida'=>'Concluída','transferida'=>'Transferida','evadida'=>'Evadida'] as $val=>$lbl)
+                            <option value="{{ $val }}" @selected(old('situacao', $matricula->situacao ?? 'nao_confirmada')===$val)>{{ $lbl }}</option>
                             @endforeach
                         </select>
                     </div>

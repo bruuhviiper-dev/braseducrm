@@ -201,6 +201,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('montagem-turma', MontagemTurmaController::class)->parameters(['montagem-turma' => 'montagem_turma'])->except('show');
         Route::post('montagem-turma/{montagem_turma}/matricular', [MontagemTurmaController::class, 'matricular'])->name('montagem-turma.matricular');
         Route::delete('montagem-turma/{montagem_turma}/desmatricular/{matricula}', [MontagemTurmaController::class, 'desmatricular'])->name('montagem-turma.desmatricular');
+        Route::post('montagem-turma/{montagem_turma}/confirmar/{matricula}', [MontagemTurmaController::class, 'confirmar'])->name('montagem-turma.confirmar');
+        Route::get('montagem-turma/{montagem_turma}/finalizar', [MontagemTurmaController::class, 'finalizar'])->name('montagem-turma.finalizar');
+        Route::post('montagem-turma/{montagem_turma}/finalizar', [MontagemTurmaController::class, 'processarFinalizacao'])->name('montagem-turma.processar-finalizacao');
     });
 
     // CRM
@@ -209,6 +212,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('funil', FunilController::class);
         Route::resource('oportunidades', OportunidadeController::class);
         Route::patch('oportunidades/{oportunidade}/mover-etapa', [OportunidadeController::class, 'moverEtapa'])->name('oportunidades.mover-etapa');
+        Route::post('oportunidades/{oportunidade}/ganhar', [OportunidadeController::class, 'ganhar'])->name('oportunidades.ganhar');
+        Route::post('oportunidades/{oportunidade}/perder', [OportunidadeController::class, 'perder'])->name('oportunidades.perder');
         Route::get('desempenho', [DesempenhoController::class, 'index'])->name('desempenho.index');
         Route::resource('origens', OrigemController::class)->parameters(['origens' => 'origem'])->except('show');
         Route::resource('tags', TagCrmController::class)->parameters(['tags' => 'tag'])->except('show');
@@ -231,6 +236,7 @@ Route::middleware('auth')->group(function () {
         Route::post('titulos-receber/gerar', [TituloReceberController::class, 'gerar'])->name('titulos-receber.gerar');
         Route::resource('titulos-receber', TituloReceberController::class);
         Route::post('titulos-receber/{titulo}/baixar', [TituloReceberController::class, 'baixar'])->name('titulos-receber.baixar');
+        Route::post('titulos-receber/{titulo}/estornar', [TituloReceberController::class, 'estornar'])->name('titulos-receber.estornar');
         Route::resource('titulos-pagar', TituloPagarController::class);
         Route::resource('plano-contas', PlanoContasController::class);
         Route::get('fluxo-caixa', [FluxoCaixaController::class, 'index'])->name('fluxo-caixa.index');
