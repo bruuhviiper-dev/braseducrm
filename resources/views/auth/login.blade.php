@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BrasEduCRM</title>
+    <title>Login - One</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body class="bg-gradient-to-br from-slate-800 to-slate-900 min-h-screen flex items-center justify-center">
     <div class="w-full max-w-md">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-white">BrasEdu<span class="text-blue-400">CRM</span></h1>
+            <h1 class="text-3xl font-bold text-white">One</h1>
             <p class="text-slate-400 mt-2">Sistema de Gestao Academica</p>
         </div>
 
@@ -63,7 +63,7 @@
             </form>
         </div>
 
-        <p class="text-center text-slate-500 text-sm mt-6">BrasEduCRM &copy; {{ date('Y') }}</p>
+        <p class="text-center text-slate-500 text-sm mt-6">One &copy; {{ date('Y') }}</p>
     </div>
 </body>
 </html>

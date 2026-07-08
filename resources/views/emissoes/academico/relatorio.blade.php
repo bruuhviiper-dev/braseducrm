@@ -34,6 +34,6 @@
     </table>
 
     <div class="total">Total de registros: {{ count($linhas) }}</div>
-    <div class="rodape">{{ config('app.name', 'BrasEduCRM') }} — Emitido em {{ now()->format('d/m/Y H:i') }}.</div>
+    <div class="rodape">{{ config('app.name', 'One') }} — Emitido em {{ now()->format('d/m/Y H:i') }}.</div>
 </body>
 </html>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BrasEduCRM - Sistema de Gestao Academica Completo para Instituicoes de Ensino. CRM, Academico, Financeiro, EAD e muito mais.">
-    <title>BrasEduCRM - Gestao Academica Completa</title>
+    <meta name="description" content="One - Sistema de Gestao Academica Completo para Instituicoes de Ensino. CRM, Academico, Financeiro, EAD e muito mais.">
+    <title>One - Gestao Academica Completa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -121,7 +121,7 @@
                         <i class="fas fa-graduation-cap text-white text-lg"></i>
                     </div>
                     <span class="text-xl font-bold" :class="scrolled ? 'text-gray-900' : 'text-white'">
-                        BrasEdu<span class="text-blue-500">CRM</span>
+                        One
                     </span>
                 </a>
 
@@ -203,7 +203,7 @@
                             <div class="w-3 h-3 rounded-full bg-red-400"></div>
                             <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
                             <div class="w-3 h-3 rounded-full bg-green-400"></div>
-                            <span class="text-white/50 text-xs ml-2">BrasEduCRM - Dashboard</span>
+                            <span class="text-white/50 text-xs ml-2">One - Dashboard</span>
                         </div>
                         <div class="grid grid-cols-2 gap-3 mb-4">
                             <div class="bg-white/10 rounded-lg p-4">
@@ -306,7 +306,7 @@
                         <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center">
                             <i class="fas fa-xmark text-red-500 text-lg"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900">Sem o BrasEduCRM</h3>
+                        <h3 class="text-lg font-bold text-gray-900">Sem o One</h3>
                     </div>
                     <ul class="space-y-4">
                         @foreach([
@@ -330,7 +330,7 @@
                         <div class="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center">
                             <i class="fas fa-check text-green-600 text-lg"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900">Com o BrasEduCRM</h3>
+                        <h3 class="text-lg font-bold text-gray-900">Com o One</h3>
                     </div>
                     <ul class="space-y-4">
                         @foreach([
@@ -489,7 +489,7 @@
                             <div class="w-3 h-3 rounded-full bg-red-400"></div>
                             <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
                             <div class="w-3 h-3 rounded-full bg-green-400"></div>
-                            <span class="text-gray-400 text-xs ml-3">BrasEduCRM / Dashboard</span>
+                            <span class="text-gray-400 text-xs ml-3">One / Dashboard</span>
                         </div>
                         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                             <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
@@ -574,7 +574,7 @@
                             <div class="w-3 h-3 rounded-full bg-red-400"></div>
                             <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
                             <div class="w-3 h-3 rounded-full bg-green-400"></div>
-                            <span class="text-gray-400 text-xs ml-3">BrasEduCRM / CRM / Funil de Vendas</span>
+                            <span class="text-gray-400 text-xs ml-3">One / CRM / Funil de Vendas</span>
                         </div>
                         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             @php
@@ -628,7 +628,7 @@
                             <div class="w-3 h-3 rounded-full bg-red-400"></div>
                             <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
                             <div class="w-3 h-3 rounded-full bg-green-400"></div>
-                            <span class="text-gray-400 text-xs ml-3">BrasEduCRM / Financeiro</span>
+                            <span class="text-gray-400 text-xs ml-3">One / Financeiro</span>
                         </div>
                         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                             <div class="bg-green-50 border border-green-100 rounded-xl p-4">
@@ -885,7 +885,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <span class="inline-block px-4 py-1.5 bg-brand-50 text-brand-600 text-sm font-semibold rounded-full mb-4">Depoimentos</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Instituicoes que confiam no BrasEduCRM</h2>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Instituicoes que confiam no One</h2>
                 <p class="text-gray-500 text-lg max-w-2xl mx-auto">Veja o que nossos clientes falam sobre a plataforma.</p>
             </div>
 
@@ -893,7 +893,7 @@
                 @php
                 $testimonials = [
                     [
-                        'quote' => 'O BrasEduCRM transformou completamente a gestao da nossa faculdade. Reduzimos em 60% o tempo gasto com processos administrativos e aumentamos em 35% a captacao de novos alunos com o CRM.',
+                        'quote' => 'O One transformou completamente a gestao da nossa faculdade. Reduzimos em 60% o tempo gasto com processos administrativos e aumentamos em 35% a captacao de novos alunos com o CRM.',
                         'name' => 'Prof. Dr. Ricardo Mendes',
                         'role' => 'Diretor Academico',
                         'institution' => 'Faculdade Horizonte - SP',
@@ -957,7 +957,7 @@
                 {{-- Left: CTA text --}}
                 <div>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-6">Pronto para transformar sua gestao academica?</h2>
-                    <p class="text-blue-100/80 text-lg mb-8 leading-relaxed">Preencha o formulario e um de nossos consultores entrara em contato para agendar uma demonstracao personalizada do BrasEduCRM.</p>
+                    <p class="text-blue-100/80 text-lg mb-8 leading-relaxed">Preencha o formulario e um de nossos consultores entrara em contato para agendar uma demonstracao personalizada do One.</p>
                     <div class="space-y-4">
                         <div class="flex items-center gap-3 text-white/90">
                             <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
@@ -1059,7 +1059,7 @@
                         <div class="w-9 h-9 rounded-lg bg-brand-600 flex items-center justify-center">
                             <i class="fas fa-graduation-cap text-white text-lg"></i>
                         </div>
-                        <span class="text-xl font-bold text-white">BrasEdu<span class="text-blue-500">CRM</span></span>
+                        <span class="text-xl font-bold text-white">One</span>
                     </div>
                     <p class="text-sm leading-relaxed mb-4">Plataforma completa de gestao academica para instituicoes de ensino. CRM, Academico, Financeiro, EAD e muito mais.</p>
                     <div class="flex gap-3">
@@ -1096,7 +1096,7 @@
                     <ul class="space-y-3 text-sm">
                         <li class="flex items-center gap-3">
                             <i class="fas fa-envelope text-brand-400"></i>
-                            <span>contato@braseducrm.com.br</span>
+                            <span>contato@one.com.br</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fas fa-phone text-brand-400"></i>
@@ -1115,7 +1115,7 @@
             </div>
 
             <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p class="text-sm">&copy; {{ date('Y') }} BrasEduCRM. Todos os direitos reservados.</p>
+                <p class="text-sm">&copy; {{ date('Y') }} One. Todos os direitos reservados.</p>
                 <div class="flex gap-6 text-sm">
                     <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
                     <a href="#" class="hover:text-white transition-colors">Politica de Privacidade</a>

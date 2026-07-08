@@ -18,7 +18,7 @@
 </head>
 <body>
     <h1>Recibo de Pagamento</h1>
-    <div class="sub">{{ config('app.name', 'BrasEduCRM') }}</div>
+    <div class="sub">{{ config('app.name', 'One') }}</div>
 
     <div class="valor">R$ {{ number_format($titulo->valor_pago ?: $titulo->valor_original, 2, ',', '.') }}</div>
 

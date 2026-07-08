@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'BrasEduCRM') - {{ config('app.name') }}</title>
+    <title>@yield('title', 'One') - {{ config('app.name') }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -39,7 +39,7 @@
         .fl-wrap>input,.fl-wrap>select,.fl-wrap>textarea{padding-top:.7rem!important;padding-bottom:.7rem!important;border-radius:.5rem!important}
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 min-h-screen" x-data="{ searchOpen: false, openMod: null, dark: localStorage.getItem('braseducrm_dark')==='true' }" x-init="document.documentElement.classList.toggle('dark', dark); $watch('dark', v => document.documentElement.classList.toggle('dark', v))">
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen" x-data="{ searchOpen: false, openMod: null, dark: localStorage.getItem('one_dark')==='true' }" x-init="document.documentElement.classList.toggle('dark', dark); $watch('dark', v => document.documentElement.classList.toggle('dark', v))">
     <div class="flex min-h-screen">
 
         {{-- SIDEBAR COM SUBMENUS EXPANDIVEIS --}}
@@ -47,7 +47,7 @@
 
             {{-- Logo (wordmark branca em bloco escuro, estilo EDUQ) --}}
             <div class="flex items-center justify-center h-14 border-b border-white/10 px-2 bg-black/30">
-                <span class="text-xl font-extrabold text-white tracking-tight lowercase">brasedu</span>
+                <span class="text-xl font-extrabold text-white tracking-tight">One</span>
             </div>
 
             {{-- Search bar inside sidebar --}}
@@ -524,7 +524,7 @@
                     <a href="{{ Route::has('configuracoes.index') ? route('configuracoes.index') : '#' }}" class="hidden md:block p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200/60 rounded-lg" title="Configurações">
                         <i class="fa-solid fa-gear"></i>
                     </a>
-                    <button @click="dark = !dark; localStorage.setItem('braseducrm_dark', dark)" class="hidden md:block p-2 text-amber-400 hover:text-amber-500 hover:bg-gray-200/60 rounded-lg" title="Alternar tema">
+                    <button @click="dark = !dark; localStorage.setItem('one_dark', dark)" class="hidden md:block p-2 text-amber-400 hover:text-amber-500 hover:bg-gray-200/60 rounded-lg" title="Alternar tema">
                         <i class="fa-solid" :class="dark ? 'fa-moon' : 'fa-sun'"></i>
                     </button>
                     {{-- Botao Painel (EDUQ) --}}
@@ -664,7 +664,7 @@
                 tabs: [],
                 current: window.location.pathname,
                 init() {
-                    try { this.tabs = JSON.parse(localStorage.getItem('braseducrm_tabs') || '[]'); } catch (e) { this.tabs = []; }
+                    try { this.tabs = JSON.parse(localStorage.getItem('one_tabs') || '[]'); } catch (e) { this.tabs = []; }
                     const url = window.location.pathname;
                     if (url === '/login' || url === '/' || url === '/dashboard') return;
                     const title = (window.__PAGE_TITLE__ || document.title || url).toString();
@@ -683,7 +683,7 @@
                     }
                 },
                 closeAll() { this.tabs = []; this.save(); window.location.href = '/dashboard'; },
-                save() { localStorage.setItem('braseducrm_tabs', JSON.stringify(this.tabs)); },
+                save() { localStorage.setItem('one_tabs', JSON.stringify(this.tabs)); },
             };
         }
     </script>

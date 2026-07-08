@@ -36,6 +36,6 @@
         <div class="linha-assinatura">Secretaria Acadêmica</div>
     </div>
 
-    <div class="rodape">{{ config('app.name', 'BrasEduCRM') }} — Documento emitido em {{ now()->format('d/m/Y H:i') }}.</div>
+    <div class="rodape">{{ config('app.name', 'One') }} — Documento emitido em {{ now()->format('d/m/Y H:i') }}.</div>
 </body>
 </html>

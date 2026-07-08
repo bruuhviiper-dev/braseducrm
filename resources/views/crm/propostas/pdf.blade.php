@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>{{ config('app.name', 'BrasEduCRM') }}</h1>
+        <h1>{{ config('app.name', 'One') }}</h1>
         <p>Proposta Comercial nº {{ str_pad($oportunidade->id, 5, '0', STR_PAD_LEFT) }} — {{ now()->format('d/m/Y') }}</p>
     </div>
 
@@ -47,6 +47,6 @@
         <div class="linha">{{ $oportunidade->consultor?->nome ?? config('app.name') }}</div>
     </div>
 
-    <div class="footer">Documento gerado eletronicamente por {{ config('app.name', 'BrasEduCRM') }} em {{ now()->format('d/m/Y H:i') }}.</div>
+    <div class="footer">Documento gerado eletronicamente por {{ config('app.name', 'One') }} em {{ now()->format('d/m/Y H:i') }}.</div>
 </body>
 </html>

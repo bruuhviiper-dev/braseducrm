@@ -348,7 +348,7 @@ class DatabaseSeeder extends Seeder
         // ============ NOTIFICACOES ============
         Notificacao::create([
             'user_id' => $admin->id,
-            'titulo' => 'Bem-vindo ao BrasEduCRM!',
+            'titulo' => 'Bem-vindo ao One!',
             'mensagem' => 'Sistema configurado e pronto para uso.',
             'tipo' => 'success',
             'lida' => false,

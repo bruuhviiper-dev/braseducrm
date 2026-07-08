@@ -49,7 +49,7 @@ class BoletoCnabService
         $banco = $this->num($this->cred['banco'] ?? '', 3);
         $agencia = $this->num($this->cred['agencia'] ?? '', 5);
         $conta = $this->num($this->cred['conta'] ?? '', 7);
-        $empresa = $this->texto(config('app.name', 'BRASEDUCRM'), 30);
+        $empresa = $this->texto(config('app.name', 'ONE'), 30);
         $data = now()->format('dmy');
 
         $r = '0';                              // 001 tipo de registro

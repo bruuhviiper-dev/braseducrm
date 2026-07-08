@@ -42,7 +42,7 @@ class RdStationService
                     'event_type' => 'CONVERSION',
                     'event_family' => 'CDP',
                     'payload' => [
-                        'conversion_identifier' => 'braseducrm-interessado',
+                        'conversion_identifier' => 'one-interessado',
                         'name' => $interessado->nome,
                         'email' => $interessado->email,
                         'mobile_phone' => $interessado->celular ?? $interessado->telefone,

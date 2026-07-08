@@ -23,7 +23,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Título do portal</label>
-                <input type="text" name="titulo" value="{{ old('titulo', $config->titulo) }}" placeholder="Ex.: Inscrições BrasEdu" class="w-full border rounded-lg px-3 py-2 text-sm">
+                <input type="text" name="titulo" value="{{ old('titulo', $config->titulo) }}" placeholder="Ex.: Inscrições One" class="w-full border rounded-lg px-3 py-2 text-sm">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Cor primária (identidade visual)</label>

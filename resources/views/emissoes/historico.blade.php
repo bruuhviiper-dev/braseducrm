@@ -19,7 +19,7 @@
 </head>
 <body>
     <h1>Histórico Escolar</h1>
-    <div class="sub">{{ config('app.name', 'BrasEduCRM') }}</div>
+    <div class="sub">{{ config('app.name', 'One') }}</div>
 
     <table class="info">
         <tr><td><strong>Aluno:</strong> {{ $aluno->pessoa->nome ?? '—' }}</td><td><strong>RA:</strong> {{ $aluno->ra ?? '—' }}</td></tr>
