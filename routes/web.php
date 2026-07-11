@@ -201,7 +201,11 @@ Route::middleware('auth')->group(function () {
 
         // Emissões Acadêmicas em PDF (P6 - lote 3)
         Route::get('emissoes', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'index'])->name('emissoes.index');
-        Route::get('emissoes/alunos-matriculados', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'alunosMatriculados'])->name('emissoes.alunos-matriculados');
+        // 79 Emissão de Alunos Matriculados — construtor de relatório dinâmico (Layouts/Colunas/Filtros + PDF/CSV/XLSX)
+        Route::get('emissoes/alunos-matriculados', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'index'])->name('emissoes.alunos-matriculados');
+        Route::get('emissoes/alunos-matriculados/emitir', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'emitir'])->name('emissoes.alunos-matriculados.emitir');
+        Route::post('emissoes/alunos-matriculados/layout', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'salvarLayout'])->name('emissoes.alunos-matriculados.layout');
+        Route::delete('emissoes/alunos-matriculados/layout/{layout}', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'excluirLayout'])->name('emissoes.alunos-matriculados.layout.excluir');
         Route::get('emissoes/turmas-montadas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'turmasMontadas'])->name('emissoes.turmas-montadas');
         Route::get('emissoes/horarios-professores', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'horariosProfessores'])->name('emissoes.horarios-professores');
         Route::get('emissoes/notas-faltas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'notasFaltas'])->name('emissoes.notas-faltas');
