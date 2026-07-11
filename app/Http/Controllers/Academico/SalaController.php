@@ -23,12 +23,13 @@ class SalaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'sigla' => 'required|string|max:60',
             'nome' => 'required|string|max:255',
-            'sigla' => 'nullable|string|max:60',
+            'capacidade' => 'nullable|integer|min:0',
         ]);
 
-        $data = $request->all();
-        $data['ativo'] = $request->has('ativo');
+        $data = $request->only(['sigla', 'nome', 'capacidade', 'bloco']);
+        $data['ativo'] = $request->boolean('ativo');
 
         Sala::create($data);
 
@@ -44,12 +45,13 @@ class SalaController extends Controller
     public function update(Request $request, Sala $sala)
     {
         $request->validate([
+            'sigla' => 'required|string|max:60',
             'nome' => 'required|string|max:255',
-            'sigla' => 'nullable|string|max:60',
+            'capacidade' => 'nullable|integer|min:0',
         ]);
 
-        $data = $request->all();
-        $data['ativo'] = $request->has('ativo');
+        $data = $request->only(['sigla', 'nome', 'capacidade', 'bloco']);
+        $data['ativo'] = $request->boolean('ativo');
 
         $sala->update($data);
 

@@ -4,24 +4,23 @@
 @php $temAtivo = in_array('ativo', (new $cfg['model'])->getFillable()); @endphp
 
 @section('content')
-<x-data-table :title="$cfg['titulo']" :codigo="$cfg['codigo']" :createRoute="empty($cfg['sem_criar']) ? route('cadastros.create', $tipo) : null">
+{{-- Lista genérica no padrão EDUQ Clean UI: sem coluna ID, kebab após a 1ª coluna, pill azul de status --}}
+<x-data-table :title="$cfg['titulo']" :codigo="$cfg['codigo']" :breadcrumb="$cfg['breadcrumb'] ?? null" :createRoute="empty($cfg['sem_criar']) ? route('cadastros.create', $tipo) : null">
     <table class="w-full text-sm text-left">
-        <thead class="bg-gray-50 border-b">
-            <tr>
-                <th class="py-3 px-3 w-10"></th>
-                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
+        <thead>
+            <tr class="border-b">
+                <th class="py-3 px-3 w-8"></th>
                 @foreach($cfg['fields'] as $f)
                 <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">{{ $f['label'] }}</th>
+                @if($loop->first)<th class="px-4 py-3 w-10"></th>@endif
                 @endforeach
-                @if($temAtivo)<th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Situacao</th>@endif
-                <th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Acoes</th>
+                @if($temAtivo)<th class="px-4 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>@endif
             </tr>
         </thead>
-        <tbody class="divide-y">
+        <tbody class="divide-y divide-gray-100">
             @forelse($registros as $r)
             <tr class="hover:bg-gray-50">
-                    <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $r->id }}" class="w-4 h-4 text-primary-600 border-gray-300"></td>
-                <td class="px-4 py-3 text-gray-500">{{ $r->id }}</td>
+                <td class="py-3 px-3"><input type="radio" name="sel" value="{{ $r->id }}" class="w-4 h-4 text-cyan-500 border-gray-300"></td>
                 @foreach($cfg['fields'] as $f)
                 <td class="px-4 py-3 {{ $loop->first ? 'font-medium text-gray-800' : 'text-gray-600' }}">
                     @if($f['type'] === 'number' && $f['name'] === 'valor')
@@ -32,19 +31,15 @@
                         {{ \Illuminate\Support\Str::limit($r->{$f['name']}, 60) ?: '—' }}
                     @endif
                 </td>
-                @endforeach
-                @if($temAtivo)
+                @if($loop->first)
                 <td class="px-4 py-3">
-                    @if($r->ativo)
-                    <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Ativo</span>
-                    @else
-                    <span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Inativo</span>
-                    @endif
+                    <x-kebab :edit="route('cadastros.edit', [$tipo, $r->id])" :delete="empty($cfg['sem_criar']) ? route('cadastros.destroy', [$tipo, $r->id]) : null" dir="left" />
                 </td>
                 @endif
-                <td class="px-4 py-3">
-                    <x-kebab :edit="route('cadastros.edit', [$tipo, $r->id])" :delete="empty($cfg['sem_criar']) ? route('cadastros.destroy', [$tipo, $r->id]) : null" />
-                </td>
+                @endforeach
+                @if($temAtivo)
+                <td class="px-4 py-3"><x-eduq-status :ativo="$r->ativo" /></td>
+                @endif
             </tr>
             @empty
             <tr><td colspan="{{ count($cfg['fields']) + ($temAtivo ? 3 : 2) }}" class="px-4 py-8 text-center text-gray-400">Nenhum registro cadastrado.</td></tr>
