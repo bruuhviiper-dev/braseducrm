@@ -1,11 +1,7 @@
-app/Http/Controllers/Academico/SalaController.php
+app/Http/Controllers/CadastroSimplesController.php
+app/Models/TagMatricula.php
+database/migrations/2024_01_02_000063_acad_eduq_fields.php
 deploy_files.txt
-resources/views/academico/salas/form.blade.php
-resources/views/academico/salas/index.blade.php
-resources/views/cadastros/form.blade.php
-resources/views/cadastros/index.blade.php
-resources/views/components/eduq-field.blade.php
-resources/views/components/eduq-header.blade.php
-resources/views/components/eduq-save.blade.php
-resources/views/components/eduq-status.blade.php
-resources/views/components/eduq-toggle.blade.php
+resources/views/academico/cursos/form.blade.php
+resources/views/academico/periodos-letivos/form.blade.php
+resources/views/administrativo/documentos/form.blade.php

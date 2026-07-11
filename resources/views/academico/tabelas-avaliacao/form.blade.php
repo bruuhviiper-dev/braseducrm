@@ -6,8 +6,8 @@
      x-data="{
         visOp: {{ old('visibilidade_operador', $tabela->visibilidade_operador ?? false) ? 'true' : 'false' }},
         formula: {{ json_encode(old('formula', $tabela->formula ?? '')) }},
-        itens: {{ isset($tabela) ? $tabela->itens->map(fn($i) => ['id' => $i->id, 'nome' => $i->nome, 'peso' => (float)$i->peso, 'recuperacao' => (bool)$i->recuperacao])->values()->toJson() : '[]' }},
-        add() { this.itens.push({ id: '', nome: '', peso: 1, recuperacao: false }); },
+        itens: {{ isset($tabela) ? $tabela->itens->map(fn($i) => ['id' => $i->id, 'sigla' => $i->sigla, 'nome' => $i->nome, 'nota_maxima' => (float)($i->nota_maxima ?? 10), 'obrigatoria' => (bool)($i->obrigatoria ?? true)])->values()->toJson() : '[]' }},
+        add() { this.itens.push({ id: '', sigla: '', nome: '', nota_maxima: 10, obrigatoria: true }); },
         remove(idx) { this.itens.splice(idx, 1); }
      }">
     <div class="bg-white">
@@ -53,8 +53,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Fórmula</label>
-                    <input type="text" name="formula" maxlength="250" x-model="formula" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Fórmula <span class="text-red-500">*</span></label>
+                    <textarea name="formula" maxlength="250" x-model="formula" required rows="2" placeholder="Ex.: (P1 + P2) / 2 — use as SIGLAS das avaliações abaixo" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"></textarea>
                     <p class="text-xs text-gray-400 text-right mt-0.5"><span x-text="(formula || '').length"></span> / 250</p>
                 </div>
             </div>
@@ -68,12 +68,13 @@
                     <template x-for="(item, idx) in itens" :key="idx">
                         <div class="flex gap-2 items-center">
                             <input type="hidden" :name="`itens[${idx}][id]`" :value="item.id">
+                            <input type="text" :name="`itens[${idx}][sigla]`" x-model="item.sigla" placeholder="SIGLA (ex.: P1)" class="w-28 border rounded-lg px-3 py-2 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
                             <input type="text" :name="`itens[${idx}][nome]`" x-model="item.nome" placeholder="Descrição da avaliação" class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
-                            <input type="number" step="0.01" min="0" :name="`itens[${idx}][peso]`" x-model="item.peso" placeholder="Peso" class="w-24 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
-                            <input type="hidden" :name="`itens[${idx}][recuperacao]`" :value="item.recuperacao ? 1 : 0">
-                            <label class="flex items-center gap-1.5 cursor-pointer shrink-0" title="Marque para este item ser a nota de RECUPERAÇÃO (fica fora da Média Parcial e entra na Média Final conforme a Configuração do Boletim)">
-                                <input type="checkbox" x-model="item.recuperacao" class="rounded border-gray-300 text-cyan-500 focus:ring-cyan-400">
-                                <span class="text-xs font-semibold text-gray-500">REC</span>
+                            <input type="number" step="0.01" min="0" :name="`itens[${idx}][nota_maxima]`" x-model="item.nota_maxima" placeholder="Nota Máx." title="Nota Máxima" class="w-24 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
+                            <input type="hidden" :name="`itens[${idx}][obrigatoria]`" :value="item.obrigatoria ? 1 : 0">
+                            <label class="flex items-center gap-1.5 cursor-pointer shrink-0" title="Avaliação obrigatória?">
+                                <input type="checkbox" x-model="item.obrigatoria" class="rounded border-gray-300 text-cyan-500 focus:ring-cyan-400">
+                                <span class="text-xs font-semibold text-gray-500">Obrig.</span>
                             </label>
                             <button type="button" @click="remove(idx)" class="p-2 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
                         </div>

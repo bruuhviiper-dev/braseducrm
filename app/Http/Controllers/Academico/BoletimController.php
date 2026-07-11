@@ -50,39 +50,30 @@ class BoletimController extends Controller
 
         $linhas = [];
         foreach ($matriculas as $matricula) {
-            // Média ponderada das notas pelos pesos dos itens
             $notas = Nota::with('item')
                 ->where('matricula_id', $matricula->id)
                 ->where('disciplina_id', $request->disciplina_id)
                 ->whereNotNull('nota')
                 ->get();
 
-            // M1 = média ponderada dos itens comuns; a nota do item marcado como REC fica de fora
-            $somaPonderada = 0;
-            $somaPesos = 0;
-            $rec = null;
+            // Modelo EDUQ (escolha do cliente): a média vem da avaliação da FÓRMULA da tabela
+            // (ex.: (P1+P2)/2) sobre as SIGLAS das avaliações. Sem nota → sigla vale 0.
+            $tabela = $notas->first()?->item?->tabela;
+            $valores = [];
             foreach ($notas as $nota) {
-                if ($nota->item?->recuperacao) {
-                    $rec = (float) $nota->nota;
-                    continue;
+                $sigla = $nota->item?->sigla;
+                if ($sigla) {
+                    $valores[strtoupper($sigla)] = (float) $nota->nota;
                 }
-                $peso = $nota->item?->peso ?? 1;
-                $somaPonderada += $nota->nota * $peso;
-                $somaPesos += $peso;
             }
-            $m1 = $somaPesos > 0 ? round($somaPonderada / $somaPesos, 2) : null;
-
-            // REC só é liberada se a M1 cair na faixa configurada (ex.: 0 a 5,99)
-            $recLiberada = $modelo !== 'direto' && $m1 !== null && $m1 >= $recMin && $m1 <= $recMax;
-
-            // Média Final conforme o modelo; REC nula (aluno passou direto) mantém a M1
-            $media = $m1;
-            $usouRec = false;
-            if ($recLiberada && $rec !== null) {
-                $media = $modelo === 'recuperacao_substitui'
-                    ? round($rec, 2)
-                    : round(($m1 + $rec) / 2, 2); // recuperacao_media
-                $usouRec = true;
+            $formula = $tabela?->formula;
+            $media = null;
+            if ($formula && $notas->isNotEmpty()) {
+                $media = $this->avaliarFormula($formula, $valores);
+                $media = $media !== null ? round($media, 2) : null;
+            } elseif ($notas->isNotEmpty()) {
+                // Sem fórmula cadastrada: cai para média simples das notas (fallback)
+                $media = round($notas->avg('nota'), 2);
             }
 
             // Frequência %
@@ -93,15 +84,11 @@ class BoletimController extends Controller
                 ->whereIn('status', ['presente', 'justificada'])->count();
             $frequencia = $totalAulas > 0 ? round(($presencas / $totalAulas) * 100, 1) : null;
 
-            // Situação: quem foi para a REC é aprovado pela média pós-REC (ex.: 5), os demais pela média normal
             $situacao = 'cursando';
             if ($media !== null) {
-                $corte = $usouRec ? $mediaAprovacaoFinal : $mediaAprovacao;
-                $aprovadoNota = $media >= $corte;
+                $aprovadoNota = $media >= $mediaAprovacao;
                 $aprovadoFreq = $frequencia === null || $frequencia >= $frequenciaMinima;
-                if ($recLiberada && $rec === null && !($m1 >= $mediaAprovacao)) {
-                    $situacao = 'em_recuperacao'; // aguardando a nota da REC
-                } elseif ($aprovadoNota && $aprovadoFreq) {
+                if ($aprovadoNota && $aprovadoFreq) {
                     $situacao = 'aprovado';
                 } elseif (!$aprovadoFreq) {
                     $situacao = 'reprovado_falta';
@@ -113,10 +100,10 @@ class BoletimController extends Controller
             $linhas[] = [
                 'matricula' => $matricula,
                 'media' => $media,
-                'm1' => $m1,
-                'rec' => $rec,
-                'rec_liberada' => $recLiberada,
-                'usou_rec' => $usouRec,
+                'm1' => $media,
+                'rec' => null,
+                'rec_liberada' => false,
+                'usou_rec' => false,
                 'frequencia' => $frequencia,
                 'total_aulas' => $totalAulas,
                 'presencas' => $presencas,
@@ -133,6 +120,82 @@ class BoletimController extends Controller
             'rec_max' => $recMax,
             'media_aprovacao_final' => $mediaAprovacaoFinal,
         ];
+    }
+
+    /**
+     * Avalia a fórmula da tabela (modelo EDUQ) substituindo as SIGLAS pelos valores
+     * das notas do aluno e resolvendo a aritmética com segurança (sem eval do PHP).
+     * Siglas ausentes valem 0. Aceita apenas + - * / ( ) e números.
+     */
+    private function avaliarFormula(string $formula, array $valores): ?float
+    {
+        $expr = $formula;
+        // substitui as siglas mais longas primeiro (evita casar prefixos)
+        $siglas = array_keys($valores);
+        usort($siglas, fn ($a, $b) => strlen($b) <=> strlen($a));
+        foreach ($siglas as $sigla) {
+            $expr = preg_replace('/\b' . preg_quote($sigla, '/') . '\b/i', (string) $valores[$sigla], $expr);
+        }
+        // qualquer sigla que sobrou (sem nota) vira 0
+        $expr = preg_replace('/[A-Za-z_][A-Za-z0-9_]*/', '0', $expr);
+        // só permite dígitos, ponto, operadores e parênteses
+        if (!preg_match('/^[0-9.+\-*\/() ]*$/', $expr) || trim($expr) === '') {
+            return null;
+        }
+        try {
+            $resultado = $this->resolverAritmetica($expr);
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        return is_finite($resultado) ? $resultado : null;
+    }
+
+    /** Avaliador aritmético seguro (shunting-yard) para + - * / e parênteses. */
+    private function resolverAritmetica(string $expr): float
+    {
+        $tokens = preg_split('/\s+/', trim(preg_replace('/([+\-*\/()])/', ' $1 ', $expr)), -1, PREG_SPLIT_NO_EMPTY);
+        $prec = ['+' => 1, '-' => 1, '*' => 2, '/' => 2];
+        $saida = [];
+        $ops = [];
+        foreach ($tokens as $tk) {
+            if (is_numeric($tk)) {
+                $saida[] = (float) $tk;
+            } elseif (isset($prec[$tk])) {
+                while (!empty($ops) && end($ops) !== '(' && $prec[end($ops)] >= $prec[$tk]) {
+                    $saida[] = array_pop($ops);
+                }
+                $ops[] = $tk;
+            } elseif ($tk === '(') {
+                $ops[] = $tk;
+            } elseif ($tk === ')') {
+                while (!empty($ops) && end($ops) !== '(') {
+                    $saida[] = array_pop($ops);
+                }
+                array_pop($ops); // remove '('
+            }
+        }
+        while (!empty($ops)) {
+            $saida[] = array_pop($ops);
+        }
+        // avalia a notação polonesa reversa
+        $pilha = [];
+        foreach ($saida as $tk) {
+            if (is_float($tk)) {
+                $pilha[] = $tk;
+            } else {
+                $b = array_pop($pilha);
+                $a = array_pop($pilha);
+                $pilha[] = match ($tk) {
+                    '+' => $a + $b,
+                    '-' => $a - $b,
+                    '*' => $a * $b,
+                    '/' => $b != 0.0 ? $a / $b : 0.0,
+                };
+            }
+        }
+
+        return (float) (end($pilha) ?: 0);
     }
 
     /** "Processar" (EDUQ): calcula o boletim; se o toggle "resultado final" estiver ligado, consolida a situação. */

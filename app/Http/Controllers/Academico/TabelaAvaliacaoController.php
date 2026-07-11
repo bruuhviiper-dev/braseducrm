@@ -73,11 +73,12 @@ class TabelaAvaliacaoController extends Controller
         $existingIds = [];
         foreach ($itens as $i => $item) {
             $attrs = [
+                'sigla' => strtoupper(trim($item['sigla'] ?? '')),
                 'nome' => $item['nome'],
-                'peso' => $item['peso'],
+                'nota_maxima' => $item['nota_maxima'] ?? 10,
+                'obrigatoria' => !empty($item['obrigatoria']),
+                'peso' => $item['peso'] ?? 1,
                 'ordem' => $i + 1,
-                // EDUQ: o item marcado como REC é a nota de recuperação (fica fora da Média Parcial)
-                'recuperacao' => !empty($item['recuperacao']),
             ];
             if (!empty($item['id'])) {
                 $registro = TabelaAvaliacaoItem::where('id', $item['id'])->where('tabela_avaliacao_id', $tabela->id)->first();
@@ -99,15 +100,16 @@ class TabelaAvaliacaoController extends Controller
             'nome' => 'required|string|max:255',
             'nota_maxima' => 'nullable|numeric|min:1',
             'media_aprovacao' => 'nullable|numeric|min:0',
-            'formula' => 'nullable|string|max:250',
+            'formula' => 'required|string|max:250',
             'visibilidade_operador' => 'nullable|boolean',
             'operador_id' => 'nullable|exists:users,id',
             'descricao' => 'nullable|string',
             'itens' => 'nullable|array',
             'itens.*.id' => 'nullable|integer',
+            'itens.*.sigla' => 'required|string|max:20',
             'itens.*.nome' => 'required|string|max:255',
-            'itens.*.peso' => 'required|numeric|min:0',
-            'itens.*.recuperacao' => 'nullable|boolean',
+            'itens.*.nota_maxima' => 'required|numeric|min:0',
+            'itens.*.obrigatoria' => 'nullable|boolean',
         ]);
     }
 }
