@@ -48,8 +48,15 @@ class CadastroSimplesController extends Controller
                 ['name' => 'nota_minima', 'label' => 'Nota Mínima', 'type' => 'number', 'required' => true],
                 ['name' => 'nota_maxima', 'label' => 'Nota Máxima', 'type' => 'number', 'required' => true],
             ]],
-            'motivos-cancelamento' => ['model' => \App\Models\MotivoCancelamentoMatricula::class, 'titulo' => 'Motivo de Cancelamento Matrícula', 'codigo' => 242, 'fields' => $nome],
-            'tags-matricula' => ['model' => \App\Models\TagMatricula::class, 'titulo' => 'Tag de Matrícula', 'codigo' => 169, 'fields' => $nome],
+            // 242 — EDUQ mostra só "Descrição"
+            'motivos-cancelamento' => ['model' => \App\Models\MotivoCancelamentoMatricula::class, 'titulo' => 'Motivo de Cancelamento Matrícula', 'codigo' => 242, 'breadcrumb' => 'Acadêmico › Matrícula', 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+            ]],
+            // 169 — EDUQ: Descrição + "Exige checklist?"
+            'tags-matricula' => ['model' => \App\Models\TagMatricula::class, 'titulo' => 'Cadastro de Tag de Matrícula', 'codigo' => 169, 'breadcrumb' => 'Acadêmico › Matrícula', 'fields' => [
+                ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
+                ['name' => 'exige_checklist', 'label' => 'Exige checklist?', 'type' => 'boolean', 'required' => false],
+            ]],
             'tags-turma-montada' => ['model' => \App\Models\TagTurmaMontada::class, 'titulo' => 'Tag (Turma Montada)', 'codigo' => 251, 'fields' => $nome],
             'topicos-plano' => ['model' => \App\Models\TopicoPlano::class, 'titulo' => 'Tópico do Plano', 'codigo' => 203, 'fields' => [
                 ['name' => 'nome', 'label' => 'Descrição', 'type' => 'text', 'required' => true],
@@ -111,12 +118,11 @@ class CadastroSimplesController extends Controller
                 ['name' => 'data_fim', 'label' => 'Data de término', 'type' => 'date', 'required' => false],
                 ['name' => 'publicado', 'label' => 'Publicar no Portal do Aluno?', 'type' => 'boolean', 'required' => false],
             ]],
-            'escolas' => ['model' => \App\Models\Escola::class, 'titulo' => 'Escola', 'codigo' => 8, 'fields' => [
+            // 8 Cadastro de Escola — campos idênticos ao EDUQ ao vivo (Nome / Telefone Fixo / Cidade / Tipo da Escola)
+            'escolas' => ['model' => \App\Models\Escola::class, 'titulo' => 'Cadastro de Escola', 'codigo' => 8, 'breadcrumb' => 'Acadêmico › Cadastros Essenciais', 'fields' => [
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'telefone', 'label' => 'Telefone (Fixo)', 'type' => 'text', 'required' => false],
-                ['name' => 'celular', 'label' => 'Celular', 'type' => 'text', 'required' => false],
                 ['name' => 'cidade', 'label' => 'Cidade', 'type' => 'text', 'required' => true],
-                ['name' => 'uf', 'label' => 'UF', 'type' => 'text', 'required' => false],
                 ['name' => 'tipo_escola', 'label' => 'Tipo da Escola', 'type' => 'select', 'required' => true, 'options' => \App\Models\Escola::TIPOS],
             ]],
             'instituicoes' => ['model' => \App\Models\InstituicaoEnsino::class, 'titulo' => 'Instituição de Ensino', 'codigo' => 7, 'fields' => [

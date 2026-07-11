@@ -8,7 +8,7 @@ class TagMatricula extends Model
 {
     protected $table = 'tags_matricula';
 
-    protected $fillable = ['nome', 'ativo'];
+    protected $fillable = ['nome', 'ativo', 'exige_checklist'];
 
-    protected $casts = ['ativo' => 'boolean'];
+    protected $casts = ['ativo' => 'boolean', 'exige_checklist' => 'boolean'];
 }

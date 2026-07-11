@@ -67,17 +67,6 @@
                 <span class="text-sm font-medium text-gray-700">Bloquear matrícula de alunos menores de idade?</span>
             </label>
 
-            <div>
-                <label class="flex items-center gap-3 cursor-pointer">
-                    <input type="hidden" name="nao_gerar_nf" :value="naoGerarNf ? 1 : 0">
-                    <button type="button" @click="naoGerarNf = !naoGerarNf" :class="naoGerarNf ? 'bg-cyan-500' : 'bg-gray-300'" class="relative w-10 h-5 rounded-full transition-colors shrink-0">
-                        <span :class="naoGerarNf ? 'translate-x-5' : 'translate-x-0.5'" class="absolute top-0.5 left-0 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
-                    </button>
-                    <span class="text-sm font-medium text-gray-700">Não gerar notas fiscais automaticamente para esse curso</span>
-                </label>
-                <p class="text-xs text-gray-400 mt-1 ml-[52px]">Com essa opção ativa, parcelas deste curso não serão enviadas para geração de nota fiscal. A geração automática é configurada na função 59 - Configuração do Financeiro.</p>
-            </div>
-
             {{-- Seção Comissão (barra cinza, Clean UI do EDUQ) --}}
             <div class="border rounded-lg overflow-hidden">
                 <div class="bg-gray-100 px-4 py-2.5 text-sm font-semibold text-gray-700">Comissão</div>
