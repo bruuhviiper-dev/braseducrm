@@ -1,7 +1,6 @@
-app/Http/Controllers/CadastroSimplesController.php
-app/Models/TagMatricula.php
-database/migrations/2024_01_02_000063_acad_eduq_fields.php
+app/Http/Controllers/Academico/BoletimController.php
+app/Http/Controllers/Academico/TabelaAvaliacaoController.php
+app/Models/TabelaAvaliacaoItem.php
+database/migrations/2024_01_02_000064_avaliacao_eduq.php
 deploy_files.txt
-resources/views/academico/cursos/form.blade.php
-resources/views/academico/periodos-letivos/form.blade.php
-resources/views/administrativo/documentos/form.blade.php
+resources/views/academico/tabelas-avaliacao/form.blade.php

@@ -22,14 +22,21 @@
                         @endforeach
                     </select>
                 </div>
-                <button class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</button>
+                {{-- EDUQ: 3 formatos de export (PDF / CSV / XLSX) --}}
+                <button name="formato" value="pdf" class="px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i>PDF</button>
+                <button name="formato" value="csv" class="px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"><i class="fa-solid fa-file-csv mr-1"></i>CSV</button>
+                <button name="formato" value="xlsx" class="px-3 py-2 bg-green-700 text-white rounded-lg text-sm font-medium hover:bg-green-800"><i class="fa-solid fa-file-excel mr-1"></i>XLSX</button>
             </form>
         </div>
 
         {{-- 184 Turmas Montadas --}}
         <div class="bg-white rounded-xl border p-5">
             <div class="flex items-center gap-2 mb-3"><span class="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">184</span><h2 class="font-semibold text-gray-800">Turmas Montadas</h2></div>
-            <a href="{{ route('academico.emissoes.turmas-montadas') }}" target="_blank" class="inline-block px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i> Gerar PDF</a>
+            <div class="flex gap-2">
+                <a href="{{ route('academico.emissoes.turmas-montadas', ['formato' => 'pdf']) }}" target="_blank" class="px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i>PDF</a>
+                <a href="{{ route('academico.emissoes.turmas-montadas', ['formato' => 'csv']) }}" target="_blank" class="px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"><i class="fa-solid fa-file-csv mr-1"></i>CSV</a>
+                <a href="{{ route('academico.emissoes.turmas-montadas', ['formato' => 'xlsx']) }}" target="_blank" class="px-3 py-2 bg-green-700 text-white rounded-lg text-sm font-medium hover:bg-green-800"><i class="fa-solid fa-file-excel mr-1"></i>XLSX</a>
+            </div>
         </div>
 
         {{-- 185 Horários Professores --}}

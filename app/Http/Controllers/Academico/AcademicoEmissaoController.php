@@ -237,11 +237,77 @@ class AcademicoEmissaoController extends Controller
         return $pdf->stream('declaracao_aula.pdf');
     }
 
+    /**
+     * Emite o relatório no formato pedido (EDUQ: botões PDF / CSV / XLSX).
+     * O formato vem de ?formato=pdf|csv|xlsx (padrão pdf).
+     */
     private function pdf(string $titulo, ?string $subtitulo, array $colunas, $linhas, string $arquivo)
     {
         $linhas = collect($linhas)->map(fn ($l) => array_values((array) $l))->all();
+        $formato = strtolower((string) request('formato', 'pdf'));
+
+        if ($formato === 'csv') {
+            return $this->emitirCsv($colunas, $linhas, $arquivo);
+        }
+        if ($formato === 'xlsx') {
+            return $this->emitirXlsx($titulo, $colunas, $linhas, $arquivo);
+        }
+
         $pdf = Pdf::loadView('emissoes.academico.relatorio', compact('titulo', 'subtitulo', 'colunas', 'linhas'))
             ->setPaper('a4', 'landscape');
+
         return $pdf->stream($arquivo . '.pdf');
+    }
+
+    /** CSV com BOM UTF-8 (abre certinho no Excel com acentos). */
+    private function emitirCsv(array $colunas, array $linhas, string $arquivo)
+    {
+        return response()->streamDownload(function () use ($colunas, $linhas) {
+            $out = fopen('php://output', 'w');
+            fwrite($out, "\xEF\xBB\xBF"); // BOM
+            fputcsv($out, $colunas, ';');
+            foreach ($linhas as $l) {
+                fputcsv($out, array_values((array) $l), ';');
+            }
+            fclose($out);
+        }, $arquivo . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    /** XLSX mínimo real (OOXML via ZipArchive, sem dependência externa). */
+    private function emitirXlsx(string $titulo, array $colunas, array $linhas, string $arquivo)
+    {
+        $esc = fn ($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $col = fn ($n) => chr(65 + ($n % 26)); // A..Z (suficiente p/ relatórios)
+
+        $linhasXml = '';
+        $r = 1;
+        $rowXml = fn ($cells, $rowNum) => '<row r="' . $rowNum . '">' . implode('', array_map(
+            fn ($c, $i) => '<c r="' . $col($i) . $rowNum . '" t="inlineStr"><is><t xml:space="preserve">' . $esc($c) . '</t></is></c>',
+            $cells, array_keys($cells)
+        )) . '</row>';
+        $linhasXml .= $rowXml(array_values($colunas), $r++);
+        foreach ($linhas as $l) {
+            $linhasXml .= $rowXml(array_values((array) $l), $r++);
+        }
+
+        $sheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>' . $linhasXml . '</sheetData></worksheet>';
+        $workbook = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Relatório" sheetId="1" r:id="rId1"/></sheets></workbook>';
+        $wbRels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/></Relationships>';
+        $rels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>';
+        $contentTypes = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>';
+
+        $tmp = tempnam(sys_get_temp_dir(), 'xlsx');
+        $zip = new \ZipArchive();
+        $zip->open($tmp, \ZipArchive::OVERWRITE);
+        $zip->addFromString('[Content_Types].xml', $contentTypes);
+        $zip->addFromString('_rels/.rels', $rels);
+        $zip->addFromString('xl/workbook.xml', $workbook);
+        $zip->addFromString('xl/_rels/workbook.xml.rels', $wbRels);
+        $zip->addFromString('xl/worksheets/sheet1.xml', $sheet);
+        $zip->close();
+
+        return response()->download($tmp, $arquivo . '.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ])->deleteFileAfterSend(true);
     }
 }
