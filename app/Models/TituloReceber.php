@@ -16,6 +16,7 @@ class TituloReceber extends Model
         'situacao', 'forma_pagamento', 'nosso_numero',
         'linha_digitavel', 'observacoes', 'gerado_por',
         'pagador', 'valor_juros', 'valor_multa', 'token_pagamento',
+        'plano_conta_id', 'instrucoes_boleto', 'cobrar_juros_multa',
     ];
 
     protected $casts = [

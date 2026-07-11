@@ -28,6 +28,11 @@ class AtividadeOportunidade extends Model
         return $this->belongsTo(EventoCrm::class);
     }
 
+    public function evento()
+    {
+        return $this->belongsTo(EventoCrm::class, 'evento_crm_id');
+    }
+
     public function responsavel()
     {
         return $this->belongsTo(User::class, 'responsavel_id');

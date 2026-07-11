@@ -1,0 +1,14 @@
+app/Services/BoletoCnabService.php
+app/Services/RdStationService.php
+database/seeders/DatabaseSeeder.php
+resources/views/auth/login.blade.php
+resources/views/crm/propostas/pdf.blade.php
+resources/views/emissoes/academico/declaracao-aula.blade.php
+resources/views/emissoes/academico/relatorio.blade.php
+resources/views/emissoes/declaracao.blade.php
+resources/views/emissoes/historico.blade.php
+resources/views/emissoes/recibo.blade.php
+resources/views/financeiro/link-pagamento/publico.blade.php
+resources/views/landing.blade.php
+resources/views/layouts/app.blade.php
+resources/views/portais/config-inscricao.blade.php

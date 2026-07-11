@@ -269,14 +269,12 @@ class DatabaseSeeder extends Seeder
         collect([['Urgente', '#EF4444'], ['VIP', '#8B5CF6'], ['Bolsista', '#F59E0B'], ['Indicado', '#10B981']])
             ->each(fn($t) => TagCrm::create(['nome' => $t[0], 'cor' => $t[1]]));
 
-        $funil = Funil::create(['nome' => 'Funil de Vendas', 'padrao' => true]);
+        // Doc CRM: fases da venda do Funil 110 (GANHO e PERDA são colunas fixas, não etapas)
+        $funil = Funil::create(['nome' => 'FUNIL DE VENDAS - COMERCIAL', 'padrao' => true]);
         $etapas = collect([
-            ['nome' => 'Novo Lead', 'cor' => '#6B7280', 'ordem' => 1, 'prazo_dias' => 3],
+            ['nome' => 'Sem Contato', 'cor' => '#6B7280', 'ordem' => 1, 'prazo_dias' => 1],
             ['nome' => 'Primeiro Contato', 'cor' => '#3B82F6', 'ordem' => 2, 'prazo_dias' => 5],
-            ['nome' => 'Qualificacao', 'cor' => '#8B5CF6', 'ordem' => 3, 'prazo_dias' => 7],
-            ['nome' => 'Proposta', 'cor' => '#F59E0B', 'ordem' => 4, 'prazo_dias' => 10],
-            ['nome' => 'Negociacao', 'cor' => '#EF4444', 'ordem' => 5, 'prazo_dias' => 15],
-            ['nome' => 'Fechamento', 'cor' => '#10B981', 'ordem' => 6, 'prazo_dias' => 5],
+            ['nome' => 'Em Negociação', 'cor' => '#F59E0B', 'ordem' => 3, 'prazo_dias' => 15],
         ])->map(fn($ed) => EtapaFunil::create(array_merge($ed, ['funil_id' => $funil->id])));
 
         $cursos = Curso::all();

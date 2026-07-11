@@ -13,6 +13,7 @@ class Oportunidade extends Model
         'curso_id', 'produto_servico_id', 'titulo', 'valor', 'situacao', 'qualificacao',
         'motivo_perda_id', 'motivo_ganho_id', 'motivo_pausa_id',
         'data_previsao_fechamento', 'data_fechamento', 'observacoes', 'motivacao_interesse',
+        'estrelas', 'midia',
     ];
 
     protected $casts = [
@@ -84,5 +85,34 @@ class Oportunidade extends Model
     public function tags()
     {
         return $this->belongsToMany(TagCrm::class, 'oportunidade_tags');
+    }
+
+    public function historicos()
+    {
+        return $this->hasMany(HistoricoOportunidade::class);
+    }
+
+    public function interesses()
+    {
+        return $this->belongsToMany(Curso::class, 'interesses_oportunidade');
+    }
+
+    public function linksMatricula()
+    {
+        return $this->hasMany(LinkMatriculaOnline::class);
+    }
+
+    /** Cronômetro do card (doc CRM): dias sem nenhuma interação/movimentação registrada. */
+    public function diasSemInteracao(): int
+    {
+        $ultima = $this->historicos->max('created_at') ?? $this->updated_at ?? $this->created_at;
+
+        return (int) \Carbon\Carbon::parse($ultima)->diffInDays(now());
+    }
+
+    /** Relógio do card (doc CRM): idade da oportunidade no funil, em dias. */
+    public function diasNoFunil(): int
+    {
+        return (int) $this->created_at->diffInDays(now());
     }
 }

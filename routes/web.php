@@ -71,6 +71,10 @@ Route::post('/contato', [LandingController::class, 'contato'])->name('landing.co
 Route::get('/pagar/{token}', [\App\Http\Controllers\Financeiro\LinkPagamentoController::class, 'publico'])->name('pagamento.publico');
 Route::post('/pagar/{token}', [\App\Http\Controllers\Financeiro\LinkPagamentoController::class, 'pagar'])->name('pagamento.publico.pagar');
 
+// Link de matrícula online público (doc CRM: autoatendimento gerado no card; ao concluir, o card vai para Ganho)
+Route::get('/m/{token}', [\App\Http\Controllers\Crm\MatriculaLinkController::class, 'publico'])->name('matricula-link');
+Route::post('/m/{token}', [\App\Http\Controllers\Crm\MatriculaLinkController::class, 'inscrever'])->name('matricula-link.inscrever');
+
 // Auth
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -146,6 +150,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('disciplinas', DisciplinaController::class);
         Route::resource('matrizes', MatrizCurricularController::class);
         Route::resource('turmas', TurmaController::class);
+        // Wizard "Matrícula e Histórico" em 4 passos (doc CRM: aberto ao dar Ganho no card)
+        Route::get('matriculas/nova', [\App\Http\Controllers\Academico\MatriculaWizardController::class, 'create'])->name('matriculas.wizard');
+        Route::post('matriculas/nova', [\App\Http\Controllers\Academico\MatriculaWizardController::class, 'store'])->name('matriculas.wizard.store');
         Route::resource('matriculas', MatriculaController::class);
         Route::get('matriculas/{matricula}/historico', [\App\Http\Controllers\Academico\HistoricoEscolarController::class, 'editar'])->name('matriculas.historico');
         Route::put('matriculas/{matricula}/historico', [\App\Http\Controllers\Academico\HistoricoEscolarController::class, 'salvar'])->name('matriculas.historico.salvar');
@@ -236,6 +243,15 @@ Route::middleware('auth')->group(function () {
         Route::patch('oportunidades/{oportunidade}/mover-etapa', [OportunidadeController::class, 'moverEtapa'])->name('oportunidades.mover-etapa');
         Route::post('oportunidades/{oportunidade}/ganhar', [OportunidadeController::class, 'ganhar'])->name('oportunidades.ganhar');
         Route::post('oportunidades/{oportunidade}/perder', [OportunidadeController::class, 'perder'])->name('oportunidades.perder');
+
+        // Ficha do card (doc CRM): linha do tempo, atividades, interesses, estrelas e link de matrícula online
+        Route::post('oportunidades/{oportunidade}/anotar', [OportunidadeController::class, 'anotar'])->name('oportunidades.anotar');
+        Route::post('oportunidades/{oportunidade}/atividades', [OportunidadeController::class, 'agendarAtividade'])->name('oportunidades.atividades');
+        Route::patch('oportunidades/{oportunidade}/atividades/{atividade}/concluir', [OportunidadeController::class, 'concluirAtividade'])->name('oportunidades.atividades.concluir');
+        Route::patch('oportunidades/{oportunidade}/estrelas', [OportunidadeController::class, 'estrelas'])->name('oportunidades.estrelas');
+        Route::post('oportunidades/{oportunidade}/interesses', [OportunidadeController::class, 'interesseAdicionar'])->name('oportunidades.interesses');
+        Route::delete('oportunidades/{oportunidade}/interesses/{curso}', [OportunidadeController::class, 'interesseRemover'])->name('oportunidades.interesses.remover');
+        Route::post('oportunidades/{oportunidade}/gerar-link', [OportunidadeController::class, 'gerarLink'])->name('oportunidades.gerar-link');
         Route::get('desempenho', [DesempenhoController::class, 'index'])->name('desempenho.index');
         Route::resource('origens', OrigemController::class)->parameters(['origens' => 'origem'])->except('show');
         Route::resource('tags', TagCrmController::class)->parameters(['tags' => 'tag'])->except('show');

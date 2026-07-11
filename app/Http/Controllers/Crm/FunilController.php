@@ -52,15 +52,36 @@ class FunilController extends Controller
             ->with('success', 'Funil criado com sucesso.');
     }
 
-    public function show(Funil $funil)
+    /**
+     * Funil de Vendas 110 (doc CRM): Kanban com etapas do funil + colunas fixas
+     * GANHO e PERDA. O filtro Situação (padrão "Em Andamento") oculta os negócios
+     * já ganhos/perdidos para não poluir a tela.
+     */
+    public function show(Request $request, Funil $funil)
     {
-        $funil->load(['etapas' => function ($query) {
-            $query->orderBy('ordem')->with(['oportunidades' => function ($q) {
-                $q->with(['interessado', 'consultor']);
+        $situacao = $request->query('situacao', 'andamento'); // andamento|ganho|perda|todas
+        $rel = ['interessado', 'consultor', 'tags', 'curso', 'origem', 'historicos', 'atividades'];
+
+        $funil->load(['etapas' => function ($query) use ($rel) {
+            $query->orderBy('ordem')->with(['oportunidades' => function ($q) use ($rel) {
+                $q->whereIn('situacao', ['aberta', 'pausada'])->with($rel)->orderByDesc('id');
             }]);
         }]);
 
-        return view('crm.funil.show', compact('funil'));
+        $ganhas = in_array($situacao, ['ganho', 'todas'])
+            ? $funil->oportunidades()->where('situacao', 'ganha')->with($rel)->orderByDesc('id')->get()
+            : collect();
+        $perdidas = in_array($situacao, ['perda', 'todas'])
+            ? $funil->oportunidades()->where('situacao', 'perdida')->with($rel)->orderByDesc('id')->get()
+            : collect();
+        $totais = [
+            'ganha' => $funil->oportunidades()->where('situacao', 'ganha')->count(),
+            'perdida' => $funil->oportunidades()->where('situacao', 'perdida')->count(),
+        ];
+        $funis = Funil::where('ativo', true)->orderBy('nome')->get();
+        $motivosPerda = \App\Models\MotivoPerda::orderBy('nome')->get();
+
+        return view('crm.funil.show', compact('funil', 'funis', 'situacao', 'ganhas', 'perdidas', 'totais', 'motivosPerda'));
     }
 
     public function edit(Funil $funil)
