@@ -206,7 +206,11 @@ Route::middleware('auth')->group(function () {
         Route::get('emissoes/alunos-matriculados/emitir', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'emitir'])->name('emissoes.alunos-matriculados.emitir');
         Route::post('emissoes/alunos-matriculados/layout', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'salvarLayout'])->name('emissoes.alunos-matriculados.layout');
         Route::delete('emissoes/alunos-matriculados/layout/{layout}', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'excluirLayout'])->name('emissoes.alunos-matriculados.layout.excluir');
-        Route::get('emissoes/turmas-montadas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'turmasMontadas'])->name('emissoes.turmas-montadas');
+        // 184 Emissão de Turmas Montadas — construtor de relatório dinâmico
+        Route::get('emissoes/turmas-montadas', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'index'])->name('emissoes.turmas-montadas');
+        Route::get('emissoes/turmas-montadas/emitir', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'emitir'])->name('emissoes.turmas-montadas.emitir');
+        Route::post('emissoes/turmas-montadas/layout', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'salvarLayout'])->name('emissoes.turmas-montadas.layout');
+        Route::delete('emissoes/turmas-montadas/layout/{layout}', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'excluirLayout'])->name('emissoes.turmas-montadas.layout.excluir');
         Route::get('emissoes/horarios-professores', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'horariosProfessores'])->name('emissoes.horarios-professores');
         Route::get('emissoes/notas-faltas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'notasFaltas'])->name('emissoes.notas-faltas');
         Route::get('emissoes/diario-classe', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'diarioClasse'])->name('emissoes.diario-classe');
