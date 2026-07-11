@@ -1,6 +1,7 @@
+app/Http/Controllers/Academico/Concerns/EmiteRelatorio.php
 app/Http/Controllers/Academico/EmissaoAlunosController.php
-app/Models/EmissaoLayout.php
-database/migrations/2024_01_02_000065_emissao_layouts.php
+app/Http/Controllers/Academico/EmissaoTurmasController.php
 deploy_files.txt
-resources/views/academico/emissoes/alunos-matriculados.blade.php
+resources/views/academico/emissoes/index.blade.php
+resources/views/academico/emissoes/turmas-montadas.blade.php
 routes/web.php

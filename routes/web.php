@@ -212,7 +212,9 @@ Route::middleware('auth')->group(function () {
         Route::post('emissoes/turmas-montadas/layout', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'salvarLayout'])->name('emissoes.turmas-montadas.layout');
         Route::delete('emissoes/turmas-montadas/layout/{layout}', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'excluirLayout'])->name('emissoes.turmas-montadas.layout.excluir');
         Route::get('emissoes/horarios-professores', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'horariosProfessores'])->name('emissoes.horarios-professores');
-        Route::get('emissoes/notas-faltas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'notasFaltas'])->name('emissoes.notas-faltas');
+        // 60 Emissão de Notas e Faltas — construtor de relatório dinâmico
+        Route::get('emissoes/notas-faltas', [\App\Http\Controllers\Academico\EmissaoNotasFaltasController::class, 'index'])->name('emissoes.notas-faltas');
+        Route::get('emissoes/notas-faltas/emitir', [\App\Http\Controllers\Academico\EmissaoNotasFaltasController::class, 'emitir'])->name('emissoes.notas-faltas.emitir');
         Route::get('emissoes/diario-classe', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'diarioClasse'])->name('emissoes.diario-classe');
         Route::get('emissoes/documentos', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'documentos'])->name('emissoes.documentos');
         Route::get('emissoes/matriz-curricular', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'matrizCurricular'])->name('emissoes.matriz-curricular');

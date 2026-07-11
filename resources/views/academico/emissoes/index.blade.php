@@ -32,16 +32,8 @@
         {{-- 60 Notas e Faltas --}}
         <div class="bg-white rounded-xl border p-5">
             <div class="flex items-center gap-2 mb-3"><span class="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">60</span><h2 class="font-semibold text-gray-800">Notas e Faltas</h2></div>
-            <form method="GET" action="{{ route('academico.emissoes.notas-faltas') }}" target="_blank" class="flex gap-2 items-end">
-                <div class="flex-1">
-                    <label class="block text-xs text-gray-500 mb-1">Turma Montada <span class="text-red-500">*</span></label>
-                    <select name="turma_montada_id" required class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <option value="">Selecione...</option>
-                        @foreach($turmasMontadas as $tm)<option value="{{ $tm->id }}">{{ $tm->nome ?? $tm->turma?->nome ?? ('TM #'.$tm->id) }}</option>@endforeach
-                    </select>
-                </div>
-                <button class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</button>
-            </form>
+            <p class="text-xs text-gray-500 mb-3">Construtor: Turma Montada, Disciplinas, Situação, Alunos e "Incluir notas das avaliações?" + export PDF/CSV/XLSX.</p>
+            <a href="{{ route('academico.emissoes.notas-faltas') }}" class="inline-block px-4 py-2 bg-cyan-500 text-white rounded-lg text-sm font-medium hover:bg-cyan-600"><i class="fa-solid fa-sliders mr-1"></i> Abrir construtor</a>
         </div>
 
         {{-- 91 Diário de Classe --}}
