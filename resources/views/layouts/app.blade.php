@@ -688,6 +688,20 @@
         }
     </script>
     @stack('scripts')
+    @auth
+    <script>
+        // Catálogo de Permissões (docs): funções marcadas como "OCULTAR NO MENU" no
+        // departamento do usuário somem da sidebar (admin enxerga tudo)
+        (function () {
+            const ocultas = @json(auth()->user()->funcoesOcultasNoMenu());
+            if (!ocultas.length) return;
+            document.querySelectorAll('.submenu-item').forEach(function (a) {
+                const cod = parseInt((a.querySelector('span')?.innerText || '').trim(), 10);
+                if (!isNaN(cod) && ocultas.includes(cod)) a.remove();
+            });
+        })();
+    </script>
+    @endauth
     <script>
         // Labels flutuantes estilo Material (EDUQ) - transforma pares label+campo
         document.addEventListener('DOMContentLoaded', function () {

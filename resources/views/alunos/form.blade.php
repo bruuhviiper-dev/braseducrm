@@ -19,7 +19,7 @@
 
         {{-- Abas (estilo EDUQ) --}}
         <div class="border-b px-4 flex gap-1 overflow-x-auto">
-            @foreach(['basicos'=>'Dados básicos','responsaveis'=>'Responsáveis','formacao'=>'Formação acadêmica','saude'=>'Informações de saúde','historico'=>'Histórico de Movimentações'] as $k => $t)
+            @foreach(['basicos'=>'Dados básicos','responsaveis'=>'Responsáveis','formacao'=>'Formação acadêmica','transferir'=>'Transferir cadastro','assinatura'=>'Assinatura eletrônica','saude'=>'Informações de saúde','historico'=>'Histórico de Movimentações'] as $k => $t)
             <button type="button" @click="tab='{{ $k }}'" :class="tab==='{{ $k }}' ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap">{{ $t }}</button>
             @endforeach
         </div>
@@ -121,6 +121,59 @@
                     </div>
                 </template>
                 <p x-show="form.length===0" class="text-xs text-gray-400 py-2">Nenhuma formação cadastrada.</p>
+            </div>
+
+            {{-- TRANSFERIR CADASTRO (doc: migrar para outro polo) --}}
+            <div x-show="tab==='transferir'" x-cloak class="space-y-4">
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-xs text-yellow-800">
+                    <b>Regra de Restrição:</b> Você pode migrar os dados deste aluno para outra unidade. Matrículas, notas, históricos e títulos financeiros NÃO serão migrados — apenas os dados cadastrais e dos responsáveis. Cada unidade funciona como centro de custo independente.
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">Domínio (Polo / Unidade de Destino) <span class="text-red-500">*</span></label>
+                        <input type="text" name="dominio_transferencia" placeholder="Ex.: polo-sp / polo-rj" class="w-full border rounded-lg px-3 py-2 text-sm">
+                    </div>
+                    <div class="flex items-end">
+                        <label class="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="checkbox" name="transferir_documentos" value="1" class="rounded text-blue-500">
+                            Tentar transferir os documentos aprovados do aluno?
+                        </label>
+                    </div>
+                </div>
+                <div class="flex justify-start">
+                    <button type="button" onclick="if(confirm('Confirmar transferência? Matrículas e financeiro ficam na unidade atual.')) this.closest('form').submit();" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-right-left mr-1"></i>Transferir</button>
+                </div>
+            </div>
+
+            {{-- ASSINATURA ELETRÔNICA (doc: painel de monitoramento jurídico) --}}
+            <div x-show="tab==='assinatura'" x-cloak class="space-y-3">
+                @if(isset($aluno) && $aluno?->matriculas?->count())
+                @php $assinaturas = \App\Models\AssinaturaEletronica::whereIn('matricula_id', $aluno->matriculas->pluck('id'))->with('matricula')->orderByDesc('created_at')->get(); @endphp
+                @if($assinaturas->count())
+                <table class="w-full text-sm">
+                    <thead><tr class="text-left text-[11px] text-gray-400 border-b"><th class="py-2">DOCUMENTO</th><th>MATRÍCULA</th><th>STATUS</th><th>ENVIADO</th><th>ASSINADO</th><th class="text-right">AÇÕES</th></tr></thead>
+                    <tbody class="divide-y">
+                        @foreach($assinaturas as $ass)
+                        @php $badgeAs = ['pendente' => 'bg-yellow-100 text-yellow-700', 'assinado' => 'bg-green-100 text-green-700'][$ass->situacao] ?? 'bg-gray-100 text-gray-600'; @endphp
+                        <tr>
+                            <td class="py-2">{{ $ass->documento }}</td>
+                            <td class="text-gray-500 text-xs">{{ $ass->matricula->numero_matricula }}</td>
+                            <td><span class="px-2 py-0.5 rounded text-xs font-semibold {{ $badgeAs }}">{{ ucfirst($ass->situacao) }}</span></td>
+                            <td class="text-gray-400 text-xs">{{ $ass->created_at->format('d/m/Y H:i') }}</td>
+                            <td class="text-gray-400 text-xs">{{ $ass->situacao === 'assinado' ? $ass->updated_at->format('d/m/Y H:i') : '-' }}</td>
+                            <td class="text-right text-xs">
+                                <span class="text-gray-400 text-xs font-mono select-all" title="Token de assinatura">{{ $ass->token }}</span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                @else
+                <p class="text-sm text-gray-400 text-center py-6">Nenhum contrato digital enviado para este aluno ainda.</p>
+                @endif
+                @else
+                <p class="text-sm text-gray-400 text-center py-6">Salve o cadastro e crie uma matrícula para gerenciar assinaturas eletrônicas.</p>
+                @endif
             </div>
 
             {{-- SAÚDE --}}

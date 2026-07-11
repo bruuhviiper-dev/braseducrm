@@ -114,6 +114,7 @@ class CadastroSimplesController extends Controller
             'escolas' => ['model' => \App\Models\Escola::class, 'titulo' => 'Escola', 'codigo' => 8, 'fields' => [
                 ['name' => 'nome', 'label' => 'Nome', 'type' => 'text', 'required' => true],
                 ['name' => 'telefone', 'label' => 'Telefone (Fixo)', 'type' => 'text', 'required' => false],
+                ['name' => 'celular', 'label' => 'Celular', 'type' => 'text', 'required' => false],
                 ['name' => 'cidade', 'label' => 'Cidade', 'type' => 'text', 'required' => true],
                 ['name' => 'uf', 'label' => 'UF', 'type' => 'text', 'required' => false],
                 ['name' => 'tipo_escola', 'label' => 'Tipo da Escola', 'type' => 'select', 'required' => true, 'options' => \App\Models\Escola::TIPOS],

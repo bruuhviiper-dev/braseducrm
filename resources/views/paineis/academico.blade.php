@@ -48,10 +48,10 @@
         </div>
     </div>
 
-    {{-- Filtros de período --}}
+    {{-- Filtros de período + Curso/Turma (doc 188) --}}
     <div class="bg-white rounded-xl border">
         <div class="px-5 py-2.5 border-b bg-gray-50 rounded-t-xl"><p class="text-sm font-medium text-gray-600">Filtros</p></div>
-        <form method="GET" action="{{ route('paineis.academico') }}" class="p-5 grid grid-cols-1 md:grid-cols-4 gap-3"
+        <form method="GET" action="{{ route('paineis.academico') }}" class="p-5 grid grid-cols-1 md:grid-cols-6 gap-3"
               x-data="{ aplica(v){ if(!v) return; const h=new Date(); this.$refs.fim.value=h.toISOString().slice(0,10); this.$refs.ini.value=new Date(h.getTime()-v*86400000).toISOString().slice(0,10); } }">
             <div>
                 <label class="block text-xs font-medium text-gray-500 mb-1">Período</label>
@@ -63,12 +63,26 @@
                 </select>
             </div>
             <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">Início <span class="text-red-500">*</span></label>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Início</label>
                 <input type="date" name="inicio" x-ref="ini" value="{{ optional($inicio)->format('Y-m-d') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
             </div>
             <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">Fim <span class="text-red-500">*</span></label>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Fim</label>
                 <input type="date" name="fim" x-ref="fim" value="{{ optional($fim)->format('Y-m-d') }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Curso</label>
+                <select name="curso_id" class="w-full border rounded-lg px-3 py-2 text-sm">
+                    <option value="">Todos</option>
+                    @foreach($cursos as $c)<option value="{{ $c->id }}" @selected(request('curso_id') == $c->id)>{{ $c->nome }}</option>@endforeach
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Turma Montada</label>
+                <select name="turma_montada_id" class="w-full border rounded-lg px-3 py-2 text-sm">
+                    <option value="">Todas</option>
+                    @foreach($turmas as $t)<option value="{{ $t->id }}" @selected(request('turma_montada_id') == $t->id)>{{ $t->sigla ?: $t->nome }}</option>@endforeach
+                </select>
             </div>
             <div class="flex items-end">
                 <button type="submit" class="w-full px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700"><i class="fa-solid fa-magnifying-glass mr-1"></i> Consultar</button>
@@ -85,6 +99,34 @@
             <p class="text-xs text-gray-400 mt-1">{{ $lbl }} no período</p>
         </div>
         @endforeach
+    </div>
+
+    {{-- Gráficos de Perfil (doc 188): Gênero + Região --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-xl border p-5">
+            <p class="text-sm font-medium text-gray-700 mb-3"><i class="fa-solid fa-venus-mars mr-1 text-purple-400"></i> Matrículas ativas por gênero</p>
+            @forelse($generos as $genero => $total)
+            @php $pct = ($totais['ativas'] > 0) ? round($total / $totais['ativas'] * 100) : 0; @endphp
+            <div class="mb-2">
+                <div class="flex justify-between text-xs text-gray-600 mb-0.5"><span>{{ $genero }}</span><span>{{ $total }} ({{ $pct }}%)</span></div>
+                <div class="h-2 rounded-full bg-gray-100"><div class="h-2 rounded-full bg-purple-400" style="width: {{ $pct }}%"></div></div>
+            </div>
+            @empty
+            <p class="text-sm text-gray-400 text-center py-4">Nenhum dado disponível.</p>
+            @endforelse
+        </div>
+        <div class="bg-white rounded-xl border p-5">
+            <p class="text-sm font-medium text-gray-700 mb-3"><i class="fa-solid fa-map-location-dot mr-1 text-blue-400"></i> Matrículas por região (UF do endereço)</p>
+            @forelse($regioes as $uf => $total)
+            @php $pct = ($totais['ativas'] > 0) ? round($total / $totais['ativas'] * 100) : 0; @endphp
+            <div class="mb-2">
+                <div class="flex justify-between text-xs text-gray-600 mb-0.5"><span>{{ $uf }}</span><span>{{ $total }} ({{ $pct }}%)</span></div>
+                <div class="h-2 rounded-full bg-gray-100"><div class="h-2 rounded-full bg-blue-400" style="width: {{ $pct }}%"></div></div>
+            </div>
+            @empty
+            <p class="text-sm text-gray-400 text-center py-4">Nenhum dado disponível.</p>
+            @endforelse
+        </div>
     </div>
 </div>
 @endsection

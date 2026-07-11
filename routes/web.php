@@ -110,6 +110,10 @@ Route::middleware('auth')->group(function () {
 
     // Administrativo
     Route::resource('pessoas', PessoaController::class);
+    Route::post('pessoas/{pessoa}/contas', [PessoaController::class, 'adicionarConta'])->name('pessoas.contas.store');
+    Route::delete('pessoas/{pessoa}/contas/{conta}', [PessoaController::class, 'removerConta'])->name('pessoas.contas.destroy');
+    Route::post('pessoas/{pessoa}/anexos', [PessoaController::class, 'uploadAnexo'])->name('pessoas.anexos.store');
+    Route::patch('pessoas/{pessoa}/anexos/{anexo}/aprovacao', [PessoaController::class, 'aprovacaoAnexo'])->name('pessoas.anexos.aprovacao');
     Route::resource('alunos', AlunoController::class);
     Route::resource('documentos', DocumentoController::class)->parameters(['documentos' => 'documento'])->except('show');
 
@@ -142,6 +146,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('operadores', \App\Http\Controllers\Admin\OperadorController::class)->parameters(['operadores' => 'operador'])->except('show');
         Route::resource('grupos', \App\Http\Controllers\Admin\GrupoOperadorController::class)->parameters(['grupos' => 'grupo'])->except('show');
         Route::resource('departamentos', \App\Http\Controllers\Admin\DepartamentoController::class)->parameters(['departamentos' => 'departamento'])->except('show');
+
+        // Catálogo de Permissões (docs): por departamento + liberações extras por usuário
+        Route::get('departamentos/{departamento}/permissoes', [\App\Http\Controllers\Admin\PermissaoController::class, 'departamento'])->name('departamentos.permissoes');
+        Route::post('departamentos/{departamento}/permissoes', [\App\Http\Controllers\Admin\PermissaoController::class, 'salvarDepartamento'])->name('departamentos.permissoes.salvar');
+        Route::get('operadores/{operador}/permissoes', [\App\Http\Controllers\Admin\PermissaoController::class, 'usuario'])->name('operadores.permissoes');
+        Route::post('operadores/{operador}/permissoes', [\App\Http\Controllers\Admin\PermissaoController::class, 'salvarUsuario'])->name('operadores.permissoes.salvar');
     });
 
     // Academico
@@ -150,6 +160,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('disciplinas', DisciplinaController::class);
         Route::resource('matrizes', MatrizCurricularController::class);
         Route::resource('turmas', TurmaController::class);
+        Route::post('matriculas/{matricula}/cancelar', [\App\Http\Controllers\Academico\MatriculaController::class, 'cancelar'])->name('matriculas.cancelar');
         // Wizard "Matrícula e Histórico" em 4 passos (doc CRM: aberto ao dar Ganho no card)
         Route::get('matriculas/nova', [\App\Http\Controllers\Academico\MatriculaWizardController::class, 'create'])->name('matriculas.wizard');
         Route::post('matriculas/nova', [\App\Http\Controllers\Academico\MatriculaWizardController::class, 'store'])->name('matriculas.wizard.store');
@@ -181,6 +192,7 @@ Route::middleware('auth')->group(function () {
 
         // Controles de Matrícula e Frequência (P6 - lote 2)
         Route::resource('horas-complementares', \App\Http\Controllers\Academico\HoraComplementarController::class)->parameters(['horas-complementares' => 'horas_complementare'])->except('show');
+        Route::post('horas-complementares/{horas_complementare}/aprovar', [\App\Http\Controllers\Academico\HoraComplementarController::class, 'aprovar'])->name('horas-complementares.aprovar');
         Route::resource('praticas-supervisionadas', \App\Http\Controllers\Academico\PraticaSupervisionadaController::class)->parameters(['praticas-supervisionadas' => 'praticas_supervisionada'])->except('show');
         Route::resource('liberacoes-frequencia', \App\Http\Controllers\Academico\LiberacaoFrequenciaController::class)->parameters(['liberacoes-frequencia' => 'liberacoes_frequencium'])->except('show');
         Route::get('programacoes-avaliacao', [\App\Http\Controllers\Academico\ProgramacaoAvaliacaoController::class, 'index'])->name('programacoes-avaliacao.index');
@@ -278,6 +290,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('titulos-receber', TituloReceberController::class);
         Route::post('titulos-receber/{titulo}/baixar', [TituloReceberController::class, 'baixar'])->name('titulos-receber.baixar');
         Route::post('titulos-receber/{titulo}/estornar', [TituloReceberController::class, 'estornar'])->name('titulos-receber.estornar');
+        Route::post('titulos-receber/{titulo}/anotar', [TituloReceberController::class, 'anotar'])->name('titulos-receber.anotar');
+        Route::patch('titulos-receber/{titulo}/baixado-por', [TituloReceberController::class, 'alterarBaixadoPor'])->name('titulos-receber.baixado-por');
         Route::resource('titulos-pagar', TituloPagarController::class);
         Route::resource('plano-contas', PlanoContasController::class);
         Route::get('fluxo-caixa', [FluxoCaixaController::class, 'index'])->name('fluxo-caixa.index');

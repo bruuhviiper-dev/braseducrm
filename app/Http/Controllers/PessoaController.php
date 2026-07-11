@@ -148,6 +148,21 @@ class PessoaController extends Controller
             'contas.*.tipo' => 'nullable|string|max:20',
             'contas.*.chave_pix' => 'nullable|string|max:120',
             'contas.*.tipo_pix' => 'nullable|string|max:20',
+            // documentos civis (doc aba 2)
+            'rg_uf' => 'nullable|string|max:2',
+            'rg_data_expedicao' => 'nullable|date',
+            'certidao_matricula' => 'nullable|string|max:60',
+            'certidao_numero' => 'nullable|string|max:30',
+            'certidao_folha' => 'nullable|string|max:20',
+            'certidao_livro' => 'nullable|string|max:20',
+            'reservista' => 'nullable|string|max:60',
+            'titulo_eleitor' => 'nullable|string|max:40',
+            'titulo_zona' => 'nullable|string|max:10',
+            'titulo_municipio' => 'nullable|string|max:120',
+            'titulo_data_expedicao' => 'nullable|date',
+            // dados para contas a pagar
+            'forma_pagamento_padrao' => 'nullable|string|max:20',
+            'dia_pagamento' => 'nullable|integer|min:1|max:31',
         ]);
 
         return [
@@ -198,6 +213,19 @@ class PessoaController extends Controller
                 'blacklist' => $request->boolean('blacklist'),
                 'ignorar_reajuste' => $request->boolean('ignorar_reajuste'),
                 'ativo' => $request->boolean('ativo'),
+                'rg_uf' => $v['rg_uf'] ?? null,
+                'rg_data_expedicao' => $v['rg_data_expedicao'] ?? null,
+                'certidao_matricula' => $v['certidao_matricula'] ?? null,
+                'certidao_numero' => $v['certidao_numero'] ?? null,
+                'certidao_folha' => $v['certidao_folha'] ?? null,
+                'certidao_livro' => $v['certidao_livro'] ?? null,
+                'reservista' => $v['reservista'] ?? null,
+                'titulo_eleitor' => $v['titulo_eleitor'] ?? null,
+                'titulo_zona' => $v['titulo_zona'] ?? null,
+                'titulo_municipio' => $v['titulo_municipio'] ?? null,
+                'titulo_data_expedicao' => $v['titulo_data_expedicao'] ?? null,
+                'forma_pagamento_padrao' => $v['forma_pagamento_padrao'] ?? null,
+                'dia_pagamento' => $v['dia_pagamento'] ?? null,
             ],
             'alergias' => array_map('intval', $v['alergias'] ?? []),
             'necessidades' => array_map('intval', $v['necessidades'] ?? []),
@@ -235,8 +263,74 @@ class PessoaController extends Controller
         }
     }
 
+    /** Aba Contas / PIX: reembolsar/pagar a pessoa. */
+    public function adicionarConta(Request $request, Pessoa $pessoa)
+    {
+        $v = $request->validate([
+            'tipo' => 'required|in:pix,bancaria',
+            'chave_pix_tipo' => 'nullable|string|max:30',
+            'chave_pix' => 'nullable|string|max:255',
+            'banco' => 'nullable|string|max:10',
+            'agencia' => 'nullable|string|max:20',
+            'conta' => 'nullable|string|max:30',
+            'tipo_conta' => 'nullable|string|max:20',
+            'nome_titular' => 'nullable|string|max:255',
+            'cpf_titular' => 'nullable|string|max:18',
+        ]);
+        \App\Models\ContaPessoa::create($v + [
+            'pessoa_id' => $pessoa->id,
+            'do_titular' => $request->boolean('do_titular'),
+        ]);
+
+        return back()->with('success', 'Conta / PIX adicionada.');
+    }
+
+    public function removerConta(Pessoa $pessoa, \App\Models\ContaPessoa $conta)
+    {
+        abort_unless($conta->pessoa_id === $pessoa->id, 404);
+        $conta->delete();
+
+        return back()->with('success', 'Conta removida.');
+    }
+
+    /** Aba Anexos: upload com fluxo de homologação (em_analise → aprovado/rejeitado). */
+    public function uploadAnexo(Request $request, Pessoa $pessoa)
+    {
+        $v = $request->validate([
+            'tipo_documento' => 'required|string|max:100',
+            'arquivo' => 'required|file|max:20480',
+            'descricao' => 'nullable|string|max:500',
+        ]);
+        $caminho = $request->file('arquivo')->store('pessoas/anexos', 'public');
+        \App\Models\AnexoPessoa::create([
+            'pessoa_id' => $pessoa->id,
+            'tipo_documento' => $v['tipo_documento'],
+            'arquivo' => $caminho,
+            'descricao' => $v['descricao'] ?? null,
+            'user_id' => auth()->id(),
+            'situacao' => 'em_analise',
+        ]);
+
+        return back()->with('success', 'Documento enviado para análise.');
+    }
+
+    public function aprovacaoAnexo(Request $request, Pessoa $pessoa, \App\Models\AnexoPessoa $anexo)
+    {
+        abort_unless($anexo->pessoa_id === $pessoa->id, 404);
+        $decisao = $request->input('decisao'); // aprovar|rejeitar
+        $anexo->update([
+            'situacao' => $decisao === 'aprovar' ? 'aprovado' : 'rejeitado',
+            'motivo_rejeicao' => $decisao !== 'aprovar' ? $request->input('motivo', 'Documento inválido') : null,
+        ]);
+
+        return back()->with('success', $decisao === 'aprovar' ? 'Documento aprovado.' : 'Documento rejeitado.');
+    }
+
     private function dados(?Pessoa $pessoa): array
     {
+        $contas = $pessoa ? \App\Models\ContaPessoa::where('pessoa_id', $pessoa->id)->get() : collect();
+        $anexos = $pessoa ? \App\Models\AnexoPessoa::where('pessoa_id', $pessoa->id)->with('user')->orderByDesc('id')->get() : collect();
+
         return [
             'pessoa' => $pessoa,
             'religioes' => Religiao::orderBy('nome')->get(),
@@ -244,6 +338,8 @@ class PessoaController extends Controller
             'escolas' => Escola::orderBy('nome')->get(),
             'alergias' => Alergia::orderBy('nome')->get(),
             'necessidades' => NecessidadeEspecial::orderBy('nome')->get(),
+            'contas' => $contas,
+            'anexos' => $anexos,
         ];
     }
 }

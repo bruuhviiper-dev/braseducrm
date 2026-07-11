@@ -29,7 +29,9 @@
                     @endif
                 </td>
                 <td class="px-4 py-3">
-                    <x-kebab :edit="route('admin.departamentos.edit', $d)" :delete="route('admin.departamentos.destroy', $d)" />
+                    <x-kebab :edit="route('admin.departamentos.edit', $d)" :delete="route('admin.departamentos.destroy', $d)">
+                        <a href="{{ route('admin.departamentos.permissoes', $d) }}" class="block px-4 py-2 text-sm text-blue-700 hover:bg-blue-50"><i class="fa-solid fa-shield-halved mr-2"></i>Permissões</a>
+                    </x-kebab>
                 </td>
             </tr>
             @empty

@@ -6,7 +6,9 @@
         'hora_inicio' => substr($a->hora_inicio, 0, 5),
         'hora_fim' => substr($a->hora_fim, 0, 5),
         'hora_aula' => $a->hora_aula ? substr($a->hora_aula, 0, 5) : '',
+        'tipo' => $a->tipo ?? 'aula',
     ])->values()->toArray() ?? []);
+    $diasSemanaAtivos = old('dias_semana', $grade ? explode(',', $grade->dias_semana ?? '') : []);
 @endphp
 
 @section('content')
@@ -50,6 +52,18 @@
                 <span class="text-sm font-medium text-gray-700">Ativo</span>
             </label>
 
+            {{-- Dias da Semana (doc: a grade define quais dias as aulas acontecem) --}}
+            <div>
+                <label class="block text-xs text-gray-500 mb-2">Dias da Semana</label>
+                <div class="flex flex-wrap gap-3">
+                    @foreach(['0' => 'Dom', '1' => 'Seg', '2' => 'Ter', '3' => 'Qua', '4' => 'Qui', '5' => 'Sex', '6' => 'Sáb'] as $num => $nome)
+                    <label class="flex items-center gap-1.5 text-sm cursor-pointer">
+                        <input type="checkbox" name="dias_semana[]" value="{{ $num }}" @checked(in_array((string)$num, $diasSemanaAtivos)) class="rounded text-blue-500">{{ $nome }}
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+
             {{-- Horários de Aula --}}
             <div class="border-t pt-4">
                 <div class="flex items-center justify-between mb-2">
@@ -67,6 +81,7 @@
                 <table class="w-full text-sm">
                     <thead class="text-xs text-gray-500 uppercase">
                         <tr>
+                            <th class="text-left pb-1">Tipo</th>
                             <th class="text-left pb-1">Início</th>
                             <th class="text-left pb-1">Fim</th>
                             <th class="text-left pb-1">Hora-aula</th>
@@ -75,10 +90,11 @@
                     </thead>
                     <tbody>
                         <template x-for="(aula, i) in aulas" :key="i">
-                            <tr>
+                            <tr :class="aula.tipo === 'intervalo' ? 'bg-gray-50' : ''">
+                                <td class="py-1 pr-2"><select :name="`aulas[${i}][tipo]`" x-model="aula.tipo" class="w-full border rounded px-2 py-1.5 text-sm"><option value="aula">Aula</option><option value="intervalo">Intervalo</option></select></td>
                                 <td class="py-1 pr-2"><input type="time" :name="`aulas[${i}][hora_inicio]`" x-model="aula.hora_inicio" required class="w-full border rounded px-2 py-1.5 text-sm"></td>
                                 <td class="py-1 pr-2"><input type="time" :name="`aulas[${i}][hora_fim]`" x-model="aula.hora_fim" required class="w-full border rounded px-2 py-1.5 text-sm"></td>
-                                <td class="py-1 pr-2"><input type="time" :name="`aulas[${i}][hora_aula]`" x-model="aula.hora_aula" class="w-full border rounded px-2 py-1.5 text-sm"></td>
+                                <td class="py-1 pr-2"><input type="time" :name="`aulas[${i}][hora_aula]`" x-model="aula.hora_aula" :disabled="aula.tipo === 'intervalo'" class="w-full border rounded px-2 py-1.5 text-sm disabled:bg-gray-100"></td>
                                 <td class="py-1 text-right">
                                     <button type="button" @click="remover(i)" class="p-1.5 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash-can text-sm"></i></button>
                                 </td>
@@ -103,7 +119,7 @@
     function gradeHorario(iniciais) {
         return {
             aulas: iniciais.length ? iniciais : [],
-            adicionar() { this.aulas.push({ hora_inicio: '', hora_fim: '', hora_aula: '' }); },
+            adicionar() { this.aulas.push({ tipo: 'aula', hora_inicio: '', hora_fim: '', hora_aula: '' }); },
             remover(i) { this.aulas.splice(i, 1); },
         };
     }

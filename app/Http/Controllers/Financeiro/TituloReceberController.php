@@ -198,14 +198,23 @@ class TituloReceberController extends Controller
             ->with('success', 'Titulo a receber cadastrado com sucesso.');
     }
 
+    /**
+     * Ficha do Título 64 (doc revisão): abas Dados Básicos / Turmas vinculadas /
+     * Anotações / Restrição / Históricos + cards de recebimento + toggles
+     * ocultar_portal / nao_emitir_nf / apenas_nfse / alterar responsável da baixa.
+     */
     public function edit(TituloReceber $titulos_receber)
     {
         $titulo = $titulos_receber;
+        $titulo->load(['pessoa', 'matricula.turmaMontada', 'categoriaReceber']);
+        $anotacoes = \App\Models\AnotacaoTitulo::where('titulo_receber_id', $titulo->id)->with('user')->orderByDesc('id')->get();
         $pessoas = Pessoa::orderBy('nome')->get();
         $categorias = CategoriaReceber::orderBy('nome')->get();
         $contas = ContaBancaria::where('ativo', true)->orderBy('nome')->get();
+        $planosConta = \App\Models\PlanoContas::where('ativo', true)->orderBy('codigo')->get();
+        $operadores = \App\Models\User::where('ativo', true)->orderBy('nome')->get();
 
-        return view('financeiro.titulos-receber.form', compact('titulo', 'pessoas', 'categorias', 'contas'));
+        return view('financeiro.titulos-receber.ficha', compact('titulo', 'anotacoes', 'pessoas', 'categorias', 'contas', 'planosConta', 'operadores'));
     }
 
     public function update(Request $request, TituloReceber $titulos_receber)
@@ -215,19 +224,63 @@ class TituloReceberController extends Controller
         $request->validate([
             'pessoa_id' => 'required|exists:pessoas,id',
             'categoria_receber_id' => 'nullable|exists:categorias_receber,id',
+            'plano_conta_id' => 'nullable|exists:plano_contas,id',
             'conta_bancaria_id' => 'nullable|exists:contas_bancarias,id',
             'valor_original' => 'required|numeric|min:0.01',
             'valor_desconto' => 'nullable|numeric|min:0',
             'data_emissao' => 'required|date',
             'data_vencimento' => 'required|date',
+            'vencimento_original' => 'nullable|date',
             'forma_pagamento' => 'nullable|string|max:50',
             'observacoes' => 'nullable|string',
+            'instrucoes_boleto' => 'nullable|string|max:250',
         ]);
 
-        $titulo->update($request->all());
+        $titulo->update([
+            'pessoa_id' => $request->pessoa_id,
+            'categoria_receber_id' => $request->categoria_receber_id,
+            'plano_conta_id' => $request->plano_conta_id,
+            'conta_bancaria_id' => $request->conta_bancaria_id,
+            'valor_original' => $request->valor_original,
+            'valor_desconto' => $request->valor_desconto ?? 0,
+            'data_emissao' => $request->data_emissao,
+            'data_vencimento' => $request->data_vencimento,
+            'vencimento_original' => $request->vencimento_original ?: ($titulo->vencimento_original ?: $request->data_vencimento),
+            'forma_pagamento' => $request->forma_pagamento,
+            'observacoes' => $request->observacoes,
+            'instrucoes_boleto' => $request->instrucoes_boleto,
+            'cobrar_juros_multa' => $request->boolean('cobrar_juros_multa'),
+            'ocultar_portal' => $request->boolean('ocultar_portal'),
+            'nao_emitir_nf' => $request->boolean('nao_emitir_nf'),
+            'apenas_nfse' => $request->boolean('apenas_nfse'),
+        ]);
 
-        return redirect()->route('financeiro.titulos-receber.index')
-            ->with('success', 'Titulo a receber atualizado com sucesso.');
+        return back()->with('success', 'Título atualizado com sucesso.');
+    }
+
+    /** Aba Anotações: comentários internos da secretaria no título. */
+    public function anotar(Request $request, TituloReceber $titulo)
+    {
+        $v = $request->validate(['texto' => 'required|string|max:2000']);
+        \App\Models\AnotacaoTitulo::create([
+            'titulo_receber_id' => $titulo->id,
+            'user_id' => auth()->id(),
+            'texto' => $v['texto'],
+        ]);
+
+        return back()->with('success', 'Anotação registrada.');
+    }
+
+    /** Alterar responsável pela baixa (doc: corrigir autoria para não dar furo no caixa). */
+    public function alterarBaixadoPor(Request $request, TituloReceber $titulo)
+    {
+        $v = $request->validate(['baixado_por' => 'required|exists:users,id']);
+        if ($titulo->situacao !== 'pago') {
+            return back()->with('error', 'Somente títulos pagos têm responsável pela baixa.');
+        }
+        $titulo->update(['baixado_por' => $v['baixado_por']]);
+
+        return back()->with('success', 'Responsável pela baixa atualizado.');
     }
 
     public function destroy(TituloReceber $titulos_receber)

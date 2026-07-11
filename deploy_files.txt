@@ -1,7 +1,27 @@
+app/Http/Controllers/Academico/MatriculaWizardController.php
+app/Http/Controllers/Crm/FunilController.php
+app/Http/Controllers/Crm/MatriculaLinkController.php
+app/Http/Controllers/Crm/OportunidadeController.php
+app/Models/AtividadeOportunidade.php
+app/Models/HistoricoOportunidade.php
+app/Models/LinkMatriculaOnline.php
+app/Models/Oportunidade.php
+app/Models/TituloReceber.php
 app/Services/BoletoCnabService.php
 app/Services/RdStationService.php
+crm (1).docx
+database/migrations/2024_01_02_000060_crm_docx_funil.php
+database/migrations/2024_01_02_000061_wizard_matricula.php
 database/seeders/DatabaseSeeder.php
+deploy_files.txt
+docs/CRM_SPEC.docx
+resources/views/academico/matriculas/wizard.blade.php
 resources/views/auth/login.blade.php
+resources/views/crm/funil/_coluna.blade.php
+resources/views/crm/funil/show.blade.php
+resources/views/crm/matricula-link/concluido.blade.php
+resources/views/crm/matricula-link/publico.blade.php
+resources/views/crm/oportunidades/ficha.blade.php
 resources/views/crm/propostas/pdf.blade.php
 resources/views/emissoes/academico/declaracao-aula.blade.php
 resources/views/emissoes/academico/relatorio.blade.php
@@ -12,3 +32,4 @@ resources/views/financeiro/link-pagamento/publico.blade.php
 resources/views/landing.blade.php
 resources/views/layouts/app.blade.php
 resources/views/portais/config-inscricao.blade.php
+routes/web.php

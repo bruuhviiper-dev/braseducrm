@@ -65,10 +65,13 @@ class GradeHorarioController extends Controller
             'nome' => 'required|string|max:255',
             'turno_id' => 'required|exists:turnos,id',
             'ativo' => 'nullable|boolean',
+            'dias_semana' => 'nullable|array',
+            'dias_semana.*' => 'integer|min:0|max:6',
             'aulas' => 'nullable|array',
             'aulas.*.hora_inicio' => 'required|date_format:H:i',
             'aulas.*.hora_fim' => 'required|date_format:H:i',
             'aulas.*.hora_aula' => 'nullable|date_format:H:i',
+            'aulas.*.tipo' => 'nullable|in:aula,intervalo',
         ], [], [
             'aulas.*.hora_inicio' => 'hora de início',
             'aulas.*.hora_fim' => 'hora de fim',
@@ -90,6 +93,7 @@ class GradeHorarioController extends Controller
                 'nome' => $data['nome'],
                 'turno_id' => $data['turno_id'],
                 'ativo' => (bool) ($data['ativo'] ?? false),
+                'dias_semana' => !empty($data['dias_semana']) ? implode(',', array_unique(array_map('intval', $data['dias_semana']))) : null,
                 'hora_inicio' => $horaInicio,
                 'hora_fim' => $horaFim,
             ])->save();
@@ -100,6 +104,7 @@ class GradeHorarioController extends Controller
                     'hora_inicio' => $a['hora_inicio'],
                     'hora_fim' => $a['hora_fim'],
                     'hora_aula' => $a['hora_aula'] ?? null,
+                    'tipo' => $a['tipo'] ?? 'aula',
                     'ordem' => $i,
                 ]);
             }

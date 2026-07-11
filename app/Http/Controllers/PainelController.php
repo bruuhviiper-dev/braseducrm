@@ -95,6 +95,8 @@ class PainelController extends Controller
         return view('paineis.financeiro', compact('kpis', 'aReceber', 'aPagar', 'meses', 'receitas', 'despesas'));
     }
 
+    /** Painel Acadêmico 188 (doc revisão): cards totalizadores + filtros de período/curso/turma +
+     *  gráficos de Matrículas Ativas por Gênero e por Região (estado). */
     public function academico(\Illuminate\Http\Request $request)
     {
         // Totalizadores (Geral) — independentes do período (fiel ao EDUQ, campos com *)
@@ -106,11 +108,17 @@ class PainelController extends Controller
             'pausadas' => Matricula::where('situacao', 'trancada')->count(),
         ];
 
-        // Período (novas/concluídas/canceladas/pausadas no período)
+        // Filtros do período
         $inicio = $request->filled('inicio') ? $request->date('inicio') : now()->startOfMonth();
         $fim = $request->filled('fim') ? $request->date('fim') : now()->endOfMonth();
+        $cursoId = $request->input('curso_id');
+        $turmaId = $request->input('turma_montada_id');
 
-        $noPeriodo = fn ($situacoes = null) => Matricula::whereBetween('data_matricula', [$inicio, $fim])
+        $base = Matricula::query()
+            ->when($cursoId, fn ($q) => $q->whereHas('turma', fn ($t) => $t->where('curso_id', $cursoId)))
+            ->when($turmaId, fn ($q) => $q->where('turma_montada_id', $turmaId));
+
+        $noPeriodo = fn ($situacoes = null) => (clone $base)->whereBetween('data_matricula', [$inicio, $fim])
             ->when($situacoes, fn ($q) => $q->whereIn('situacao', (array) $situacoes))->count();
 
         $periodo = [
@@ -120,6 +128,27 @@ class PainelController extends Controller
             'pausadas' => $noPeriodo('trancada'),
         ];
 
-        return view('paineis.academico', compact('totais', 'periodo', 'inicio', 'fim', 'request'));
+        // Gráfico 1: matrículas ativas por gênero (demo)
+        $generos = \App\Models\Pessoa::whereHas('aluno.matriculas', fn ($q) => $q->whereIn('situacao', ['ativa', 'confirmada']))
+            ->select('sexo', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('sexo')
+            ->orderByDesc('total')
+            ->pluck('total', 'sexo')
+            ->mapWithKeys(fn ($v, $k) => [$k ?: 'Não informado' => $v]);
+
+        // Gráfico 2: matrículas por região (UF do endereço da pessoa)
+        $regioes = \App\Models\Pessoa::whereHas('aluno.matriculas', fn ($q) => $q->whereIn('situacao', ['ativa', 'confirmada']))
+            ->select('uf', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('uf')
+            ->orderByDesc('total')
+            ->limit(10)
+            ->pluck('total', 'uf')
+            ->mapWithKeys(fn ($v, $k) => [$k ?: 'Sem UF' => $v]);
+
+        // Filtros de cascata para a view
+        $cursos = \App\Models\Curso::where('ativo', true)->orderBy('nome')->get();
+        $turmas = \App\Models\TurmaMontada::where('ativo', true)->orderBy('nome')->get();
+
+        return view('paineis.academico', compact('totais', 'periodo', 'inicio', 'fim', 'request', 'generos', 'regioes', 'cursos', 'turmas'));
     }
 }

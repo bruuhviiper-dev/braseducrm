@@ -56,6 +56,20 @@ class MatriculaController extends Controller
             ->with('success', 'Matricula atualizada com sucesso.');
     }
 
+    /**
+     * Cancelar matrícula (doc 242): o motivo de cancelamento é obrigatório.
+     * Se não houver motivos cadastrados, o sistema direciona para a 242.
+     */
+    public function cancelar(\Illuminate\Http\Request $request, Matricula $matricula)
+    {
+        $v = $request->validate(['motivo_cancelamento_id' => 'required|exists:motivos_cancelamento_matricula,id']);
+        $motivo = \App\Models\MotivoCancelamentoMatricula::find($v['motivo_cancelamento_id']);
+        $matricula->update(['situacao' => 'cancelada', 'observacoes' => ($matricula->observacoes ? $matricula->observacoes . "\n" : '') . 'Cancelado: ' . $motivo?->nome]);
+        \App\Models\MovimentacaoMatricula::registrar($matricula->id, 'Matrícula cancelada. Motivo: ' . ($motivo?->nome ?? '-'), 'cancelada', null);
+
+        return back()->with('success', 'Matrícula cancelada com motivo registrado.');
+    }
+
     public function destroy(Matricula $matricula)
     {
         $matricula->delete();

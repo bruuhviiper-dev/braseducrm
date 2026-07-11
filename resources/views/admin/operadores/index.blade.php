@@ -33,7 +33,9 @@
                     @endif
                 </td>
                 <td class="px-4 py-3">
-                    <x-kebab :edit="route('admin.operadores.edit', $o)" :delete="route('admin.operadores.destroy', $o)" />
+                    <x-kebab :edit="route('admin.operadores.edit', $o)" :delete="route('admin.operadores.destroy', $o)">
+                        <a href="{{ route('admin.operadores.permissoes', $o) }}" class="block px-4 py-2 text-sm text-blue-700 hover:bg-blue-50"><i class="fa-solid fa-shield-halved mr-2"></i>Liberações extras</a>
+                    </x-kebab>
                 </td>
             </tr>
             @empty
