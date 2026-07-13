@@ -26,7 +26,8 @@
         {{-- 185 Horários Professores --}}
         <div class="bg-white rounded-xl border p-5">
             <div class="flex items-center gap-2 mb-3"><span class="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">185</span><h2 class="font-semibold text-gray-800">Horários dos Professores</h2></div>
-            <a href="{{ route('academico.emissoes.horarios-professores') }}" target="_blank" class="inline-block px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i> Gerar PDF</a>
+            <p class="text-xs text-gray-500 mb-3">Construtor: Professores/Turmas/Período + Layouts salvos + export PDF/CSV/XLSX.</p>
+            <a href="{{ route('academico.emissoes.horarios-professores') }}" class="inline-block px-4 py-2 bg-cyan-500 text-white rounded-lg text-sm font-medium hover:bg-cyan-600"><i class="fa-solid fa-sliders mr-1"></i> Abrir construtor</a>
         </div>
 
         {{-- 60 Notas e Faltas --}}
@@ -74,22 +75,15 @@
         {{-- 305 Disciplinas dos Alunos --}}
         <div class="bg-white rounded-xl border p-5">
             <div class="flex items-center gap-2 mb-3"><span class="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">305</span><h2 class="font-semibold text-gray-800">Disciplinas dos Alunos</h2></div>
-            <a href="{{ route('academico.emissoes.disciplinas-alunos') }}" target="_blank" class="inline-block px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i> Gerar PDF</a>
+            <p class="text-xs text-gray-500 mb-3">Construtor: Turma Montada/Disciplinas/Situações/Tipos + Layouts + export PDF/CSV/XLSX.</p>
+            <a href="{{ route('academico.emissoes.disciplinas-alunos') }}" class="inline-block px-4 py-2 bg-cyan-500 text-white rounded-lg text-sm font-medium hover:bg-cyan-600"><i class="fa-solid fa-sliders mr-1"></i> Abrir construtor</a>
         </div>
 
         {{-- 249 Pendências de Notas e Faltas --}}
         <div class="bg-white rounded-xl border p-5">
             <div class="flex items-center gap-2 mb-3"><span class="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">249</span><h2 class="font-semibold text-gray-800">Pendências de Notas e Faltas</h2></div>
-            <form method="GET" action="{{ route('academico.emissoes.pendencias-notas-faltas') }}" target="_blank" class="flex gap-2 items-end">
-                <div class="flex-1">
-                    <label class="block text-xs text-gray-500 mb-1">Turma Montada <span class="text-red-500">*</span></label>
-                    <select name="turma_montada_id" required class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <option value="">Selecione...</option>
-                        @foreach($turmasMontadas as $tm)<option value="{{ $tm->id }}">{{ $tm->nome ?? $tm->turma?->nome ?? ('TM #'.$tm->id) }}</option>@endforeach
-                    </select>
-                </div>
-                <button class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</button>
-            </form>
+            <p class="text-xs text-gray-500 mb-3">Construtor: Turma Montada/Professor/Período, Notas e Frequências pendentes + Layouts + export PDF/CSV/XLSX.</p>
+            <a href="{{ route('academico.emissoes.pendencias-notas-faltas') }}" class="inline-block px-4 py-2 bg-cyan-500 text-white rounded-lg text-sm font-medium hover:bg-cyan-600"><i class="fa-solid fa-sliders mr-1"></i> Abrir construtor</a>
         </div>
 
         {{-- 114 Declaração de Aula Ministrada --}}

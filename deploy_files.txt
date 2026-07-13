@@ -1,7 +1,5 @@
-app/Http/Controllers/Academico/Concerns/EmiteRelatorio.php
-app/Http/Controllers/Academico/EmissaoAlunosController.php
-app/Http/Controllers/Academico/EmissaoTurmasController.php
+app/Http/Controllers/Academico/EmissaoNotasFaltasController.php
 deploy_files.txt
 resources/views/academico/emissoes/index.blade.php
-resources/views/academico/emissoes/turmas-montadas.blade.php
+resources/views/academico/emissoes/notas-faltas.blade.php
 routes/web.php

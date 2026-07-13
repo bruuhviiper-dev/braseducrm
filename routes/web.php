@@ -206,20 +206,27 @@ Route::middleware('auth')->group(function () {
         Route::get('emissoes/alunos-matriculados/emitir', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'emitir'])->name('emissoes.alunos-matriculados.emitir');
         Route::post('emissoes/alunos-matriculados/layout', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'salvarLayout'])->name('emissoes.alunos-matriculados.layout');
         Route::delete('emissoes/alunos-matriculados/layout/{layout}', [\App\Http\Controllers\Academico\EmissaoAlunosController::class, 'excluirLayout'])->name('emissoes.alunos-matriculados.layout.excluir');
+        // Layouts genéricos das emissões (salvar/excluir) — usados pelo componente x-report-builder
+        Route::post('emissoes/layout', [\App\Http\Controllers\Academico\EmissaoLayoutController::class, 'salvar'])->name('emissoes.layout');
+        Route::delete('emissoes/layout/{layout}', [\App\Http\Controllers\Academico\EmissaoLayoutController::class, 'excluir'])->name('emissoes.layout.excluir');
+        // 185 Horários Professores / 249 Pendências / 305 Disciplinas dos Alunos — report-builders
+        Route::get('emissoes/horarios-professores', [\App\Http\Controllers\Academico\EmissaoHorariosController::class, 'index'])->name('emissoes.horarios-professores');
+        Route::get('emissoes/horarios-professores/emitir', [\App\Http\Controllers\Academico\EmissaoHorariosController::class, 'emitir'])->name('emissoes.horarios-professores.emitir');
+        Route::get('emissoes/pendencias-notas-faltas', [\App\Http\Controllers\Academico\EmissaoPendenciasController::class, 'index'])->name('emissoes.pendencias-notas-faltas');
+        Route::get('emissoes/pendencias-notas-faltas/emitir', [\App\Http\Controllers\Academico\EmissaoPendenciasController::class, 'emitir'])->name('emissoes.pendencias-notas-faltas.emitir');
+        Route::get('emissoes/disciplinas-alunos', [\App\Http\Controllers\Academico\EmissaoDisciplinasAlunosController::class, 'index'])->name('emissoes.disciplinas-alunos');
+        Route::get('emissoes/disciplinas-alunos/emitir', [\App\Http\Controllers\Academico\EmissaoDisciplinasAlunosController::class, 'emitir'])->name('emissoes.disciplinas-alunos.emitir');
         // 184 Emissão de Turmas Montadas — construtor de relatório dinâmico
         Route::get('emissoes/turmas-montadas', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'index'])->name('emissoes.turmas-montadas');
         Route::get('emissoes/turmas-montadas/emitir', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'emitir'])->name('emissoes.turmas-montadas.emitir');
         Route::post('emissoes/turmas-montadas/layout', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'salvarLayout'])->name('emissoes.turmas-montadas.layout');
         Route::delete('emissoes/turmas-montadas/layout/{layout}', [\App\Http\Controllers\Academico\EmissaoTurmasController::class, 'excluirLayout'])->name('emissoes.turmas-montadas.layout.excluir');
-        Route::get('emissoes/horarios-professores', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'horariosProfessores'])->name('emissoes.horarios-professores');
         // 60 Emissão de Notas e Faltas — construtor de relatório dinâmico
         Route::get('emissoes/notas-faltas', [\App\Http\Controllers\Academico\EmissaoNotasFaltasController::class, 'index'])->name('emissoes.notas-faltas');
         Route::get('emissoes/notas-faltas/emitir', [\App\Http\Controllers\Academico\EmissaoNotasFaltasController::class, 'emitir'])->name('emissoes.notas-faltas.emitir');
         Route::get('emissoes/diario-classe', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'diarioClasse'])->name('emissoes.diario-classe');
         Route::get('emissoes/documentos', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'documentos'])->name('emissoes.documentos');
         Route::get('emissoes/matriz-curricular', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'matrizCurricular'])->name('emissoes.matriz-curricular');
-        Route::get('emissoes/disciplinas-alunos', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'disciplinasAlunos'])->name('emissoes.disciplinas-alunos');
-        Route::get('emissoes/pendencias-notas-faltas', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'pendenciasNotasFaltas'])->name('emissoes.pendencias-notas-faltas');
         Route::get('emissoes/declaracao-aula', [\App\Http\Controllers\Academico\AcademicoEmissaoController::class, 'declaracaoAula'])->name('emissoes.declaracao-aula');
 
         // Painéis de ensino (P6 - lote 4c)
