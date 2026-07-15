@@ -114,6 +114,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('pessoas/{pessoa}/contas/{conta}', [PessoaController::class, 'removerConta'])->name('pessoas.contas.destroy');
     Route::post('pessoas/{pessoa}/anexos', [PessoaController::class, 'uploadAnexo'])->name('pessoas.anexos.store');
     Route::patch('pessoas/{pessoa}/anexos/{anexo}/aprovacao', [PessoaController::class, 'aprovacaoAnexo'])->name('pessoas.anexos.aprovacao');
+    Route::post('alunos/quick', [AlunoController::class, 'quickStore'])->name('alunos.quick');
     Route::resource('alunos', AlunoController::class);
     Route::resource('documentos', DocumentoController::class)->parameters(['documentos' => 'documento'])->except('show');
 

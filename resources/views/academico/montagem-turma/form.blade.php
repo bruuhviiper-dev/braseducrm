@@ -184,6 +184,7 @@
             @endif
         </div>
         <div class="p-6 space-y-4">
+            <div class="flex justify-end"><x-aluno-quick-add target="aluno_id" label="Cadastrar aluno" /></div>
             <form method="POST" action="{{ route('academico.montagem-turma.matricular', $turmaMontada) }}" class="flex gap-2">
                 @csrf
                 <select name="aluno_id" class="flex-1 border rounded-lg px-3 py-2 text-sm" required>

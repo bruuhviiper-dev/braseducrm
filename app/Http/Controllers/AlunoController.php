@@ -44,6 +44,42 @@ class AlunoController extends Controller
         return redirect()->route('alunos.index')->with('success', 'Aluno cadastrado com sucesso.');
     }
 
+    /**
+     * Cadastro rápido de aluno (padrão EDUQ: "+" inline sem sair da tela).
+     * Cria a Pessoa mínima + o Aluno e devolve JSON para o front injetar a opção.
+     */
+    public function quickStore(Request $request)
+    {
+        $v = $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'nullable|string|max:20',
+            'celular' => 'nullable|string|max:30',
+            'email' => 'nullable|email|max:255',
+        ]);
+
+        $aluno = DB::transaction(function () use ($v) {
+            $pessoa = Pessoa::create([
+                'tipo' => 'fisica',
+                'nome' => $v['nome'],
+                'cpf' => $v['cpf'] ?? null,
+                'celular' => $v['celular'] ?? null,
+                'email' => $v['email'] ?? null,
+                'ativo' => true,
+            ]);
+
+            return Aluno::create([
+                'pessoa_id' => $pessoa->id,
+                'ativo' => true,
+            ]);
+        });
+
+        return response()->json([
+            'id' => $aluno->id,
+            'nome' => $v['nome'],
+            'label' => $aluno->id . ' - ' . $v['nome'],
+        ]);
+    }
+
     public function edit(Aluno $aluno)
     {
         $aluno->load(['pessoa', 'responsaveis', 'formacoes', 'matriculas.turma']);

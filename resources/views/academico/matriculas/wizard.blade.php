@@ -45,14 +45,17 @@
         {{-- ================= PASSO 1: Informações básicas ================= --}}
         <div x-show="passo === 1" class="p-8 space-y-4">
             <div>
-                <label class="block text-xs text-gray-500 mb-1">Aluno <span class="text-red-500">*</span></label>
+                <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs text-gray-500">Aluno <span class="text-red-500">*</span></label>
+                    <x-aluno-quick-add target="aluno_id" label="Novo aluno" />
+                </div>
                 <select name="aluno_id" x-model="alunoId" required class="w-full border rounded-lg px-3 py-2.5 text-sm">
                     <option value="">Busque pelo nome...</option>
                     @foreach($alunos as $a)
                     <option value="{{ $a->id }}" @selected(($alunoSugerido?->id) === $a->id)>{{ $a->id }} - {{ $a->pessoa->nome ?? '-' }}</option>
                     @endforeach
                 </select>
-                <p class="text-[11px] text-gray-400 mt-1">Não encontrou? <a href="{{ route('alunos.create') }}" target="_blank" class="text-blue-500 hover:underline">Criar novo cadastro de aluno</a> — ao salvar, volte e recarregue esta tela para selecioná-lo.</p>
+                <p class="text-[11px] text-gray-400 mt-1">Não encontrou o aluno? Use <b>Novo aluno</b> acima para cadastrá-lo sem sair desta tela.</p>
             </div>
             <div>
                 <label class="block text-xs text-gray-500 mb-1">Turma Montada <span class="text-red-500">*</span></label>
