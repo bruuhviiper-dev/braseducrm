@@ -109,6 +109,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/painel-cliente', [PainelClienteController::class, 'index'])->name('painel-cliente.index');
 
     // Administrativo
+    Route::post('pessoas/quick', [PessoaController::class, 'quickStore'])->name('pessoas.quick');
     Route::resource('pessoas', PessoaController::class);
     Route::post('pessoas/{pessoa}/contas', [PessoaController::class, 'adicionarConta'])->name('pessoas.contas.store');
     Route::delete('pessoas/{pessoa}/contas/{conta}', [PessoaController::class, 'removerConta'])->name('pessoas.contas.destroy');

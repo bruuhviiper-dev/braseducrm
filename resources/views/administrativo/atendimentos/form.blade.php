@@ -33,7 +33,10 @@
             @endif
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Pessoa <span class="text-red-500">*</span></label>
+                <div class="flex items-center justify-between mb-1">
+                    <label class="block text-sm font-medium text-gray-700">Pessoa <span class="text-red-500">*</span></label>
+                    <x-pessoa-quick-add target="pessoa_id" />
+                </div>
                 <select name="pessoa_id" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400" required>
                     <option value="">Selecione...</option>
                     @foreach($pessoas as $p)

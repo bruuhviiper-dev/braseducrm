@@ -46,6 +46,36 @@ class PessoaController extends Controller
         return redirect()->route('pessoas.index')->with('success', 'Pessoa cadastrada com sucesso.');
     }
 
+    /**
+     * Cadastro rápido de pessoa (padrão EDUQ: "+" inline sem sair da tela).
+     * Devolve JSON para o front injetar a opção no <select> alvo.
+     */
+    public function quickStore(Request $request)
+    {
+        $v = $request->validate([
+            'nome' => 'required|string|max:255',
+            'tipo' => 'nullable|in:fisica,juridica',
+            'cpf' => 'nullable|string|max:20',
+            'celular' => 'nullable|string|max:30',
+            'email' => 'nullable|email|max:255',
+        ]);
+
+        $pessoa = Pessoa::create([
+            'tipo' => $v['tipo'] ?? 'fisica',
+            'nome' => $v['nome'],
+            'cpf' => $v['cpf'] ?? null,
+            'celular' => $v['celular'] ?? null,
+            'email' => $v['email'] ?? null,
+            'ativo' => true,
+        ]);
+
+        return response()->json([
+            'id' => $pessoa->id,
+            'nome' => $pessoa->nome,
+            'label' => $pessoa->nome,
+        ]);
+    }
+
     public function show(Pessoa $pessoa)
     {
         $pessoa->load(['religiao', 'profissao', 'escola', 'aluno.formaIngresso', 'profissional']);

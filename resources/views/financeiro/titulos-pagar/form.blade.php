@@ -60,7 +60,10 @@
                     </div>
                     @endunless
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Credor <span class="text-red-500">*</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-sm font-medium text-gray-700">Credor <span class="text-red-500">*</span></label>
+                            <x-pessoa-quick-add target="pessoa_id" label="Novo credor" />
+                        </div>
                         <select name="pessoa_id" required class="w-full border rounded-lg px-3 py-2 text-sm">
                             <option value="">Selecione...</option>
                             @foreach($pessoas as $p)<option value="{{ $p->id }}" @selected(old('pessoa_id', $titulo->pessoa_id ?? '')==$p->id)>{{ $p->nome }}</option>@endforeach
