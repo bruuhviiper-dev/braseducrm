@@ -268,6 +268,7 @@ Route::middleware('auth')->group(function () {
 
     // CRM
     Route::prefix('crm')->name('crm.')->group(function () {
+        Route::post('interessados/quick', [InteressadoController::class, 'quickStore'])->name('interessados.quick');
         Route::resource('interessados', InteressadoController::class);
         Route::resource('funil', FunilController::class);
         Route::resource('oportunidades', OportunidadeController::class);

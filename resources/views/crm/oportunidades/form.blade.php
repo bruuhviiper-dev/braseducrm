@@ -27,7 +27,10 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Interessado <span class="text-red-500">*</span></label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-sm font-medium text-gray-700">Interessado <span class="text-red-500">*</span></label>
+                        <x-interessado-quick-add target="interessado_id" />
+                    </div>
                     <select name="interessado_id" required class="w-full border rounded-lg px-3 py-2 text-sm">
                         <option value="">Selecione...</option>
                         @foreach($interessados as $i)<option value="{{ $i->id }}" @selected(old('interessado_id', $oportunidade->interessado_id ?? '')==$i->id)>{{ $i->nome }}</option>@endforeach

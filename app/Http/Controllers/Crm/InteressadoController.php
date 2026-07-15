@@ -44,6 +44,37 @@ class InteressadoController extends Controller
         return redirect()->route('crm.interessados.index')->with('success', 'Interessado cadastrado com sucesso.');
     }
 
+    /**
+     * Cadastro rápido de interessado (padrão EDUQ: "+" inline sem sair da tela).
+     * Cria o lead mínimo, dispara ao RD Station e devolve JSON p/ o front injetar a opção.
+     */
+    public function quickStore(Request $request)
+    {
+        $v = $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'nullable|string|max:20',
+            'celular' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+        ]);
+
+        $interessado = Interessado::create([
+            'nome' => $v['nome'],
+            'cpf' => $v['cpf'] ?? null,
+            'celular' => $v['celular'] ?? null,
+            'email' => $v['email'] ?? null,
+            'responsavel_id' => $request->user()?->id,
+            'ativo' => true,
+        ]);
+
+        (new RdStationService())->enviarLead($interessado);
+
+        return response()->json([
+            'id' => $interessado->id,
+            'nome' => $interessado->nome,
+            'label' => $interessado->nome,
+        ]);
+    }
+
     public function edit(Interessado $interessado)
     {
         $interessado->load('contatos');
