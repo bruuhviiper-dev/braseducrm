@@ -17,9 +17,6 @@ $badges = [
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">149</span>
             <h1 class="text-lg font-semibold text-gray-800">Acompanhamento de InscriÃ§Ãµes</h1>
         </div>
-        <a href="{{ route('matricula-online.inscricoes.create') }}" class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 flex items-center gap-2">
-            <i class="fa-solid fa-plus"></i> Nova InscriÃ§Ã£o
-        </a>
     </div>
 
     {{-- Filtro por situaÃ§Ã£o --}}

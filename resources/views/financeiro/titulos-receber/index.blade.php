@@ -61,11 +61,6 @@
                 <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span> Recebido</span>
             </span>
         </div>
-        <div class="flex items-center gap-2">
-            <a href="{{ route('financeiro.titulos-receber.create') }}" class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-plus"></i> Novo Titulo
-            </a>
-        </div>
     </div>
 
     <div class="p-4">

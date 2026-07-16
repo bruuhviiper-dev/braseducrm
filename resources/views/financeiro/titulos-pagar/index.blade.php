@@ -56,11 +56,6 @@
             <span class="text-sm font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">52</span>
             <h1 class="text-lg font-semibold text-gray-800">Titulos a Pagar</h1>
         </div>
-        <div class="flex items-center gap-2">
-            <a href="{{ route('financeiro.titulos-pagar.create') }}" class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-plus"></i> Novo Titulo
-            </a>
-        </div>
     </div>
 
     <div class="p-4">

@@ -792,8 +792,20 @@
                 box.appendChild(b);
             });
         }
+        function hideColByHeader(table, re) {
+            table.querySelectorAll('thead th').forEach(function (th, idx) {
+                if (re.test((th.textContent || '').trim())) {
+                    th.style.display = 'none';
+                    table.querySelectorAll('tbody tr').forEach(function (tr) {
+                        var cell = tr.children[idx]; if (cell) cell.style.display = 'none';
+                    });
+                }
+            });
+        }
         main.querySelectorAll('table').forEach(function (table) {
             var hasKebab = false;
+            // EDUQ nunca mostra a coluna ID — esconde em qualquer lista
+            hideColByHeader(table, /^id$/i);
             table.querySelectorAll('tbody tr').forEach(function (tr) {
                 var kebIcon = tr.querySelector('i.fa-ellipsis-vertical');
                 if (!kebIcon) return;
@@ -816,14 +828,7 @@
                     var b = ic.closest('button'); if (b) b.style.display = 'none';
                 });
                 // esconde a coluna "Ações" (EDUQ não tem — ações vão p/ a barra inferior)
-                table.querySelectorAll('thead th').forEach(function (th, idx) {
-                    if (/^a[çc][õo]es?$/i.test((th.textContent || '').trim())) {
-                        th.style.display = 'none';
-                        table.querySelectorAll('tbody tr').forEach(function (tr) {
-                            var cell = tr.children[idx]; if (cell) cell.style.display = 'none';
-                        });
-                    }
-                });
+                hideColByHeader(table, /^a[çc][õo]es?$/i);
             }
         });
     });
