@@ -341,7 +341,7 @@ class TituloReceberController extends Controller
 
         $titulo->update([
             'situacao' => 'aberto',
-            'valor_pago' => null,
+            'valor_pago' => 0,           // coluna é NOT NULL DEFAULT 0 — título reaberto = nada pago
             'valor_juros' => null,
             'valor_multa' => null,
             'data_pagamento' => null,

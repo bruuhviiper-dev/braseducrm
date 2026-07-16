@@ -62,7 +62,7 @@ class TituloPagarController extends Controller
                     'descricao' => $n > 1 ? ($data['base']['descricao'] ?? 'Título') . ' (' . ($i + 1) . '/' . $n . ')' : $data['base']['descricao'],
                     'data_vencimento' => $venc->copy()->addMonths($i)->format('Y-m-d'),
                     'situacao' => $liquidado ? 'pago' : 'aberto',
-                    'valor_pago' => $liquidado ? $data['base']['valor_original'] : null,
+                    'valor_pago' => $liquidado ? $data['base']['valor_original'] : 0,
                     'data_pagamento' => $liquidado ? now() : null,
                 ]));
                 $this->salvarRateios($titulo, $data['rateios']);
