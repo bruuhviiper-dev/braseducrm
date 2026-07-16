@@ -8,14 +8,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    {{-- Fonte Inter = a mesma do EDUQ (Clean UI) --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Roboto', '"Helvetica Neue"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    },
                     colors: {
-                        primary: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a' },
+                        // Paleta primária = ciano exato do EDUQ (#00b3f0)
+                        primary: { 50:'#e8f8fe',100:'#c7eefc',200:'#8fddf9',300:'#4ec8f5',400:'#1bb7f1',500:'#00b3f0',600:'#0090c2',700:'#0b7194',800:'#125d78',900:'#144d64' },
                         sidebar: '#1e293b',
                     }
                 }
@@ -39,11 +47,11 @@
         .fl-wrap>input,.fl-wrap>select,.fl-wrap>textarea{padding-top:.7rem!important;padding-bottom:.7rem!important;border-radius:.5rem!important}
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 min-h-screen" x-data="{ searchOpen: false, openMod: null, dark: localStorage.getItem('one_dark')==='true' }" x-init="document.documentElement.classList.toggle('dark', dark); $watch('dark', v => document.documentElement.classList.toggle('dark', v))">
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen font-sans antialiased text-gray-800" x-data="{ searchOpen: false, openMod: null, dark: localStorage.getItem('one_dark')==='true' }" x-init="document.documentElement.classList.toggle('dark', dark); $watch('dark', v => document.documentElement.classList.toggle('dark', v))">
     <div class="flex min-h-screen">
 
         {{-- SIDEBAR COM SUBMENUS EXPANDIVEIS --}}
-        <aside class="fixed top-0 left-0 z-40 h-screen bg-white text-gray-500 border-r border-gray-200 flex flex-col w-28">
+        <aside @mouseleave="openMod = null" class="fixed top-0 left-0 z-40 h-screen bg-white text-gray-500 border-r border-gray-200 flex flex-col w-28">
 
             {{-- Logo (wordmark em bloco escuro sobre trilho branco, estilo EDUQ) --}}
             <div class="flex items-center justify-center h-14 border-b border-gray-100 px-2">
@@ -57,11 +65,11 @@
             <nav class="flex-1 overflow-y-auto scrollbar-thin py-1">
 
                 {{-- Dashboard --}}
-                <a href="{{ route('dashboard') }}" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->routeIs('dashboard') ? 'bg-gray-900 text-white' : 'text-gray-400' }}"><i class="fa-solid fa-house text-lg"></i><span class="text-center px-0.5">Dashboard</span></a>
+                <a href="{{ route('dashboard') }}" @mouseenter="openMod = null" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->routeIs('dashboard') ? 'bg-gray-900 text-white' : 'text-gray-400' }}"><i class="fa-solid fa-house text-lg"></i><span class="text-center px-0.5">Dashboard</span></a>
 
                 {{-- ACADEMICO --}}
                 <div>
-                    <button @click="openMod = openMod===0 ? null : 0" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('academico*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===0 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-graduation-cap text-lg"></i><span class="text-center px-0.5">Acadêmico</span></button>
+                    <button @click="openMod = openMod===0 ? null : 0" @mouseenter="openMod = 0" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('academico*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===0 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-graduation-cap text-lg"></i><span class="text-center px-0.5">Acadêmico</span></button>
                     <div x-show="openMod===0" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; ACADÊMICO</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Cadastros Essenciais</p>
@@ -154,7 +162,7 @@
 
                 {{-- ADMINISTRATIVO --}}
                 <div>
-                    <button @click="openMod = openMod===1 ? null : 1" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('admin*') || request()->routeIs('painel-cliente.*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===1 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-building text-lg"></i><span class="text-center px-0.5">Administrativo</span></button>
+                    <button @click="openMod = openMod===1 ? null : 1" @mouseenter="openMod = 1" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('admin*') || request()->routeIs('painel-cliente.*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===1 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-building text-lg"></i><span class="text-center px-0.5">Administrativo</span></button>
                     <div x-show="openMod===1" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; ADMINISTRATIVO</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Acessos</p>
@@ -166,7 +174,7 @@
 
                 {{-- BIBLIOTECA --}}
                 <div>
-                    <button @click="openMod = openMod===2 ? null : 2" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('biblioteca*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===2 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-book text-lg"></i><span class="text-center px-0.5">Biblioteca</span></button>
+                    <button @click="openMod = openMod===2 ? null : 2" @mouseenter="openMod = 2" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('biblioteca*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===2 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-book text-lg"></i><span class="text-center px-0.5">Biblioteca</span></button>
                     <div x-show="openMod===2" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; BIBLIOTECA</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Acervo</p>
@@ -194,7 +202,7 @@
 
                 {{-- COMUNICACAO --}}
                 <div>
-                    <button @click="openMod = openMod===3 ? null : 3" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('comunicacao*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===3 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-comments text-lg"></i><span class="text-center px-0.5">Comunicação</span></button>
+                    <button @click="openMod = openMod===3 ? null : 3" @mouseenter="openMod = 3" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('comunicacao*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===3 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-comments text-lg"></i><span class="text-center px-0.5">Comunicação</span></button>
                     <div x-show="openMod===3" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; COMUNICAÇÃO</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Configuração</p>
@@ -214,7 +222,7 @@
 
                 {{-- ESTOQUE --}}
                 <div>
-                    <button @click="openMod = openMod===4 ? null : 4" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('estoque*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===4 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-center px-0.5">Estoque</span></button>
+                    <button @click="openMod = openMod===4 ? null : 4" @mouseenter="openMod = 4" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('estoque*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===4 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-boxes-stacked text-lg"></i><span class="text-center px-0.5">Estoque</span></button>
                     <div x-show="openMod===4" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; ESTOQUE</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Cadastros Essenciais</p>
@@ -231,7 +239,7 @@
 
                 {{-- CRM --}}
                 <div>
-                    <button @click="openMod = openMod===5 ? null : 5" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('crm*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===5 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-handshake text-lg"></i><span class="text-center px-0.5">CRM</span></button>
+                    <button @click="openMod = openMod===5 ? null : 5" @mouseenter="openMod = 5" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('crm*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===5 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-handshake text-lg"></i><span class="text-center px-0.5">CRM</span></button>
                     <div x-show="openMod===5" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; CRM</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Cadastros Essenciais</p>
@@ -261,7 +269,7 @@
 
                 {{-- EAD --}}
                 <div>
-                    <button @click="openMod = openMod===6 ? null : 6" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('ead*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===6 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-laptop text-lg"></i><span class="text-center px-0.5">EAD</span></button>
+                    <button @click="openMod = openMod===6 ? null : 6" @mouseenter="openMod = 6" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('ead*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===6 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-laptop text-lg"></i><span class="text-center px-0.5">EAD</span></button>
                     <div x-show="openMod===6" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; EAD</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Cadastros Essenciais</p>
@@ -283,7 +291,7 @@
 
                 {{-- FINANCEIRO --}}
                 <div>
-                    <button @click="openMod = openMod===7 ? null : 7" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('financeiro*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===7 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-dollar-sign text-lg"></i><span class="text-center px-0.5">Financeiro</span></button>
+                    <button @click="openMod = openMod===7 ? null : 7" @mouseenter="openMod = 7" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('financeiro*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===7 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-dollar-sign text-lg"></i><span class="text-center px-0.5">Financeiro</span></button>
                     <div x-show="openMod===7" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; FINANCEIRO</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Cadastros Essenciais</p>
@@ -347,7 +355,7 @@
 
                 {{-- GED --}}
                 <div>
-                    <button @click="openMod = openMod===8 ? null : 8" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('ged*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===8 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-folder-open text-lg"></i><span class="text-center px-0.5">GED</span></button>
+                    <button @click="openMod = openMod===8 ? null : 8" @mouseenter="openMod = 8" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('ged*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===8 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-folder-open text-lg"></i><span class="text-center px-0.5">GED</span></button>
                     <div x-show="openMod===8" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; GED</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Cadastros Essenciais</p>
@@ -359,7 +367,7 @@
 
                 {{-- GERAL --}}
                 <div>
-                    <button @click="openMod = openMod===9 ? null : 9" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===9 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-table-cells text-lg"></i><span class="text-center px-0.5">Geral</span></button>
+                    <button @click="openMod = openMod===9 ? null : 9" @mouseenter="openMod = 9" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('geral*') || request()->is('pessoas*') || request()->is('profissionais*') || request()->is('atendimentos*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===9 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-table-cells text-lg"></i><span class="text-center px-0.5">Geral</span></button>
                     <div x-show="openMod===9" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; GERAL</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Atendimentos</p>
@@ -407,7 +415,7 @@
 
                 {{-- INTEGRACOES --}}
                 <div>
-                    <button @click="openMod = openMod===12 ? null : 12" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('integracoes*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===12 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-plug text-lg"></i><span class="text-center px-0.5">Integrações</span></button>
+                    <button @click="openMod = openMod===12 ? null : 12" @mouseenter="openMod = 12" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('integracoes*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===12 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-plug text-lg"></i><span class="text-center px-0.5">Integrações</span></button>
                     <div x-show="openMod===12" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; INTEGRAÇÕES</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Integração Bancária</p>
@@ -429,7 +437,7 @@
 
                 {{-- MATRICULA ONLINE --}}
                 <div>
-                    <button @click="openMod = openMod===10 ? null : 10" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('matricula-online*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===10 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-globe text-lg"></i><span class="text-center px-0.5">Matr. Online</span></button>
+                    <button @click="openMod = openMod===10 ? null : 10" @mouseenter="openMod = 10" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('matricula-online*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===10 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-globe text-lg"></i><span class="text-center px-0.5">Matr. Online</span></button>
                     <div x-show="openMod===10" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; MATRÍCULA ONLINE</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Processos</p>
@@ -445,7 +453,7 @@
 
                 {{-- PORTAIS --}}
                 <div>
-                    <button @click="openMod = openMod===11 ? null : 11" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('portais*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===11 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-desktop text-lg"></i><span class="text-center px-0.5">Portais</span></button>
+                    <button @click="openMod = openMod===11 ? null : 11" @mouseenter="openMod = 11" class="w-[calc(100%-16px)] mx-2 my-0.5 rounded-xl flex flex-col items-center justify-center gap-1.5 py-2.5 text-[10px] leading-tight transition-colors hover:bg-gray-100 {{ request()->is('portais*') ? 'bg-gray-900 text-white' : 'text-gray-400' }}" :class="openMod===11 ? 'bg-gray-900 text-white' : ''"><i class="fa-solid fa-desktop text-lg"></i><span class="text-center px-0.5">Portais</span></button>
                     <div x-show="openMod===11" x-cloak class="fixed left-28 top-0 z-50 w-80 h-screen bg-white shadow-2xl border-r border-gray-200 overflow-y-auto py-2"><div class="px-3 pb-2 pt-1 space-y-2"><input type="text" placeholder="Buscar..." oninput="filtraFlyout(this)" class="w-full px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700 placeholder-gray-400 outline-none border border-gray-200 focus:border-cyan-400"><label class="flex items-center gap-2 text-xs text-gray-500 px-1 cursor-pointer select-none"><input type="checkbox" onchange="filtraFlyout(this)" class="rounded text-cyan-500"> Somente Emissão</label></div>
                         <div class="px-4 pt-3 pb-1 text-[11px] tracking-[0.2em] text-gray-500 font-semibold">—&nbsp; PORTAIS</div>
                         <p class="px-4 py-2.5 text-[13px] text-gray-800 font-semibold">Configuração</p>
