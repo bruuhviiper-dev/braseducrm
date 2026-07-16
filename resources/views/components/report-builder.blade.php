@@ -52,7 +52,7 @@
             <button type="button" @click="aba = 'colunas'" :class="aba === 'colunas' ? 'border-cyan-500 text-cyan-600 font-semibold' : 'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-2.5 border-b-2 whitespace-nowrap">Colunas</button>
             @endunless
             @unless($semPagina)
-            <button type="button" @click="aba = 'pagina'" :class="aba === 'pagina' ? 'border-cyan-500 text-cyan-600 font-semibold' : 'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-2.5 border-b-2 whitespace-nowrap">Layout de Página</button>
+            <button type="button" @click="aba = 'pagina'" :class="aba === 'pagina' ? 'border-cyan-500 text-cyan-600 font-semibold' : 'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-2.5 border-b-2 whitespace-nowrap">Layout de Página (Somente PDF)</button>
             @endunless
         </div>
 
@@ -82,10 +82,11 @@
         </div>
         @endunless
 
-        <div class="flex justify-end gap-2 px-5 py-4 border-t bg-gray-50 rounded-b-xl">
-            <button type="submit" name="formato" value="pdf" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700"><i class="fa-solid fa-file-pdf mr-1"></i>PDF</button>
-            <button type="submit" name="formato" value="csv" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700"><i class="fa-solid fa-file-csv mr-1"></i>CSV</button>
-            <button type="submit" name="formato" value="xlsx" class="px-4 py-2 bg-green-700 text-white rounded-lg text-sm font-semibold hover:bg-green-800"><i class="fa-solid fa-file-excel mr-1"></i>XLSX</button>
+        {{-- Botões de exportação FLUTUANTES no canto inferior direito (padrão EDUQ) --}}
+        <div class="fixed bottom-6 right-6 z-40 flex items-center gap-2.5">
+            <button type="submit" name="formato" value="pdf" class="px-5 py-2.5 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 shadow-lg shadow-red-600/25"><i class="fa-solid fa-file-pdf mr-1.5"></i>PDF</button>
+            <button type="submit" name="formato" value="csv" class="px-5 py-2.5 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 shadow-lg shadow-green-600/25"><i class="fa-solid fa-file-csv mr-1.5"></i>CSV</button>
+            <button type="submit" name="formato" value="xlsx" class="px-5 py-2.5 bg-green-700 text-white rounded-lg text-sm font-semibold hover:bg-green-800 shadow-lg shadow-green-700/25"><i class="fa-solid fa-file-excel mr-1.5"></i>XLSX</button>
         </div>
     </form>
 
