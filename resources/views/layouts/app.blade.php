@@ -743,5 +743,81 @@
             });
         });
     </script>
+
+    {{-- ===== Padrão EDUQ de LISTA: clicar na linha SELECIONA + barra de ações inferior (copia TODAS as ações do kebab da linha) ===== --}}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var main = document.querySelector('main');
+        if (!main) return;
+        var toolbar = null, selectedRow = null;
+        function ensureToolbar() {
+            if (toolbar) return toolbar;
+            toolbar = document.createElement('div');
+            toolbar.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-40 hidden items-center gap-1 bg-white border border-gray-200 shadow-2xl rounded-full pl-4 pr-1.5 py-1.5';
+            toolbar.innerHTML =
+                '<span class="text-xs text-gray-400 mr-1 whitespace-nowrap">1 selecionado</span>' +
+                '<div data-actions class="flex items-center gap-0.5"></div>' +
+                '<button data-fechar type="button" class="w-8 h-8 rounded-full text-gray-400 hover:bg-gray-100 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>';
+            document.body.appendChild(toolbar);
+            toolbar.querySelector('[data-fechar]').addEventListener('click', clearSel);
+            return toolbar;
+        }
+        function clearSel() {
+            if (selectedRow) selectedRow.classList.remove('bg-cyan-50');
+            selectedRow = null;
+            if (toolbar) { toolbar.classList.add('hidden'); toolbar.classList.remove('flex'); }
+        }
+        function buildActions(tb, kebRoot) {
+            var box = tb.querySelector('[data-actions]');
+            box.innerHTML = '';
+            // links do kebab (Abrir/Editar/Visualizar/Histórico/etc.) — preserva ícone + rótulo
+            kebRoot.querySelectorAll('a').forEach(function (a) {
+                if (!a.getAttribute('href')) return;
+                var b = document.createElement('a');
+                b.href = a.getAttribute('href');
+                if (a.target) b.target = a.target;
+                b.className = 'flex items-center gap-1.5 px-4 py-2 rounded-full text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap';
+                b.innerHTML = a.innerHTML;
+                box.appendChild(b);
+            });
+            // forms do kebab (Excluir e afins) — reenvia o form original (mantém CSRF/method/confirm)
+            kebRoot.querySelectorAll('form').forEach(function (f) {
+                var orig = f.querySelector('button, [type=submit]');
+                var b = document.createElement('button');
+                b.type = 'button';
+                var red = orig && /excluir|remover|deletar/i.test(orig.textContent);
+                b.className = 'flex items-center gap-1.5 px-4 py-2 rounded-full text-sm whitespace-nowrap ' + (red ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-100');
+                b.innerHTML = orig ? orig.innerHTML : 'Ação';
+                b.addEventListener('click', function () { f.requestSubmit ? f.requestSubmit() : f.submit(); });
+                box.appendChild(b);
+            });
+        }
+        main.querySelectorAll('table').forEach(function (table) {
+            var hasKebab = false;
+            table.querySelectorAll('tbody tr').forEach(function (tr) {
+                var kebIcon = tr.querySelector('i.fa-ellipsis-vertical');
+                if (!kebIcon) return;
+                hasKebab = true;
+                var kebRoot = kebIcon.closest('div.relative') || kebIcon.closest('div');
+                tr.style.cursor = 'pointer';
+                tr.addEventListener('click', function (e) {
+                    if (e.target.closest('a, button, form, input, select, label')) return;
+                    var tb = ensureToolbar();
+                    if (selectedRow === tr) { clearSel(); return; }
+                    if (selectedRow) selectedRow.classList.remove('bg-cyan-50');
+                    selectedRow = tr; tr.classList.add('bg-cyan-50');
+                    var radio = tr.querySelector('input[type=radio]'); if (radio) radio.checked = true;
+                    buildActions(tb, kebRoot);
+                    tb.classList.remove('hidden'); tb.classList.add('flex');
+                });
+            });
+            if (hasKebab) {
+                table.querySelectorAll('i.fa-ellipsis-vertical').forEach(function (ic) {
+                    var b = ic.closest('button'); if (b) b.style.display = 'none';
+                });
+            }
+        });
+    });
+    </script>
 </body>
 </html>
